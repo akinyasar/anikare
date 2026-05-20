@@ -6,7 +6,7 @@ import PinEntry from './pin-entry'
 import WelcomeScreen from './welcome-screen'
 import UploadBar from './upload-bar'
 import ThankYouScreen from './thank-you-screen'
-import { useMediaUpload } from '@/hooks/use-media-upload'
+import { useMediaUpload, createUploadItems } from '@/hooks/use-media-upload'
 import type { PublicEvent, Dictionary } from '@/types'
 
 type Stage = 'pin' | 'welcome' | 'thankyou'
@@ -16,7 +16,7 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
   const [guestName, setGuestName] = useState('')
   const [guestNote, setGuestNote] = useState('')
   const [dict, setDict] = useState<Dictionary | null>(null)
-  const { upload, progress, uploading, error, resetError } = useMediaUpload()
+  const { uploadBatch, uploading, error, resetError } = useMediaUpload()
 
   useEffect(() => {
     getDictionary(detectLocale()).then(setDict)
@@ -35,16 +35,16 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
 
   async function handleFiles(files: FileList) {
     resetError()
-    for (const file of Array.from(files)) {
-      await upload({
-        file,
-        eventId: event.id,
-        packageType: event.package_type,
-        guestName,
-        guestNote: guestNote || undefined,
-      })
-    }
-    setStage('thankyou')
+    const items = createUploadItems(files)
+    const ok = await uploadBatch({
+      items,
+      eventId: event.id,
+      packageType: event.package_type,
+      guestName,
+      guestNote: guestNote || undefined,
+      onProgress: () => {},
+    })
+    if (ok) setStage('thankyou')
   }
 
   if (stage === 'pin') {
@@ -81,9 +81,6 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
       <UploadBar
         dict={g}
         disabled={!guestName.trim() || uploading}
-        progress={progress}
-        uploading={uploading}
-        error={error}
         onFiles={handleFiles}
       />
     </div>
