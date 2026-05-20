@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import Hero from '@/components/landing/hero'
+import HowItWorks from '@/components/landing/how-it-works'
 import Features from '@/components/landing/features'
 import Pricing from '@/components/landing/pricing'
+import CtaBanner from '@/components/landing/cta-banner'
 
 export const metadata: Metadata = {
   title: 'AnıKare — Düğününüzün Dijital Anı Defteri',
@@ -18,8 +20,10 @@ export default function LandingPage() {
   return (
     <>
       <Hero />
+      <HowItWorks />
       <Features />
       <Pricing />
+      <CtaBanner />
     </>
   )
 }
