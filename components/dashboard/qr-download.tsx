@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import QRCode from 'qrcode'
 
 interface Props {
@@ -10,10 +10,11 @@ interface Props {
 
 export default function QrDownload({ slug, eventTitle }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const guestUrl =
-    typeof window !== 'undefined'
-      ? `${window.location.origin}/e/${slug}`
-      : `/e/${slug}`
+  const [guestUrl, setGuestUrl] = useState(`/e/${slug}`)
+
+  useEffect(() => {
+    setGuestUrl(`${window.location.origin}/e/${slug}`)
+  }, [slug])
 
   useEffect(() => {
     if (canvasRef.current) {
