@@ -54,3 +54,4 @@ worktrees/
 *.tsbuildinfo
 next-env.d.ts
 .claude
+screen_*.png
