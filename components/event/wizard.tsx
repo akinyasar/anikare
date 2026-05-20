@@ -15,7 +15,7 @@ interface WizardState {
   title: string
   eventType: EventType
   eventDate: string
-  guestCountEstimate: number
+  guestCountEstimate: string
   thankYouMessage: string
   pinEnabled: boolean
   pinCode: string
@@ -27,7 +27,7 @@ const INITIAL_STATE: WizardState = {
   title: '',
   eventType: 'wedding',
   eventDate: '',
-  guestCountEstimate: 50,
+  guestCountEstimate: '50',
   thankYouMessage: '',
   pinEnabled: false,
   pinCode: '',
@@ -86,7 +86,7 @@ export default function EventWizard() {
           pin_code_hash: pinHash,
           package_type: state.packageType,
           template_id: state.templateId,
-          guest_count_estimate: state.guestCountEstimate,
+          guest_count_estimate: state.guestCountEstimate ? Number(state.guestCountEstimate) : null,
           upload_expires_at: uploadExpiresAt.toISOString(),
           media_retention_until: mediaRetentionUntil.toISOString(),
         })

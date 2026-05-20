@@ -1,5 +1,7 @@
+// components/event/steps/step-details.tsx
 'use client'
 
+import Input, { Textarea } from '@/components/ui/input'
 import type { EventType } from '@/types'
 
 const EVENT_TYPES: { value: EventType; label: string; emoji: string }[] = [
@@ -14,7 +16,7 @@ interface StepDetailsState {
   title: string
   eventType: EventType
   eventDate: string
-  guestCountEstimate: number
+  guestCountEstimate: string
   thankYouMessage: string
   pinEnabled: boolean
   pinCode: string
@@ -28,95 +30,77 @@ interface Props {
 export default function StepDetails({ state, update }: Props) {
   return (
     <div className="space-y-5">
+      {/* Event type chips */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Etkinlik Türü
-        </label>
+        <p className="text-sm font-medium text-[#374151] mb-3">Etkinlik Türü</p>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
           {EVENT_TYPES.map((type) => (
             <button
               key={type.value}
               type="button"
               onClick={() => update({ eventType: type.value })}
-              className={`flex flex-col items-center gap-1 p-3 rounded-xl border text-sm font-medium transition-all ${
+              className={`flex flex-col items-center gap-1 p-3 rounded-2xl border-2 text-sm font-medium transition-all ${
                 state.eventType === type.value
-                  ? 'border-rose-400 bg-rose-50 text-rose-600'
-                  : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                  ? 'border-[#6D1A3E] bg-[#f5e6ed] text-[#6D1A3E]'
+                  : 'border-[#e8ddd5] bg-white text-[#7a6a5a] hover:border-[#6D1A3E]/30'
               }`}
             >
               <span className="text-xl">{type.emoji}</span>
-              <span>{type.label}</span>
+              <span className="text-xs">{type.label}</span>
             </button>
           ))}
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          İsimler / Başlık <span className="text-rose-500">*</span>
-        </label>
-        <input
-          type="text"
-          value={state.title}
-          onChange={(e) => update({ title: e.target.value })}
-          placeholder="Örn: Ahmet & Ayşe"
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition"
-        />
-        <p className="text-xs text-gray-400 mt-1">
-          Link: /e/{state.title ? state.title.toLowerCase().replace(/\s+/g, '-').slice(0, 20) + '-...' : 'isim-evleniyor-xxxxx'}
-        </p>
-      </div>
+      <Input
+        label="İsimler / Başlık"
+        placeholder="Örn: Ahmet & Ayşe"
+        value={state.title}
+        onChange={(e) => update({ title: e.target.value })}
+        required
+        hint={state.title
+          ? `anikare.co/e/${state.title.toLowerCase().replace(/\s+/g, '-').slice(0, 20)}...`
+          : undefined
+        }
+      />
 
       <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Etkinlik Tarihi
-          </label>
-          <input
-            type="date"
-            value={state.eventDate}
-            onChange={(e) => update({ eventDate: e.target.value })}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Tahmini Davetli
-          </label>
-          <input
-            type="number"
-            min={1}
-            value={state.guestCountEstimate}
-            onChange={(e) => update({ guestCountEstimate: Number(e.target.value) })}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          Teşekkür Mesajı
-        </label>
-        <textarea
-          value={state.thankYouMessage}
-          onChange={(e) => update({ thankYouMessage: e.target.value })}
-          placeholder="Yükleme sonrası misafire gösterilecek mesaj..."
-          rows={3}
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition resize-none"
+        <Input
+          label="Etkinlik Tarihi"
+          type="date"
+          value={state.eventDate}
+          onChange={(e) => update({ eventDate: e.target.value })}
+        />
+        <Input
+          label="Tahmini Davetli"
+          type="number"
+          min={1}
+          value={state.guestCountEstimate}
+          onChange={(e) => update({ guestCountEstimate: e.target.value })}
+          placeholder="50"
         />
       </div>
 
-      <div className="border border-gray-200 rounded-xl p-4">
+      <Textarea
+        label="Teşekkür Mesajı"
+        placeholder="Yükleme sonrası misafire gösterilecek mesaj..."
+        value={state.thankYouMessage}
+        onChange={(e) => update({ thankYouMessage: e.target.value })}
+        rows={3}
+      />
+
+      {/* PIN toggle */}
+      <div className="bg-white border border-[#e8ddd5] rounded-2xl p-4">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <p className="text-sm font-medium text-gray-700">PIN Koruması</p>
-            <p className="text-xs text-gray-400">Yükleme öncesi 4 haneli kod isteyin</p>
+            <p className="text-sm font-medium text-[#374151]">PIN Koruması</p>
+            <p className="text-xs text-[#9ca3af] mt-0.5">Yükleme öncesi 4 haneli kod isteyin</p>
           </div>
           <button
             type="button"
             onClick={() => update({ pinEnabled: !state.pinEnabled })}
             className={`relative w-11 h-6 rounded-full transition-colors ${
-              state.pinEnabled ? 'bg-rose-500' : 'bg-gray-200'
+              state.pinEnabled ? 'bg-[#6D1A3E]' : 'bg-[#e8ddd5]'
             }`}
           >
             <span
@@ -134,7 +118,7 @@ export default function StepDetails({ state, update }: Props) {
             value={state.pinCode}
             onChange={(e) => update({ pinCode: e.target.value.replace(/\D/g, '').slice(0, 4) })}
             placeholder="4 haneli PIN"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm tracking-widest text-center focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition"
+            className="w-full bg-[#FAF7F2] border border-[#e8ddd5] rounded-2xl px-4 py-3 text-sm text-[#1a1a1a] placeholder:text-[#9ca3af] text-center tracking-widest focus:outline-none focus:ring-2 focus:ring-[#6D1A3E]/30 focus:border-[#6D1A3E] transition"
           />
         )}
       </div>
