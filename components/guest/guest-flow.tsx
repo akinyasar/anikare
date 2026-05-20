@@ -1,22 +1,29 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { detectLocale, getDictionary } from '@/lib/i18n'
 import PinEntry from './pin-entry'
 import WelcomeScreen from './welcome-screen'
 import UploadBar from './upload-bar'
+import MediaStaging from './media-staging'
+import UploadProgress from './upload-progress'
 import ThankYouScreen from './thank-you-screen'
-import { useMediaUpload, createUploadItems } from '@/hooks/use-media-upload'
-import type { PublicEvent, Dictionary } from '@/types'
+import { useMediaUpload, createUploadItems, type UploadItem } from '@/hooks/use-media-upload'
+import type { PublicEvent, Dictionary, PackageType } from '@/types'
 
-type Stage = 'pin' | 'welcome' | 'thankyou'
+type Stage = 'pin' | 'welcome' | 'staging' | 'uploading' | 'thankyou'
 
 export default function GuestFlow({ event }: { event: PublicEvent }) {
   const [stage, setStage] = useState<Stage>(event.pin_enabled ? 'pin' : 'welcome')
   const [guestName, setGuestName] = useState('')
   const [guestNote, setGuestNote] = useState('')
   const [dict, setDict] = useState<Dictionary | null>(null)
-  const { uploadBatch, uploading, error, resetError } = useMediaUpload()
+  const [items, setItems] = useState<UploadItem[]>([])
+  const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0 })
+  const { uploadBatch, error, resetError } = useMediaUpload()
+
+  // Ref for "add more" from staging screen
+  const addMoreRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     getDictionary(detectLocale()).then(setDict)
@@ -27,49 +34,130 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
 
   if (!event.is_upload_active) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6 text-center">
-        <p className="text-gray-400 text-base">{e.eventClosed ?? 'Bu etkinlik için yükleme sona erdi'}</p>
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-8 text-center">
+        <div>
+          <p className="text-4xl mb-4">📷</p>
+          <p className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#1a1a1a] mb-2">
+            Yükleme Kapalı
+          </p>
+          <p className="text-sm text-[#7a6a5a]">
+            {e.eventClosed ?? 'Bu etkinlik için yükleme sona erdi.'}
+          </p>
+        </div>
       </div>
     )
   }
 
-  async function handleFiles(files: FileList) {
-    resetError()
-    const items = createUploadItems(files)
-    const ok = await uploadBatch({
-      items,
-      eventId: event.id,
-      packageType: event.package_type,
-      guestName,
-      guestNote: guestNote || undefined,
-      onProgress: () => {},
-    })
-    if (ok) setStage('thankyou')
+  function handleFilesSelected(files: FileList) {
+    const newItems = createUploadItems(files)
+    if (stage === 'staging') {
+      setItems(prev => [...prev, ...newItems])
+    } else {
+      setItems(newItems)
+      setStage('staging')
+    }
   }
 
+  function handleRemoveItem(index: number) {
+    setItems(prev => {
+      const next = prev.filter((_, i) => i !== index)
+      URL.revokeObjectURL(prev[index].preview)
+      return next
+    })
+  }
+
+  async function handleUpload() {
+    setStage('uploading')
+    setUploadProgress({ done: 0, total: items.length })
+
+    const success = await uploadBatch({
+      items,
+      eventId: event.id,
+      packageType: event.package_type as PackageType,
+      guestName,
+      guestNote: guestNote || undefined,
+      onProgress: (done, total) => setUploadProgress({ done, total }),
+    })
+
+    // Revoke all preview URLs
+    items.forEach(item => URL.revokeObjectURL(item.preview))
+    setItems([])
+
+    if (success) {
+      setStage('thankyou')
+    }
+    // If error, stage stays 'uploading' and error is shown via UploadProgress
+  }
+
+  function handleUploadMore() {
+    setGuestName('')
+    setGuestNote('')
+    setItems([])
+    resetError()
+    setStage('welcome')
+  }
+
+  // PIN stage
   if (stage === 'pin') {
+    return <PinEntry eventId={event.id} dict={g} onSuccess={() => setStage('welcome')} />
+  }
+
+  // Upload progress stage
+  if (stage === 'uploading') {
     return (
-      <PinEntry
-        eventId={event.id}
-        dict={g}
-        onSuccess={() => setStage('welcome')}
+      <UploadProgress
+        done={uploadProgress.done}
+        total={uploadProgress.total}
+        error={error}
       />
     )
   }
 
+  // Thank you stage
   if (stage === 'thankyou') {
     return (
       <ThankYouScreen
-        message={event.thank_you_message ?? (g.thankYouDefault ?? 'Teşekkürler!')}
-        videoUrl={event.thank_you_video_url}
-        uploadMoreLabel={g.uploadMore ?? 'Başka anı ekle'}
-        onUploadMore={() => setStage('welcome')}
+        message={event.thank_you_message ?? (g.thankYouDefault ?? 'Anılarınızı paylaştığınız için teşekkürler!')}
+        videoUrl={event.thank_you_video_url ?? null}
+        uploadMoreLabel={g.uploadMore ?? 'Başka Anı Ekle'}
+        onUploadMore={handleUploadMore}
       />
     )
   }
 
+  // Staging stage
+  if (stage === 'staging') {
+    return (
+      <>
+        <MediaStaging
+          items={items}
+          packageType={event.package_type as PackageType}
+          existingPhotoCount={event.photo_count}
+          existingVideoCount={event.video_count}
+          onRemove={handleRemoveItem}
+          onAddMore={() => addMoreRef.current?.click()}
+          onUpload={handleUpload}
+          dict={g}
+        />
+        {/* Hidden input for "add more" from staging */}
+        <input
+          ref={addMoreRef}
+          type="file"
+          accept="image/*,video/*"
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            if (e.target.files?.length) handleFilesSelected(e.target.files)
+            e.target.value = ''
+          }}
+        />
+      </>
+    )
+  }
+
+  // Welcome stage
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col">
       <WelcomeScreen
         event={event}
         dict={g}
@@ -80,8 +168,8 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
       />
       <UploadBar
         dict={g}
-        disabled={!guestName.trim() || uploading}
-        onFiles={handleFiles}
+        disabled={!guestName.trim()}
+        onFiles={handleFilesSelected}
       />
     </div>
   )
