@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
@@ -25,10 +26,11 @@ export default function Sidebar({ user }: SidebarProps) {
   }
 
   return (
-    <aside className="hidden lg:flex w-64 shrink-0 flex-col bg-white border-r border-gray-100 h-screen sticky top-0">
-      <div className="p-6 border-b border-gray-100">
-        <Link href="/dashboard" className="text-xl font-bold text-rose-500 tracking-tight">
-          AnıKare
+    <aside className="hidden lg:flex w-64 shrink-0 flex-col bg-white border-r border-[#e8ddd5] h-screen sticky top-0">
+      <div className="p-6 border-b border-[#e8ddd5]">
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <Image src="/brand/logo.svg" alt="AnıKare" width={28} height={36} />
+          <span className="text-base font-bold text-[#6D1A3E] tracking-widest uppercase">AnıKare</span>
         </Link>
       </div>
 
@@ -39,8 +41,8 @@ export default function Sidebar({ user }: SidebarProps) {
             href={item.href}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
               pathname === item.href
-                ? 'bg-rose-50 text-rose-600'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                ? 'bg-[#f5e6ed] text-[#6D1A3E]'
+                : 'text-[#7a6a5a] hover:bg-[#FAF7F2] hover:text-[#1a1a1a]'
             }`}
           >
             <span>{item.icon}</span>
@@ -49,7 +51,7 @@ export default function Sidebar({ user }: SidebarProps) {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 border-t border-[#e8ddd5]">
         <div className="flex items-center gap-3 mb-3">
           {user.user_metadata?.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -59,19 +61,17 @@ export default function Sidebar({ user }: SidebarProps) {
               className="w-8 h-8 rounded-full object-cover"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 text-sm font-medium">
+            <div className="w-8 h-8 rounded-full bg-[#f5e6ed] flex items-center justify-center text-[#6D1A3E] text-sm font-medium">
               {user.email?.[0]?.toUpperCase()}
             </div>
           )}
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
-              {user.user_metadata?.full_name ?? user.email}
-            </p>
-          </div>
+          <p className="text-sm font-medium text-[#1a1a1a] truncate min-w-0">
+            {user.user_metadata?.full_name ?? user.email}
+          </p>
         </div>
         <button
           onClick={handleSignOut}
-          className="w-full text-left text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-xs text-[#9ca3af] hover:text-[#7a6a5a] transition-colors"
         >
           Çıkış Yap
         </button>
