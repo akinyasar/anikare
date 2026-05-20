@@ -137,6 +137,7 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
           onRemove={handleRemoveItem}
           onAddMore={() => addMoreRef.current?.click()}
           onUpload={handleUpload}
+          onBack={() => { items.forEach(i => URL.revokeObjectURL(i.preview)); setItems([]); setStage('welcome') }}
           dict={g}
         />
         {/* Hidden input for "add more" from staging */}

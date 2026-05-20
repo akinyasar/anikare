@@ -52,7 +52,7 @@ export default function MediaGrid({ eventId }: Props) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="aspect-square bg-gray-100 rounded-2xl animate-pulse" />
+          <div key={i} className="aspect-square bg-[#F0EBE3] rounded-2xl animate-pulse" />
         ))}
       </div>
     )
@@ -68,8 +68,8 @@ export default function MediaGrid({ eventId }: Props) {
             onClick={() => setFilter(f)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
               filter === f
-                ? 'bg-rose-500 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-[#6D1A3E] text-white'
+                : 'bg-white border border-[#e8ddd5] text-[#7a6a5a] hover:border-[#6D1A3E]/40'
             }`}
           >
             {f === 'all' ? 'Tümü' : f === 'photo' ? '📷 Fotoğraflar' : '🎬 Videolar'}
@@ -81,9 +81,9 @@ export default function MediaGrid({ eventId }: Props) {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-[#9ca3af]">
           <p className="text-3xl mb-3">📸</p>
-          <p>Henüz içerik yüklenmedi.</p>
+          <p className="text-sm">Henüz içerik yüklenmedi.</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">

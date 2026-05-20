@@ -40,6 +40,9 @@ yarn-error.log*
 .worktrees/
 worktrees/
 
+# brainstorm mockups
+.superpowers/
+
 # uploads / temp test files
 /uploads
 /tmp

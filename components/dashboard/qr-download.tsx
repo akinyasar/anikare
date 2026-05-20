@@ -40,19 +40,20 @@ export default function QrDownload({ slug, eventTitle }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col items-center gap-4">
-      <canvas ref={canvasRef} className="rounded-xl" />
-      <p className="text-xs text-gray-400 text-center max-w-[180px] break-all">{guestUrl}</p>
+    <div className="bg-white rounded-3xl p-5 border border-[#e8ddd5] shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col items-center gap-3 w-full sm:w-auto">
+      <p className="text-xs font-semibold text-[#7a6a5a] tracking-wide uppercase">Misafir QR Kodu</p>
+      <canvas ref={canvasRef} className="rounded-2xl" />
+      <p className="text-[10px] text-[#9ca3af] text-center max-w-[180px] break-all">{guestUrl}</p>
       <div className="flex gap-2 w-full">
         <button
           onClick={downloadQR}
-          className="flex-1 bg-rose-500 text-white text-xs py-2.5 rounded-xl font-medium hover:bg-rose-600 transition-colors"
+          className="flex-1 bg-[#6D1A3E] text-white text-xs py-2.5 rounded-xl font-medium hover:bg-[#5a1533] transition-colors"
         >
           ↓ QR İndir
         </button>
         <button
           onClick={copyLink}
-          className="flex-1 bg-gray-100 text-gray-600 text-xs py-2.5 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+          className="flex-1 bg-[#FAF7F2] text-[#6D1A3E] border border-[#e8ddd5] text-xs py-2.5 rounded-xl font-medium hover:bg-[#f5e6ed] transition-colors"
         >
           Linki Kopyala
         </button>
