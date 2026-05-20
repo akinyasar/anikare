@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
+import Button from '@/components/ui/button'
 
 interface Props {
   eventId: string
@@ -58,21 +59,28 @@ export default function PinEntry({ eventId, dict, onSuccess }: Props) {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="min-h-screen flex flex-col items-center justify-center p-6 bg-white"
-    >
-      <div className="w-full max-w-xs text-center">
-        <div className="text-4xl mb-6">🔒</div>
-        <h1 className="text-xl font-bold text-gray-900 mb-2">
+    <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center px-6 safe-top">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-xs text-center"
+      >
+        {/* Lock icon */}
+        <div className="w-16 h-16 rounded-full bg-[#f5e6ed] flex items-center justify-center mx-auto mb-6">
+          <svg className="w-7 h-7 text-[#6D1A3E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+        </div>
+
+        <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-[#1a1a1a] mb-2">
           {dict.pinTitle ?? 'Gizlilik Kodu'}
         </h1>
-        <p className="text-sm text-gray-500 mb-8">
+        <p className="text-sm text-[#7a6a5a] mb-8">
           {dict.pinDescription ?? 'Masa kartınızdaki 4 haneli kodu girin'}
         </p>
 
-        <div className="flex justify-center gap-3 mb-6">
+        {/* OTP boxes */}
+        <div className="flex justify-center gap-3 mb-5">
           {pin.map((digit, i) => (
             <input
               key={i}
@@ -83,29 +91,37 @@ export default function PinEntry({ eventId, dict, onSuccess }: Props) {
               value={digit}
               onChange={(e) => handleChange(i, e.target.value)}
               onKeyDown={(e) => handleKeyDown(i, e)}
-              className={`w-14 h-14 text-center text-2xl font-bold border-2 rounded-2xl focus:outline-none transition-all ${
+              className={`w-14 h-16 text-center text-2xl font-bold rounded-2xl border-2 transition-all focus:outline-none ${
                 error
                   ? 'border-red-400 bg-red-50 text-red-600'
                   : digit
-                  ? 'border-rose-400 bg-rose-50 text-rose-600'
-                  : 'border-gray-200 text-gray-900 focus:border-rose-400'
+                  ? 'border-[#6D1A3E] bg-[#f5e6ed] text-[#6D1A3E]'
+                  : 'border-[#e8ddd5] bg-white text-[#1a1a1a] focus:border-[#6D1A3E]'
               }`}
             />
           ))}
         </div>
 
         {error && (
-          <p className="text-sm text-red-500 mb-4">{dict.pinError ?? 'Hatalı kod, tekrar deneyin'}</p>
+          <motion.p
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-sm text-red-500 mb-4"
+          >
+            {dict.pinError ?? 'Hatalı kod, tekrar deneyin'}
+          </motion.p>
         )}
 
-        <button
+        <Button
+          variant="primary"
+          size="lg"
           onClick={handleSubmit}
-          disabled={pin.join('').length !== 4 || loading}
-          className="w-full bg-rose-500 text-white rounded-2xl py-4 font-medium text-sm hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          disabled={pin.join('').length !== 4}
+          loading={loading}
         >
-          {loading ? '...' : dict.confirm ?? 'Onayla'}
-        </button>
-      </div>
-    </motion.div>
+          {dict.confirm ?? 'Onayla'}
+        </Button>
+      </motion.div>
+    </div>
   )
 }
