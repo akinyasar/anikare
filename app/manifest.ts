@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Düğün ve davetleriniz için QR tabanlı fotoğraf paylaşım platformu',
     start_url: '/',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#f43f5e',
+    background_color: '#FAF7F2',
+    theme_color: '#6D1A3E',
     icons: [
       {
         src: '/icons/icon-192.png',
