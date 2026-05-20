@@ -125,8 +125,25 @@ Full plan at: `docs/superpowers/plans/2026-05-20-anikare-saas.md`
 - Task 17: Landing page (hero + features + pricing) ✅
 - Task 18: Vercel deployment guide (manual panel steps) ✅
 
+**UI Redesign Plan (`docs/superpowers/plans/2026-05-20-ui-redesign.md`) — all 16 tasks completed:**
+- Task 1: Design system tokens, Playfair+Inter fonts, PWA viewport ✅
+- Task 2: Base UI components (button, input, card, bottom-bar) ✅
+- Task 3: MIME type bug fix (presign route — image/jpg, heic, octet-stream) ✅
+- Task 4: useMediaUpload hook refactored to batch upload ✅
+- Task 5: PIN entry screen redesigned ✅
+- Task 6: Welcome screen redesigned (C variant) ✅
+- Task 7: Upload bar redesigned + camera capture bug fixed ✅
+- Task 8: NEW MediaStaging component (preview grid, package limits) ✅
+- Task 9: NEW UploadProgress component (animated indicator) ✅
+- Task 10: ThankYou screen redesigned (animated heart) ✅
+- Task 11: Guest flow state machine overhauled (5 stages, correct timing) ✅
+- Task 12: Dashboard bottom nav + sidebar logo update ✅
+- Task 13: Event wizard + guest count string bug fix ✅
+- Task 14: Auth + marketing pages updated with logo ✅
+- Task 15: PWA icons generated (192×192, 512×512) ✅
+- Task 16: Final build verification ✅
+
 **Known Issues / Notes:**
-- `public/icons/` contains a placeholder — add real 192×192 and 512×512 PNG icons before deploying
 - Slideshow management page (`/etkinlik/[slug]/slayt`) is listed in plan but not yet implemented (host control UI for slideshow)
 
 ## Collaboration Rules
