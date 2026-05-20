@@ -18,7 +18,7 @@ A QR-based digital memory/photo sharing SaaS for weddings and events.
 - `middleware.ts` is **deprecated** — use `proxy.ts` instead (same API, renamed)
 - Tailwind CSS v4 uses `@import "tailwindcss"` not `@tailwind` directives — no `tailwind.config.js`
 - Route params are **async**: `const { slug } = await params` (not `params.slug` directly)
-- Use `PageProps<'/path/[param]'>` helper type for typed page props
+- **`PageProps` is NOT exported from 'next'** — use inline typing: `{ params: Promise<{ slug: string }> }`
 - `proxy` export function name (not `middleware`) in proxy.ts
 
 ## Project Structure
@@ -105,11 +105,29 @@ Set `.env.local` locally, and add all vars to Vercel dashboard before deploying.
 Full plan at: `docs/superpowers/plans/2026-05-20-anikare-saas.md`
 18 tasks total — progress tracked via TodoWrite in each session.
 
-**Completed tasks:**
+**Completed tasks (all 18):**
 - Task 1: Dependencies + env template + .gitignore ✅
-- Task 2: TypeScript types ✅
-- Task 3: Supabase schema SQL + panel setup guide ✅
-- Task 4: Cloudflare R2 setup (manual panel steps — in progress)
+- Task 2: TypeScript types (`types/index.ts`) ✅
+- Task 3: Supabase schema SQL + panel setup ✅
+- Task 4: Cloudflare R2 bucket + CORS + lifecycle rule ✅
+- Task 5: Supabase clients (browser + server + service) + `proxy.ts` auth guard ✅
+- Task 6: R2 client + `/api/upload/presign` + `/api/upload/confirm` ✅
+- Task 7: PIN hash/verify (`lib/pin.ts`) + `/api/pin/verify` + `lib/media/compress.ts` ✅
+- Task 8: Turkish slug generator (`lib/slug.ts`) + TR/EN/DE i18n dictionaries ✅
+- Task 9: Google OAuth login page + `/auth/callback` route ✅
+- Task 10: Dashboard layout + sidebar + events list page ✅
+- Task 11: 3-step event creation wizard + live table card preview ✅
+- Task 12: Guest flow (PIN entry, welcome screen, upload bar, thank-you screen) ✅
+- Task 13: Event dashboard + media grid + moderation (hide/delete) + QR download ✅
+- Task 14: Premium live slideshow (`/sunum/[slug]`) with Supabase realtime ✅
+- Task 15: PWA manifest + next.config image domains ✅
+- Task 16: Nightly cleanup cron (`/api/cron/cleanup`) + `vercel.json` ✅
+- Task 17: Landing page (hero + features + pricing) ✅
+- Task 18: Vercel deployment guide (manual panel steps) ✅
+
+**Known Issues / Notes:**
+- `public/icons/` contains a placeholder — add real 192×192 and 512×512 PNG icons before deploying
+- Slideshow management page (`/etkinlik/[slug]/slayt`) is listed in plan but not yet implemented (host control UI for slideshow)
 
 ## Collaboration Rules
 - **Commit messages:** `feat: ...` / `fix: ...` only — no Co-Authored-By lines
