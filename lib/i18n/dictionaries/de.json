@@ -1,0 +1,22 @@
+{
+  "guest": {
+    "welcome": "Willkommen!",
+    "enterName": "Ihren Namen eingeben",
+    "namePlaceholder": "Vor- und Nachname",
+    "noteOptional": "Hinterlassen Sie eine Notiz (optional)",
+    "openCamera": "Kamera öffnen",
+    "selectFromGallery": "Aus Galerie wählen",
+    "uploading": "Wird hochgeladen...",
+    "uploadMore": "Weitere Erinnerung hinzufügen",
+    "pinTitle": "Zugangscode",
+    "pinDescription": "Geben Sie den 4-stelligen Code auf Ihrer Tischkarte ein",
+    "pinError": "Falscher Code, bitte erneut versuchen",
+    "confirm": "Bestätigen",
+    "thankYouDefault": "Vielen Dank für das Teilen Ihrer Erinnerungen!"
+  },
+  "errors": {
+    "uploadFailed": "Upload fehlgeschlagen, bitte erneut versuchen",
+    "eventClosed": "Uploads für diese Veranstaltung sind geschlossen",
+    "limitReached": "Paketlimit erreicht"
+  }
+}

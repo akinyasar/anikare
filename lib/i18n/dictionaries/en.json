@@ -1,0 +1,22 @@
+{
+  "guest": {
+    "welcome": "Welcome!",
+    "enterName": "Enter your name",
+    "namePlaceholder": "Your full name",
+    "noteOptional": "Leave a note (optional)",
+    "openCamera": "Open Camera",
+    "selectFromGallery": "Select from Gallery",
+    "uploading": "Uploading...",
+    "uploadMore": "Add another memory",
+    "pinTitle": "Privacy Code",
+    "pinDescription": "Enter the 4-digit code on your table card",
+    "pinError": "Wrong code, please try again",
+    "confirm": "Confirm",
+    "thankYouDefault": "Thank you for sharing your memories!"
+  },
+  "errors": {
+    "uploadFailed": "Upload failed, please try again",
+    "eventClosed": "Uploads are closed for this event",
+    "limitReached": "Package limit reached"
+  }
+}
