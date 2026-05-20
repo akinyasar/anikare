@@ -1,88 +1,118 @@
+// hooks/use-media-upload.ts
 'use client'
 
-import { useState } from 'react'
-import { compressImage, isVideoFile } from '@/lib/media/compress'
+import { useState, useCallback } from 'react'
+import { compressImage } from '@/lib/media/compress'
 import type { PackageType, FileType } from '@/types'
 
-interface UploadArgs {
+export interface UploadItem {
   file: File
+  preview: string        // URL.createObjectURL()
+  fileType: FileType
+  status: 'pending' | 'uploading' | 'done' | 'error'
+  error?: string
+}
+
+interface BatchUploadArgs {
+  items: UploadItem[]
   eventId: string
   packageType: PackageType
   guestName: string
   guestNote?: string
+  onProgress: (done: number, total: number) => void
 }
 
 export function useMediaUpload() {
-  const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function upload({ file, eventId, packageType, guestName, guestNote }: UploadArgs) {
+  const uploadBatch = useCallback(async ({
+    items,
+    eventId,
+    packageType,
+    guestName,
+    guestNote,
+    onProgress,
+  }: BatchUploadArgs): Promise<boolean> => {
     setUploading(true)
     setError(null)
-    setProgress(0)
+    let done = 0
 
     try {
-      const fileType: FileType = isVideoFile(file) ? 'video' : 'photo'
-      const processedFile = fileType === 'photo' ? await compressImage(file, packageType) : file
-      setProgress(20)
+      for (const item of items) {
+        const fileType = item.fileType
+        const processedFile = fileType === 'photo'
+          ? await compressImage(item.file, packageType)
+          : item.file
 
-      const presignRes = await fetch('/api/upload/presign', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          eventId,
-          fileType,
-          fileName: processedFile.name,
-          mimeType: processedFile.type,
-          fileSize: processedFile.size,
-        }),
-      })
+        const presignRes = await fetch('/api/upload/presign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventId,
+            fileType,
+            fileName: processedFile.name,
+            mimeType: processedFile.type || 'application/octet-stream',
+            fileSize: processedFile.size,
+          }),
+        })
 
-      if (!presignRes.ok) {
-        const err = await presignRes.json()
-        throw new Error(err.error ?? 'Presign başarısız')
+        if (!presignRes.ok) {
+          const err = await presignRes.json()
+          throw new Error(err.error ?? 'Presign başarısız')
+        }
+
+        const { uploadUrl, fileKey, publicUrl } = await presignRes.json()
+
+        const uploadRes = await fetch(uploadUrl, {
+          method: 'PUT',
+          body: processedFile,
+          headers: { 'Content-Type': processedFile.type || 'application/octet-stream' },
+        })
+
+        if (!uploadRes.ok) throw new Error('R2 yüklemesi başarısız')
+
+        const confirmRes = await fetch('/api/upload/confirm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventId,
+            guestName,
+            guestNote,
+            fileKey,
+            fileUrl: publicUrl,
+            fileType,
+            fileSize: processedFile.size,
+            originalFilename: item.file.name,
+          }),
+        })
+
+        if (!confirmRes.ok) {
+          const err = await confirmRes.json()
+          throw new Error(err.error ?? 'Kayıt başarısız')
+        }
+
+        done++
+        onProgress(done, items.length)
       }
 
-      const { uploadUrl, fileKey, publicUrl } = await presignRes.json()
-      setProgress(40)
-
-      const uploadRes = await fetch(uploadUrl, {
-        method: 'PUT',
-        body: processedFile,
-        headers: { 'Content-Type': processedFile.type },
-      })
-
-      if (!uploadRes.ok) throw new Error('R2 yüklemesi başarısız')
-      setProgress(80)
-
-      const confirmRes = await fetch('/api/upload/confirm', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          eventId,
-          guestName,
-          guestNote,
-          fileKey,
-          fileUrl: publicUrl,
-          fileType,
-          fileSize: processedFile.size,
-          originalFilename: file.name,
-        }),
-      })
-
-      if (!confirmRes.ok) {
-        const err = await confirmRes.json()
-        throw new Error(err.error ?? 'Kayıt başarısız')
-      }
-
-      setProgress(100)
+      return true
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Bilinmeyen hata')
+      return false
     } finally {
       setUploading(false)
     }
-  }
+  }, [])
 
-  return { upload, progress, uploading, error, resetError: () => setError(null) }
+  return { uploadBatch, uploading, error, resetError: () => setError(null) }
+}
+
+export function createUploadItems(files: FileList): UploadItem[] {
+  return Array.from(files).map(file => ({
+    file,
+    preview: URL.createObjectURL(file),
+    fileType: file.type.startsWith('video/') ? 'video' : 'photo',
+    status: 'pending' as const,
+  }))
 }
