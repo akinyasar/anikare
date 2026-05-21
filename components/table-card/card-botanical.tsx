@@ -15,39 +15,32 @@ function formatDate(d: string) {
 // Stitch-generated botanical corner SVG paths (120×100 viewBox)
 function BotanicalCorner({ flip }: { flip?: boolean }) {
   return (
-    <svg
-      width="100" height="85"
-      viewBox="0 0 120 100"
-      fill="none"
-      style={flip ? { transform: 'rotate(180deg)' } : undefined}
-    >
-      {/* Main eucalyptus stem (Stitch) */}
-      <path d="M110,10 Q80,20 40,70" stroke="#5c7a3c" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
-      {/* Leaf pairs (Stitch) */}
-      <ellipse cx="102" cy="18" rx="8" ry="5" fill="#7a9e6a" transform="rotate(-30, 102, 18)"/>
-      <ellipse cx="108" cy="8" rx="7" ry="4" fill="#a8c896" transform="rotate(-15, 108, 8)"/>
-      <ellipse cx="88" cy="28" rx="9" ry="6" fill="#a8c896" transform="rotate(-40, 88, 28)"/>
-      <ellipse cx="82" cy="15" rx="8" ry="5" fill="#7a9e6a" transform="rotate(-20, 82, 15)"/>
-      <ellipse cx="68" cy="42" rx="10" ry="6.5" fill="#7a9e6a" transform="rotate(-45, 68, 42)"/>
-      <ellipse cx="60" cy="30" rx="9" ry="6" fill="#a8c896" transform="rotate(-30, 60, 30)"/>
-      <ellipse cx="45" cy="65" rx="8" ry="5" fill="#a8c896" transform="rotate(-50, 45, 65)"/>
-      {/* Side branch (Stitch) */}
-      <path d="M85,22 Q95,45 80,85" stroke="#5c7a3c" strokeWidth="1" fill="none" strokeLinecap="round"/>
-      <ellipse cx="90" cy="35" rx="7" ry="4.5" fill="#7a9e6a" transform="rotate(10, 90, 35)"/>
-      <ellipse cx="95" cy="48" rx="8" ry="5" fill="#a8c896" transform="rotate(20, 95, 48)"/>
-      <ellipse cx="85" cy="70" rx="9" ry="6" fill="#7a9e6a" transform="rotate(30, 85, 70)"/>
-      {/* Berry clusters (Stitch) */}
-      <circle cx="95" cy="15" r="1.5" fill="#3d5c2d"/>
-      <circle cx="98" cy="18" r="1.2" fill="#3d5c2d"/>
-      <circle cx="93" cy="18" r="1.3" fill="#3d5c2d"/>
-      <circle cx="75" cy="35" r="1.4" fill="#3d5c2d"/>
-      <circle cx="78" cy="38" r="1.2" fill="#3d5c2d"/>
-      <circle cx="72" cy="38" r="1.3" fill="#3d5c2d"/>
-      {/* Gold sparkles (Stitch) */}
-      <circle cx="115" cy="25" r="1" fill="#c9a84c"/>
-      <circle cx="100" cy="50" r="0.7" fill="#c9a84c"/>
-      <circle cx="60" cy="80" r="0.8" fill="#c9a84c"/>
-      <circle cx="50" cy="20" r="0.6" fill="#c9a84c"/>
+    <svg width="100" height="85" viewBox="0 0 120 100" fill="none">
+      {/* rotate(180, 60, 50) = 180° around viewBox center — no CSS transform needed */}
+      <g transform={flip ? 'rotate(180, 60, 50)' : undefined}>
+        <path d="M110,10 Q80,20 40,70" stroke="#5c7a3c" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+        <ellipse cx="102" cy="18" rx="8" ry="5" fill="#7a9e6a" transform="rotate(-30, 102, 18)"/>
+        <ellipse cx="108" cy="8" rx="7" ry="4" fill="#a8c896" transform="rotate(-15, 108, 8)"/>
+        <ellipse cx="88" cy="28" rx="9" ry="6" fill="#a8c896" transform="rotate(-40, 88, 28)"/>
+        <ellipse cx="82" cy="15" rx="8" ry="5" fill="#7a9e6a" transform="rotate(-20, 82, 15)"/>
+        <ellipse cx="68" cy="42" rx="10" ry="6.5" fill="#7a9e6a" transform="rotate(-45, 68, 42)"/>
+        <ellipse cx="60" cy="30" rx="9" ry="6" fill="#a8c896" transform="rotate(-30, 60, 30)"/>
+        <ellipse cx="45" cy="65" rx="8" ry="5" fill="#a8c896" transform="rotate(-50, 45, 65)"/>
+        <path d="M85,22 Q95,45 80,85" stroke="#5c7a3c" strokeWidth="1" fill="none" strokeLinecap="round"/>
+        <ellipse cx="90" cy="35" rx="7" ry="4.5" fill="#7a9e6a" transform="rotate(10, 90, 35)"/>
+        <ellipse cx="95" cy="48" rx="8" ry="5" fill="#a8c896" transform="rotate(20, 95, 48)"/>
+        <ellipse cx="85" cy="70" rx="9" ry="6" fill="#7a9e6a" transform="rotate(30, 85, 70)"/>
+        <circle cx="95" cy="15" r="1.5" fill="#3d5c2d"/>
+        <circle cx="98" cy="18" r="1.2" fill="#3d5c2d"/>
+        <circle cx="93" cy="18" r="1.3" fill="#3d5c2d"/>
+        <circle cx="75" cy="35" r="1.4" fill="#3d5c2d"/>
+        <circle cx="78" cy="38" r="1.2" fill="#3d5c2d"/>
+        <circle cx="72" cy="38" r="1.3" fill="#3d5c2d"/>
+        <circle cx="115" cy="25" r="1" fill="#c9a84c"/>
+        <circle cx="100" cy="50" r="0.7" fill="#c9a84c"/>
+        <circle cx="60" cy="80" r="0.8" fill="#c9a84c"/>
+        <circle cx="50" cy="20" r="0.6" fill="#c9a84c"/>
+      </g>
     </svg>
   )
 }

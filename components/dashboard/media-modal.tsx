@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { MediaItem } from '@/types'
+import { fetchAndDownload } from '@/lib/download'
 
 interface Props {
   item: MediaItem
@@ -11,6 +13,20 @@ interface Props {
 }
 
 export default function MediaModal({ item, onClose, onToggleVisibility, onDelete }: Props) {
+  const [downloading, setDownloading] = useState(false)
+
+  async function handleDownload() {
+    setDownloading(true)
+    try {
+      const ext = item.original_filename?.split('.').pop() ?? (item.file_type === 'video' ? 'mp4' : 'jpg')
+      const filename = `${item.guest_name.replace(/\s+/g, '_')}.${ext}`
+      await fetchAndDownload(item.viewUrl ?? item.file_url, filename)
+    } catch {
+      window.open(item.viewUrl ?? item.file_url, '_blank')
+    } finally {
+      setDownloading(false)
+    }
+  }
   return (
     <AnimatePresence>
       <motion.div
@@ -62,15 +78,13 @@ export default function MediaModal({ item, onClose, onToggleVisibility, onDelete
                   {new Date(item.uploaded_at).toLocaleString('tr-TR')}
                 </p>
               </div>
-              <a
-                href={item.viewUrl ?? item.file_url}
-                download
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs bg-gray-100 px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-200 transition-colors"
+              <button
+                onClick={handleDownload}
+                disabled={downloading}
+                className="text-xs bg-gray-100 px-3 py-1.5 rounded-lg text-gray-600 hover:bg-gray-200 transition-colors disabled:opacity-50"
               >
-                ↓ İndir
-              </a>
+                {downloading ? '...' : '↓ İndir'}
+              </button>
             </div>
 
             <div className="flex gap-2 pt-3 border-t border-gray-100">

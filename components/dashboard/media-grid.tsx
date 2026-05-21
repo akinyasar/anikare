@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import JSZip from 'jszip'
+import { triggerBlobDownload } from '@/lib/download'
 import MediaCard from './media-card'
 import MediaModal from './media-modal'
 import type { MediaItem } from '@/types'
@@ -66,12 +67,7 @@ export default function MediaGrid({ eventId, count = 8 }: Props) {
       })
     )
     const content = await zip.generateAsync({ type: 'blob' })
-    const url = URL.createObjectURL(content)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'anikare-fotograflar.zip'
-    a.click()
-    URL.revokeObjectURL(url)
+    triggerBlobDownload(new Blob([await content.arrayBuffer()], { type: 'application/octet-stream' }), 'anikare-fotograflar.zip')
   }
 
   if (loading) {

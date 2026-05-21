@@ -15,12 +15,8 @@ function formatDate(d: string) {
 // Stitch-generated floral corner SVG paths (120×100 viewBox)
 function FloralCorner({ flip }: { flip?: boolean }) {
   return (
-    <svg
-      width="100" height="85"
-      viewBox="0 0 120 100"
-      fill="none"
-      style={flip ? { transform: 'rotate(180deg)' } : undefined}
-    >
+    <svg width="100" height="85" viewBox="0 0 120 100" fill="none">
+      <g transform={flip ? 'rotate(180, 60, 50)' : undefined}>
       {/* Rose 1 — center cluster (Stitch) */}
       <g transform="translate(95, 25)">
         <path d="M0,0 c-5,-10 -15,-5 -15,5 c0,10 10,15 15,10 c5,5 15,0 15,-10 c0,-10 -10,-15 -15,-5" fill="#f4a0b0" opacity="0.85"/>
@@ -49,6 +45,7 @@ function FloralCorner({ flip }: { flip?: boolean }) {
       <path d="M40,75 q-15,5 -8,-10 q7,-15 8,10" fill="#6a9a5a" opacity="0.65"/>
       <path d="M105,40 q5,10 12,0 q-7,-10 -12,0" fill="#9ec87e" opacity="0.72"/>
       <path d="M85,15 q-10,-5 -5,-15 q10,5 5,15" fill="#6a9a5a" opacity="0.55"/>
+      </g>
     </svg>
   )
 }

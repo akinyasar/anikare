@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import QRCode from 'qrcode'
 import type { TemplateId } from './table-card'
+import { triggerBlobDownload } from '@/lib/download'
 
 interface Props {
   templateId: TemplateId
@@ -105,15 +106,11 @@ export default function DownloadPdfBtn({ templateId, title, eventType, eventDate
       pdf.addImage(canvas.toDataURL('image/png', 1.0), 'PNG', 0, 0, pdfW, pdfH)
 
       const safeName = title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ\s]/g, '').trim()
-      const blob = pdf.output('blob')
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${safeName}-masa-karti-${orientation}.pdf`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      setTimeout(() => URL.revokeObjectURL(url), 1000)
+      const filename = `${safeName}-masa-karti-${orientation}.pdf`
+      // Use octet-stream so browsers download instead of opening the PDF viewer
+      const pdfBytes = pdf.output('arraybuffer')
+      const blob = new Blob([pdfBytes], { type: 'application/octet-stream' })
+      triggerBlobDownload(blob, filename)
     } catch (e) {
       console.error('PDF error:', e)
     } finally {
