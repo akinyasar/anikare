@@ -169,8 +169,8 @@ export default function EventWizard() {
         </div>
       </div>
 
-      {/* Live preview */}
-      <div className="hidden lg:block w-72 sticky top-6 space-y-4">
+      {/* Live preview — hidden on template step (card previews shown inline there) */}
+      <div className={`hidden lg:block w-72 sticky top-6 space-y-4 ${step === 2 ? 'invisible' : ''}`}>
         <TableCardPreview state={state} />
         {state.thankYouMessage && (
           <div className="bg-[#f5e6ed] rounded-2xl p-4 text-sm">

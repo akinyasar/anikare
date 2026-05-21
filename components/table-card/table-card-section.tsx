@@ -16,10 +16,11 @@ interface Props {
   templateId: string
   title: string
   eventType: string
+  eventDate: string | null
   slug: string
 }
 
-export default function TableCardSection({ templateId, title, eventType, slug }: Props) {
+export default function TableCardSection({ templateId, title, eventType, eventDate, slug }: Props) {
   const [orientation, setOrientation] = useState<'landscape' | 'portrait'>('landscape')
   const template = resolveTemplate(templateId)
   const guestUrl = `${SITE_URL}/e/${slug}`
@@ -71,6 +72,7 @@ export default function TableCardSection({ templateId, title, eventType, slug }:
             templateId={template}
             title={title}
             eventType={eventType}
+            eventDate={eventDate ?? undefined}
             guestUrl={guestUrl}
             orientation={orientation}
             scale={0.62}
@@ -86,6 +88,7 @@ export default function TableCardSection({ templateId, title, eventType, slug }:
             templateId={template}
             title={title}
             eventType={eventType}
+            eventDate={eventDate ?? undefined}
             guestUrl={guestUrl}
             orientation="landscape"
           />
@@ -93,6 +96,7 @@ export default function TableCardSection({ templateId, title, eventType, slug }:
             templateId={template}
             title={title}
             eventType={eventType}
+            eventDate={eventDate ?? undefined}
             guestUrl={guestUrl}
             orientation="portrait"
           />

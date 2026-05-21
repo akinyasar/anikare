@@ -8,6 +8,7 @@ interface Props {
   templateId: TemplateId
   title: string
   eventType?: string
+  eventDate?: string
   guestUrl: string
   orientation: 'landscape' | 'portrait'
 }
@@ -19,15 +20,12 @@ async function renderCardToCanvas(
   templateId: TemplateId,
   title: string,
   eventType: string | undefined,
+  eventDate: string | undefined,
   guestUrl: string,
   qrDataUrl: string,
+  orientation: 'landscape' | 'portrait',
 ): Promise<HTMLCanvasElement> {
-  // Dynamically import heavy deps only on click
-  const [{ default: html2canvas }] = await Promise.all([
-    import('html2canvas'),
-  ])
-
-  // Build a temporary full-size card in a hidden div
+  const [{ default: html2canvas }] = await Promise.all([import('html2canvas')])
   const { createRoot } = await import('react-dom/client')
   const React = await import('react')
 
@@ -35,7 +33,7 @@ async function renderCardToCanvas(
   const CardBotanical = (await import('./card-botanical')).default
   const CardMinimal = (await import('./card-minimal')).default
 
-  const cardProps = { title, eventType, guestUrl, qrDataUrl }
+  const cardProps = { title, eventType, eventDate, guestUrl, qrDataUrl, orientation }
 
   const container = document.createElement('div')
   container.style.cssText = 'position:fixed;left:-9999px;top:-9999px;z-index:-1;'
@@ -71,45 +69,33 @@ async function renderCardToCanvas(
   return canvas
 }
 
-export default function DownloadPdfBtn({ templateId, title, eventType, guestUrl, orientation }: Props) {
+// Portrait card: 480×580px → 10cm×12cm print size
+const PORTRAIT_W_CM = 10
+const PORTRAIT_H_CM = 12
+
+export default function DownloadPdfBtn({ templateId, title, eventType, eventDate, guestUrl, orientation }: Props) {
   const [loading, setLoading] = useState(false)
 
   async function handleDownload() {
     setLoading(true)
     try {
       const qrDataUrl = await QRCode.toDataURL(guestUrl, { width: 200, margin: 1 })
-      const canvas = await renderCardToCanvas(templateId, title, eventType, guestUrl, qrDataUrl)
+      const canvas = await renderCardToCanvas(templateId, title, eventType, eventDate, guestUrl, qrDataUrl, orientation)
 
       const { jsPDF } = await import('jspdf')
 
       const isPortrait = orientation === 'portrait'
-      // jsPDF: landscape = [w, h], portrait = [h, w] — swap dims
+      const pdfW = isPortrait ? PORTRAIT_W_CM : CARD_W_CM
+      const pdfH = isPortrait ? PORTRAIT_H_CM : CARD_H_CM
+
       const pdf = new jsPDF({
         orientation: isPortrait ? 'portrait' : 'landscape',
         unit: 'cm',
-        format: isPortrait
-          ? [CARD_H_CM, CARD_W_CM]
-          : [CARD_W_CM, CARD_H_CM],
+        format: [pdfW, pdfH],
       })
 
-      const pdfW = isPortrait ? CARD_H_CM : CARD_W_CM
-      const pdfH = isPortrait ? CARD_W_CM : CARD_H_CM
-
-      const imgData = canvas.toDataURL('image/png', 1.0)
-
-      if (isPortrait) {
-        // Rotate the canvas image for portrait
-        const rotCanvas = document.createElement('canvas')
-        rotCanvas.width = canvas.height
-        rotCanvas.height = canvas.width
-        const ctx = rotCanvas.getContext('2d')!
-        ctx.translate(canvas.height / 2, canvas.width / 2)
-        ctx.rotate((90 * Math.PI) / 180)
-        ctx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2)
-        pdf.addImage(rotCanvas.toDataURL('image/png', 1.0), 'PNG', 0, 0, pdfW, pdfH)
-      } else {
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfW, pdfH)
-      }
+      // Portrait card is a native layout (480×580), no rotation needed
+      pdf.addImage(canvas.toDataURL('image/png', 1.0), 'PNG', 0, 0, pdfW, pdfH)
 
       const safeName = title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ\s]/g, '').trim()
       pdf.save(`${safeName}-masa-karti-${orientation}.pdf`)

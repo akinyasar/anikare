@@ -103,6 +103,7 @@ export default async function EventDashboardPage({
         templateId={event.template_id}
         title={event.title}
         eventType={EVENT_LABELS[event.event_type] ?? 'Etkinlik'}
+        eventDate={event.event_date}
         slug={slug}
       />
 
