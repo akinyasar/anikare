@@ -1,18 +1,25 @@
 {
   "guest": {
     "welcome": "Hoş geldiniz!",
-    "enterName": "Adınızı girin",
-    "namePlaceholder": "Adınız ve soyadınız",
+    "enterName": "Adınız",
+    "namePlaceholder": "Örn: Mehmet Yılmaz",
     "noteOptional": "Bir not bırakın (isteğe bağlı)",
-    "openCamera": "Kamera Aç",
+    "openCamera": "Kamera ile Çek",
     "selectFromGallery": "Galeriden Seç",
     "uploading": "Yükleniyor...",
-    "uploadMore": "Başka anı ekle",
+    "uploadMore": "Başka Anı Ekle",
     "pinTitle": "Gizlilik Kodu",
     "pinDescription": "Masa kartınızdaki 4 haneli kodu girin",
     "pinError": "Hatalı kod, tekrar deneyin",
     "confirm": "Onayla",
-    "thankYouDefault": "Anılarınızı paylaştığınız için teşekkürler!"
+    "thankYouDefault": "Anılarınızı paylaştığınız için teşekkürler!",
+    "shareMemories": "Anılarını Paylaş",
+    "shareMemoriesDesc": "Bu özel günün bir parçası olduğun için teşekkürler 🤍",
+    "uploadClosedTitle": "Yükleme Kapalı",
+    "uploadClosedDesc": "Bu etkinlik için yükleme sona erdi.",
+    "uploadingCount": "dosya tamamlandı",
+    "uploadError": "Bir sorun oluştu",
+    "filesSelected": "dosya seçildi"
   },
   "errors": {
     "uploadFailed": "Yükleme başarısız oldu, tekrar deneyin",

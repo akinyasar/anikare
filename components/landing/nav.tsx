@@ -29,6 +29,15 @@ export default function MarketingNav() {
     { href: '#fiyatlar', label: 'Fiyatlar' },
   ]
 
+  function smoothScroll(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+    if (!href.startsWith('#')) return
+    e.preventDefault()
+    const id = href.slice(1)
+    const el = document.getElementById(id)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    setMenuOpen(false)
+  }
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -58,6 +67,7 @@ export default function MarketingNav() {
             <a
               key={link.href}
               href={link.href}
+              onClick={(e) => smoothScroll(e, link.href)}
               className="text-sm text-[#7a6a5a] hover:text-[#6D1A3E] transition-colors font-medium"
             >
               {link.label}
@@ -111,7 +121,7 @@ export default function MarketingNav() {
             <a
               key={link.href}
               href={link.href}
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => smoothScroll(e, link.href)}
               className="text-sm font-medium text-[#7a6a5a] hover:text-[#6D1A3E] transition-colors py-1"
             >
               {link.label}

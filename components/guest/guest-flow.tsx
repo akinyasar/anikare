@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { detectLocale, getDictionary } from '@/lib/i18n'
+import { getDictionary } from '@/lib/i18n'
 import PinEntry from './pin-entry'
 import WelcomeScreen from './welcome-screen'
 import UploadBar from './upload-bar'
@@ -9,11 +9,11 @@ import MediaStaging from './media-staging'
 import UploadProgress from './upload-progress'
 import ThankYouScreen from './thank-you-screen'
 import { useMediaUpload, createUploadItems, type UploadItem } from '@/hooks/use-media-upload'
-import type { PublicEvent, Dictionary, PackageType } from '@/types'
+import type { PublicEvent, Dictionary, PackageType, Locale } from '@/types'
 
 type Stage = 'pin' | 'welcome' | 'staging' | 'uploading' | 'thankyou'
 
-export default function GuestFlow({ event }: { event: PublicEvent }) {
+export default function GuestFlow({ event, locale = 'tr' }: { event: PublicEvent; locale?: Locale }) {
   const [stage, setStage] = useState<Stage>(event.pin_enabled ? 'pin' : 'welcome')
   const [guestName, setGuestName] = useState('')
   const [guestNote, setGuestNote] = useState('')
@@ -22,12 +22,11 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
   const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0 })
   const { uploadBatch, error, resetError } = useMediaUpload()
 
-  // Ref for "add more" from staging screen
   const addMoreRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    getDictionary(detectLocale()).then(setDict)
-  }, [])
+    getDictionary(locale).then(setDict)
+  }, [locale])
 
   const g = dict?.guest ?? ({} as Dictionary['guest'])
   const e = dict?.errors ?? ({} as Dictionary['errors'])
@@ -38,10 +37,10 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
         <div>
           <p className="text-4xl mb-4">📷</p>
           <p className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#1a1a1a] mb-2">
-            Yükleme Kapalı
+            {g.uploadClosedTitle ?? 'Yükleme Kapalı'}
           </p>
           <p className="text-sm text-[#7a6a5a]">
-            {e.eventClosed ?? 'Bu etkinlik için yükleme sona erdi.'}
+            {e.eventClosed ?? g.uploadClosedDesc ?? 'Bu etkinlik için yükleme sona erdi.'}
           </p>
         </div>
       </div>
@@ -109,6 +108,9 @@ export default function GuestFlow({ event }: { event: PublicEvent }) {
         done={uploadProgress.done}
         total={uploadProgress.total}
         error={error}
+        uploadingLabel={g.uploading}
+        countLabel={g.uploadingCount}
+        errorLabel={g.uploadError}
       />
     )
   }

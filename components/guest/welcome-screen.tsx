@@ -67,11 +67,11 @@ export default function WelcomeScreen({ event, dict, guestName, setGuestName, gu
       {/* Upload card */}
       <div className="px-5">
         <Card className="max-w-sm mx-auto w-full">
-          <h2 className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#1a1a1a] mb-1.5">
-            Anılarını Paylaş
+          <h2 className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#1a1a1a] mb-1.5 text-center">
+            {dict.shareMemories ?? 'Anılarını Paylaş'}
           </h2>
-          <p className="text-sm text-[#7a6a5a] mb-5 leading-relaxed">
-            Bu özel günün bir parçası olduğun için teşekkürler 🤍
+          <p className="text-sm text-[#7a6a5a] mb-5 leading-relaxed text-center">
+            {dict.shareMemoriesDesc ?? 'Bu özel günün bir parçası olduğun için teşekkürler 🤍'}
           </p>
 
           <div className="space-y-4">

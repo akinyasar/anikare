@@ -1,22 +1,29 @@
 {
   "guest": {
     "welcome": "Willkommen!",
-    "enterName": "Ihren Namen eingeben",
-    "namePlaceholder": "Vor- und Nachname",
-    "noteOptional": "Hinterlassen Sie eine Notiz (optional)",
+    "enterName": "Ihr Name",
+    "namePlaceholder": "z.B. Max Mustermann",
+    "noteOptional": "Eine Notiz hinterlassen (optional)",
     "openCamera": "Kamera öffnen",
-    "selectFromGallery": "Aus Galerie wählen",
+    "selectFromGallery": "Aus Galerie auswählen",
     "uploading": "Wird hochgeladen...",
     "uploadMore": "Weitere Erinnerung hinzufügen",
-    "pinTitle": "Zugangscode",
+    "pinTitle": "Geheimcode",
     "pinDescription": "Geben Sie den 4-stelligen Code auf Ihrer Tischkarte ein",
     "pinError": "Falscher Code, bitte erneut versuchen",
     "confirm": "Bestätigen",
-    "thankYouDefault": "Vielen Dank für das Teilen Ihrer Erinnerungen!"
+    "thankYouDefault": "Danke, dass Sie Ihre Erinnerungen geteilt haben!",
+    "shareMemories": "Erinnerungen teilen",
+    "shareMemoriesDesc": "Danke, dass Sie Teil dieses besonderen Tages sind 🤍",
+    "uploadClosedTitle": "Uploads beendet",
+    "uploadClosedDesc": "Das Hochladen für diese Veranstaltung ist beendet.",
+    "uploadingCount": "Dateien abgeschlossen",
+    "uploadError": "Etwas ist schiefgelaufen",
+    "filesSelected": "Dateien ausgewählt"
   },
   "errors": {
     "uploadFailed": "Upload fehlgeschlagen, bitte erneut versuchen",
-    "eventClosed": "Uploads für diese Veranstaltung sind geschlossen",
+    "eventClosed": "Uploads für diese Veranstaltung sind beendet",
     "limitReached": "Paketlimit erreicht"
   }
 }

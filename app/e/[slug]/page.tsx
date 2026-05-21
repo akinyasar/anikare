@@ -1,6 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
+import { headers } from 'next/headers'
 import GuestFlow from '@/components/guest/guest-flow'
+import type { Locale } from '@/types'
+
+function detectLocaleFromHeader(acceptLang: string): Locale {
+  const primary = acceptLang.split(',')[0].split(';')[0].trim().split('-')[0].toLowerCase()
+  if (primary === 'en') return 'en'
+  if (primary === 'de') return 'de'
+  return 'tr'
+}
 
 export default async function GuestPage({
   params,
@@ -21,5 +30,9 @@ export default async function GuestPage({
 
   if (!event) notFound()
 
-  return <GuestFlow event={event} />
+  const headersList = await headers()
+  const acceptLang = headersList.get('accept-language') ?? 'tr'
+  const locale = detectLocaleFromHeader(acceptLang)
+
+  return <GuestFlow event={event} locale={locale} />
 }

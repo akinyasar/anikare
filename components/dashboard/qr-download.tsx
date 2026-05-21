@@ -35,8 +35,16 @@ export default function QrDownload({ slug, eventTitle }: Props) {
     link.click()
   }
 
+  const [copied, setCopied] = useState(false)
+
   function copyLink() {
     navigator.clipboard.writeText(guestUrl)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  function openLink() {
+    window.open(guestUrl, '_blank', 'noopener,noreferrer')
   }
 
   return (
@@ -55,9 +63,18 @@ export default function QrDownload({ slug, eventTitle }: Props) {
           onClick={copyLink}
           className="flex-1 bg-[#FAF7F2] text-[#6D1A3E] border border-[#e8ddd5] text-xs py-2.5 rounded-xl font-medium hover:bg-[#f5e6ed] transition-colors"
         >
-          Linki Kopyala
+          {copied ? '✓ Kopyalandı' : 'Linki Kopyala'}
         </button>
       </div>
+      <button
+        onClick={openLink}
+        className="w-full bg-white border border-[#e8ddd5] text-[#7a6a5a] text-xs py-2.5 rounded-xl font-medium hover:bg-[#FAF7F2] hover:text-[#6D1A3E] transition-colors flex items-center justify-center gap-1.5"
+      >
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+        </svg>
+        Linki Aç
+      </button>
     </div>
   )
 }

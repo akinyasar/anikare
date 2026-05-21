@@ -27,7 +27,31 @@ export default function PinEntry({ eventId, dict, onSuccess }: Props) {
     next[index] = value
     setPin(next)
     setError(false)
-    if (value && index < 3) refs[index + 1].current?.focus()
+    if (value && index < 3) {
+      refs[index + 1].current?.focus()
+    } else if (value && index === 3) {
+      // Auto-submit when last digit filled
+      const code = [...next].join('')
+      if (code.length === 4) setTimeout(() => handleSubmitWithCode(code), 80)
+    }
+  }
+
+  async function handleSubmitWithCode(code: string) {
+    setLoading(true)
+    setError(false)
+    const res = await fetch('/api/pin/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ eventId, pin: code }),
+    })
+    setLoading(false)
+    if (res.ok) {
+      onSuccess()
+    } else {
+      setError(true)
+      setPin(['', '', '', ''])
+      refs[0].current?.focus()
+    }
   }
 
   function handleKeyDown(index: number, e: React.KeyboardEvent) {
@@ -37,25 +61,7 @@ export default function PinEntry({ eventId, dict, onSuccess }: Props) {
   }
 
   async function handleSubmit() {
-    const code = pin.join('')
-    if (code.length !== 4) return
-    setLoading(true)
-    setError(false)
-
-    const res = await fetch('/api/pin/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ eventId, pin: code }),
-    })
-
-    setLoading(false)
-    if (res.ok) {
-      onSuccess()
-    } else {
-      setError(true)
-      setPin(['', '', '', ''])
-      refs[0].current?.focus()
-    }
+    await handleSubmitWithCode(pin.join(''))
   }
 
   return (

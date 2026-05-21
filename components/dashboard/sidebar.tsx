@@ -28,8 +28,8 @@ export default function Sidebar({ user }: SidebarProps) {
   return (
     <aside className="hidden lg:flex w-64 shrink-0 flex-col bg-white border-r border-[#e8ddd5] h-screen sticky top-0">
       <div className="p-6 border-b border-[#e8ddd5]">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <Image src="/brand/logo.svg" alt="AnıKare" width={28} height={36} />
+        <Link href="/" className="flex items-center gap-2 group">
+          <Image src="/brand/logo.svg" alt="AnıKare" width={44} height={58} className="group-hover:scale-105 transition-transform" />
           <span className="text-base font-bold text-[#6D1A3E] tracking-widest uppercase">AnıKare</span>
         </Link>
       </div>
@@ -71,8 +71,11 @@ export default function Sidebar({ user }: SidebarProps) {
         </div>
         <button
           onClick={handleSignOut}
-          className="text-xs text-[#9ca3af] hover:text-[#7a6a5a] transition-colors"
+          className="flex items-center gap-1.5 text-xs font-medium text-[#7a6a5a] hover:text-[#6D1A3E] hover:bg-[#f5e6ed] px-3 py-1.5 rounded-lg transition-all"
         >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+          </svg>
           Çıkış Yap
         </button>
       </div>

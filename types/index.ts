@@ -83,6 +83,13 @@ export interface Dictionary {
     pinError: string;
     confirm: string;
     thankYouDefault: string;
+    shareMemories: string;
+    shareMemoriesDesc: string;
+    uploadClosedTitle: string;
+    uploadClosedDesc: string;
+    uploadingCount: string;
+    uploadError: string;
+    filesSelected: string;
   };
   errors: {
     uploadFailed: string;

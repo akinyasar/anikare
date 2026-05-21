@@ -6,9 +6,12 @@ interface Props {
   done: number
   total: number
   error: string | null
+  uploadingLabel?: string
+  countLabel?: string
+  errorLabel?: string
 }
 
-export default function UploadProgress({ done, total, error }: Props) {
+export default function UploadProgress({ done, total, error, uploadingLabel, countLabel, errorLabel }: Props) {
   const pct = total > 0 ? Math.round((done / total) * 100) : 0
 
   return (
@@ -24,7 +27,7 @@ export default function UploadProgress({ done, total, error }: Props) {
               <span className="text-2xl">⚠️</span>
             </div>
             <p className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#1a1a1a] mb-2">
-              Bir sorun oluştu
+              {errorLabel ?? 'Bir sorun oluştu'}
             </p>
             <p className="text-sm text-[#7a6a5a]">{error}</p>
           </>
@@ -43,10 +46,10 @@ export default function UploadProgress({ done, total, error }: Props) {
             </div>
 
             <p className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#1a1a1a] mb-1">
-              Yükleniyor...
+              {uploadingLabel ?? 'Yükleniyor...'}
             </p>
             <p className="text-sm text-[#7a6a5a] mb-6">
-              {done} / {total} dosya tamamlandı
+              {done} / {total} {countLabel ?? 'dosya tamamlandı'}
             </p>
 
             {/* Progress bar */}

@@ -1,22 +1,29 @@
 {
   "guest": {
     "welcome": "Welcome!",
-    "enterName": "Enter your name",
-    "namePlaceholder": "Your full name",
+    "enterName": "Your name",
+    "namePlaceholder": "E.g. John Smith",
     "noteOptional": "Leave a note (optional)",
     "openCamera": "Open Camera",
     "selectFromGallery": "Select from Gallery",
     "uploading": "Uploading...",
-    "uploadMore": "Add another memory",
+    "uploadMore": "Add Another Memory",
     "pinTitle": "Privacy Code",
     "pinDescription": "Enter the 4-digit code on your table card",
     "pinError": "Wrong code, please try again",
     "confirm": "Confirm",
-    "thankYouDefault": "Thank you for sharing your memories!"
+    "thankYouDefault": "Thank you for sharing your memories!",
+    "shareMemories": "Share Your Memories",
+    "shareMemoriesDesc": "Thank you for being part of this special day 🤍",
+    "uploadClosedTitle": "Uploads Closed",
+    "uploadClosedDesc": "Uploads for this event have ended.",
+    "uploadingCount": "files completed",
+    "uploadError": "Something went wrong",
+    "filesSelected": "files selected"
   },
   "errors": {
     "uploadFailed": "Upload failed, please try again",
-    "eventClosed": "Uploads are closed for this event",
+    "eventClosed": "Uploads for this event have ended",
     "limitReached": "Package limit reached"
   }
 }
