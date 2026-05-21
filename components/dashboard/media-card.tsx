@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import type { MediaItem } from '@/types'
 
 interface Props {
@@ -10,6 +11,9 @@ interface Props {
 }
 
 export default function MediaCard({ item, onClick, onToggleVisibility, onDelete }: Props) {
+  const [imgError, setImgError] = useState(false)
+  const [imgLoaded, setImgLoaded] = useState(false)
+
   return (
     <div
       className="relative group rounded-2xl overflow-hidden cursor-pointer aspect-square bg-[#F0EBE3]"
@@ -22,13 +26,27 @@ export default function MediaCard({ item, onClick, onToggleVisibility, onDelete 
           </svg>
           <span className="text-[10px] text-white/50">Video</span>
         </div>
+      ) : imgError ? (
+        <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-[#F0EBE3]">
+          <svg className="w-8 h-8 text-[#c4b5a5]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          <span className="text-[10px] text-[#c4b5a5]">Görsel yüklenemedi</span>
+        </div>
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={item.file_url}
-          alt={item.guest_name}
-          className="w-full h-full object-cover transition-transform group-hover:scale-105"
-        />
+        <>
+          {!imgLoaded && (
+            <div className="absolute inset-0 bg-[#F0EBE3] animate-pulse" />
+          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.file_url}
+            alt={item.guest_name}
+            className={`w-full h-full object-cover transition-all group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImgLoaded(true)}
+            onError={() => setImgError(true)}
+          />
+        </>
       )}
 
       {/* Hidden overlay — strong blur + dark tint */}
