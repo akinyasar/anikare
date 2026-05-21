@@ -1,14 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useLocale } from '@/components/providers/locale-provider'
+import type { Locale } from '@/types'
 
-type Locale = 'tr' | 'en' | 'de'
 const LOCALES: { code: Locale; label: string }[] = [
   { code: 'tr', label: 'TR' },
   { code: 'en', label: 'EN' },
   { code: 'de', label: 'DE' },
 ]
 
+// Legacy helpers for guest flow (reads/writes localStorage directly without context)
 export function getStoredLocale(): Locale {
   if (typeof window === 'undefined') return 'tr'
   const v = localStorage.getItem('anikare-locale')
@@ -24,23 +25,14 @@ interface Props {
 }
 
 export default function LocaleSwitcher({ className }: Props) {
-  const [locale, setLocale] = useState<Locale>('tr')
-
-  useEffect(() => {
-    setLocale(getStoredLocale())
-  }, [])
-
-  function handleChange(code: Locale) {
-    setLocale(code)
-    setStoredLocale(code)
-  }
+  const { locale, setLocale } = useLocale()
 
   return (
     <div className={`flex items-center gap-0.5 bg-[#F0EBE3] rounded-full p-0.5 ${className ?? ''}`}>
       {LOCALES.map(({ code, label }) => (
         <button
           key={code}
-          onClick={() => handleChange(code)}
+          onClick={() => setLocale(code)}
           className={`text-[10px] font-bold px-2.5 py-1 rounded-full transition-all ${
             locale === code
               ? 'bg-[#6D1A3E] text-white shadow-sm'

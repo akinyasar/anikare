@@ -10,14 +10,14 @@ import UploadProgress from './upload-progress'
 import ThankYouScreen from './thank-you-screen'
 import GuestHeader from './guest-header'
 import { useMediaUpload, createUploadItems, type UploadItem } from '@/hooks/use-media-upload'
-import { getStoredLocale, setStoredLocale } from '@/components/ui/locale-switcher'
+import { useLocale } from '@/components/providers/locale-provider'
 import type { PublicEvent, Dictionary, PackageType, Locale } from '@/types'
 
 type Stage = 'pin' | 'welcome' | 'staging' | 'uploading' | 'thankyou'
 
 export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { event: PublicEvent; locale?: Locale }) {
   const [stage, setStage] = useState<Stage>(event.pin_enabled ? 'pin' : 'welcome')
-  const [locale, setLocale] = useState<Locale>(initialLocale)
+  const { locale, setLocale } = useLocale()
   const [guestName, setGuestName] = useState('')
   const [guestNote, setGuestNote] = useState('')
   const [dict, setDict] = useState<Dictionary | null>(null)
@@ -27,21 +27,16 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
 
   const addMoreRef = useRef<HTMLInputElement>(null)
 
-  // Read localStorage locale preference on mount (overrides server-detected locale)
+  // If no locale stored yet, seed from server-detected Accept-Language
   useEffect(() => {
-    const stored = getStoredLocale()
-    if (stored !== initialLocale) setLocale(stored)
+    const stored = localStorage.getItem('anikare-locale')
+    if (!stored && initialLocale !== 'tr') setLocale(initialLocale)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     getDictionary(locale).then(setDict)
   }, [locale])
-
-  function handleLocaleChange(l: Locale) {
-    setLocale(l)
-    setStoredLocale(l)
-  }
 
   const g = dict?.guest ?? ({} as Dictionary['guest'])
   const e = dict?.errors ?? ({} as Dictionary['errors'])
@@ -166,7 +161,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
           onBack={() => { items.forEach(i => URL.revokeObjectURL(i.preview)); setItems([]); setStage('welcome') }}
           dict={g}
           locale={locale}
-          onLocaleChange={handleLocaleChange}
+          onLocaleChange={setLocale}
         />
         {/* Hidden input for "add more" from staging */}
         <input
@@ -187,7 +182,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
   // Welcome stage — h-[100dvh] + inner scroll fixes iOS keyboard gap
   return (
     <div className="h-[100dvh] bg-[#FAF7F2] flex flex-col overflow-hidden">
-      <GuestHeader locale={locale} onLocaleChange={handleLocaleChange} />
+      <GuestHeader locale={locale} onLocaleChange={setLocale} />
       <div className="flex-1 overflow-y-auto overscroll-none">
         <WelcomeScreen
           event={event}

@@ -6,36 +6,36 @@ import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import LocaleSwitcher from '@/components/ui/locale-switcher'
+import { useLocale } from '@/components/providers/locale-provider'
+import { t } from '@/lib/i18n/site'
 
 interface SidebarProps {
   user: User
 }
 
-const navItems = [
-  {
-    href: '/dashboard',
-    label: 'Etkinliklerim',
-    icon: (
-      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
-      </svg>
-    ),
-  },
-  {
-    href: '/etkinlik/yeni',
-    label: 'Yeni Etkinlik',
-    icon: (
-      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-      </svg>
-    ),
-  },
-]
+const NAV_ICONS = {
+  calendar: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+    </svg>
+  ),
+  plus: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+  ),
+}
 
 export default function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
+  const { locale } = useLocale()
+
+  const navItems = [
+    { href: '/dashboard', label: t(locale, 'myEvents'), icon: NAV_ICONS.calendar },
+    { href: '/etkinlik/yeni', label: t(locale, 'newEvent'), icon: NAV_ICONS.plus },
+  ]
 
   async function handleSignOut() {
     await supabase.auth.signOut()
@@ -87,7 +87,6 @@ export default function Sidebar({ user }: SidebarProps) {
           </p>
         </div>
         <div className="mb-3">
-          <p className="text-[10px] text-[#c4b5a5] uppercase tracking-wide mb-1.5">Misafir Dili</p>
           <LocaleSwitcher />
         </div>
         <button
@@ -97,7 +96,7 @@ export default function Sidebar({ user }: SidebarProps) {
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
           </svg>
-          Çıkış Yap
+          {t(locale, 'signOut')}
         </button>
       </div>
     </aside>

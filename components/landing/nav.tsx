@@ -5,11 +5,14 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import LocaleSwitcher from '@/components/ui/locale-switcher'
+import { useLocale } from '@/components/providers/locale-provider'
+import { t } from '@/lib/i18n/site'
 
 export default function MarketingNav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [user, setUser] = useState<{ email?: string } | null>(null)
+  const { locale } = useLocale()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -25,9 +28,9 @@ export default function MarketingNav() {
   }, [])
 
   const NAV_LINKS = [
-    { href: '#ozellikler', label: 'Özellikler' },
-    { href: '#nasil-calisir', label: 'Nasıl Çalışır' },
-    { href: '#fiyatlar', label: 'Fiyatlar' },
+    { href: '#ozellikler', label: t(locale, 'features') },
+    { href: '#nasil-calisir', label: t(locale, 'howItWorks') },
+    { href: '#fiyatlar', label: t(locale, 'pricing') },
   ]
 
   function smoothScroll(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
@@ -84,7 +87,7 @@ export default function MarketingNav() {
               href="/dashboard"
               className="bg-[#6D1A3E] text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#5a1533] transition-colors"
             >
-              Panele Git →
+              {t(locale, 'goToDashboard')}
             </Link>
           ) : (
             <>
@@ -92,13 +95,13 @@ export default function MarketingNav() {
                 href="/giris"
                 className="text-sm text-[#7a6a5a] hover:text-[#1a1a1a] transition-colors font-medium px-4 py-2"
               >
-                Giriş
+                {t(locale, 'signIn')}
               </Link>
               <Link
                 href="/giris"
                 className="bg-[#6D1A3E] text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#5a1533] transition-colors"
               >
-                Ücretsiz Başla
+                {t(locale, 'startFree')}
               </Link>
             </>
           )}
@@ -133,13 +136,13 @@ export default function MarketingNav() {
             <LocaleSwitcher className="self-start" />
             {user ? (
               <Link href="/dashboard" className="bg-[#6D1A3E] text-white text-center py-3 rounded-full text-sm font-semibold">
-                Panele Git →
+                {t(locale, 'goToDashboard')}
               </Link>
             ) : (
               <>
-                <Link href="/giris" className="text-center text-sm text-[#7a6a5a] py-2.5 font-medium">Giriş</Link>
+                <Link href="/giris" className="text-center text-sm text-[#7a6a5a] py-2.5 font-medium">{t(locale, 'signIn')}</Link>
                 <Link href="/giris" className="bg-[#6D1A3E] text-white text-center py-3 rounded-full text-sm font-semibold">
-                  Ücretsiz Başla
+                  {t(locale, 'startFree')}
                 </Link>
               </>
             )}

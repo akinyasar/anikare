@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SITE_URL } from '@/lib/config'
+import { LocaleProvider } from '@/components/providers/locale-provider'
 import './globals.css'
 
 const playfair = Playfair_Display({
@@ -78,7 +79,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${playfair.variable} ${inter.variable} h-full`}
     >
       <body className="h-full">
-        {children}
+        <LocaleProvider>
+          {children}
+        </LocaleProvider>
         <Analytics />
       </body>
     </html>
