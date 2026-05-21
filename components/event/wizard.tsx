@@ -48,6 +48,11 @@ export default function EventWizard() {
     setState((prev) => ({ ...prev, ...partial }))
   }
 
+  function goToStep(next: number) {
+    setStep(next)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   function canProceed() {
     if (step === 0) {
       if (!state.title.trim()) return false
@@ -141,7 +146,7 @@ export default function EventWizard() {
           {step > 0 && (
             <button
               type="button"
-              onClick={() => setStep((s) => s - 1)}
+              onClick={() => goToStep(step - 1)}
               className="flex-1 border border-gray-200 rounded-xl py-3 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
             >
               Geri
@@ -150,7 +155,7 @@ export default function EventWizard() {
           {step < STEPS.length - 1 ? (
             <button
               type="button"
-              onClick={() => setStep((s) => s + 1)}
+              onClick={() => goToStep(step + 1)}
               disabled={!canProceed()}
               className="flex-1 bg-[#6D1A3E] text-white rounded-xl py-3 text-sm font-medium hover:bg-[#5a1533] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >

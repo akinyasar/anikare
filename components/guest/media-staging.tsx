@@ -121,12 +121,15 @@ export default function MediaStaging({
           </span>
         </div>
 
-        {/* Limits bar */}
+        {/* Action bar */}
         <div className="px-5 py-2.5 bg-white border-b border-[#e8ddd5] flex items-center justify-between">
-          <span className="text-xs text-[#7a6a5a]">
-            <span className="inline-flex items-center gap-1"><CameraIcon className="w-3.5 h-3.5"/>{totalPhotos}/{photoLimit}</span>
-            <span className="text-[#c4b5a5]">·</span>
-            <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5"/>{totalVideos}/{videoLimit}</span>
+          <span className="text-xs text-[#7a6a5a] flex items-center gap-2">
+            {photoItems.length > 0 && (
+              <span className="inline-flex items-center gap-1"><CameraIcon className="w-3.5 h-3.5"/>{photoItems.length} fotoğraf</span>
+            )}
+            {videoItems.length > 0 && (
+              <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5"/>{videoItems.length} video</span>
+            )}
           </span>
           <button
             onClick={onAddMore}
@@ -162,13 +165,8 @@ export default function MediaStaging({
 
         {/* Fixed bottom bar */}
         <BottomBar>
-          <div className="flex items-center justify-between mb-2 px-1">
-            <span className="text-xs text-[#7a6a5a]">
-              📷 {totalPhotos}/{photoLimit} · 🎬 {totalVideos}/{videoLimit}
-            </span>
-          </div>
           <Button variant="primary" size="lg" disabled={!canUpload} onClick={onUpload}>
-            Yükle → ({items.length} dosya)
+            {dict.upload ?? 'Yükle'} ({items.length} {items.length === 1 ? 'dosya' : 'dosya'})
           </Button>
         </BottomBar>
       </div>
