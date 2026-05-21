@@ -1,8 +1,13 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
 import GuestFlow from '@/components/guest/guest-flow'
 import type { Locale } from '@/types'
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+}
 
 function detectLocaleFromHeader(acceptLang: string): Locale {
   const primary = acceptLang.split(',')[0].split(';')[0].trim().split('-')[0].toLowerCase()

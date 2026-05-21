@@ -16,9 +16,45 @@ const inter = Inter({
   display: 'swap',
 })
 
+const SITE_URL = 'https://anikare.vercel.app' // TODO: anikare.co alındığında güncelle
+
 export const metadata: Metadata = {
-  title: 'AnıKare — Dijital Anı Defteri',
-  description: 'Düğün ve davetleriniz için QR tabanlı fotoğraf paylaşım platformu',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'AnıKare — Düğün ve Etkinlik Fotoğraf Paylaşım Platformu',
+    template: '%s | AnıKare',
+  },
+  description:
+    'Misafirleriniz QR kodu okutarak anında fotoğraf paylaşır, siz her anı tek yerde toplarsınız. Düğün, doğum günü ve davetler için dijital anı defteri.',
+  keywords: [
+    'düğün fotoğraf paylaşım',
+    'etkinlik qr kod fotoğraf',
+    'dijital anı defteri',
+    'düğün misafir fotoğrafı',
+    'qr kodlu fotoğraf albümü',
+    'düğün anı uygulaması',
+    'anikare',
+  ],
+  authors: [{ name: 'AnıKare', url: SITE_URL }],
+  creator: 'AnıKare',
+  publisher: 'AnıKare',
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: 'website',
+    locale: 'tr_TR',
+    url: SITE_URL,
+    siteName: 'AnıKare',
+    title: 'AnıKare — Düğün Anılarınızı Bir Arada Toplayın',
+    description:
+      'Misafirleriniz QR kodu okutarak anında fotoğraf paylaşır. Abonelik yok, tek etkinlik tek seferlik fiyat.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AnıKare — Dijital Anı Defteri' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AnıKare — Düğün Anılarınızı Bir Arada Toplayın',
+    description: 'Misafirleriniz QR kodu okutarak anında fotoğraf paylaşır.',
+    images: ['/og-image.png'],
+  },
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
