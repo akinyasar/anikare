@@ -1,59 +1,63 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { useLocale } from '@/components/providers/locale-provider'
+import { t } from '@/lib/i18n/site'
+import type { Locale } from '@/types'
 
-const PLANS = [
-  {
-    name: 'Ücretsiz',
-    price: 'Ücretsiz',
-    sub: 'Akışı keşfetmek için',
-    badge: null,
-    features: [
-      '10 fotoğraf',
-      '2 video',
-      'Temel QR kart',
-      'Türkçe / İngilizce / Almanca',
-      'Sınırsız süre',
-    ],
-    cta: 'Ücretsiz Başla',
-    highlight: false,
-  },
-  {
-    name: 'Standart',
-    price: '₺1.000',
-    sub: 'Tek etkinlik · tek seferlik',
-    badge: 'En Popüler',
-    features: [
-      'Sınırsız fotoğraf',
-      '20 video',
-      '4K kalite',
-      '3 masa kartı şablonu (indirilebilir PDF)',
-      'Tüm diller',
-    ],
-    cta: 'Hemen Al',
-    highlight: true,
-  },
-  {
-    name: 'Premium',
-    price: '₺1.399',
-    sub: 'Tek etkinlik · tek seferlik',
-    badge: null,
-    features: [
-      'Sınırsız fotoğraf & video',
-      'Orijinal kalite (sıkıştırma yok)',
-      '3 masa kartı şablonu (indirilebilir PDF)',
-      'Canlı slayt gösterisi',
-      'Tüm özellikler dahil',
-    ],
-    cta: 'Hemen Al',
-    highlight: false,
-  },
-]
+function getPlans(locale: Locale) {
+  return [
+    {
+      name: t(locale, 'plan1Name'),
+      price: t(locale, 'plan1Price'),
+      sub: t(locale, 'plan1Sub'),
+      badge: null,
+      features: [
+        t(locale, 'plan1F1'),
+        t(locale, 'plan1F2'),
+        t(locale, 'plan1F3'),
+        t(locale, 'plan1F4'),
+        t(locale, 'plan1F5'),
+      ],
+      cta: t(locale, 'plan1Cta'),
+      highlight: false,
+    },
+    {
+      name: t(locale, 'plan2Name'),
+      price: t(locale, 'plan2Price'),
+      sub: t(locale, 'plan2Sub'),
+      badge: t(locale, 'plan2Badge'),
+      features: [
+        t(locale, 'plan2F1'),
+        t(locale, 'plan2F2'),
+        t(locale, 'plan2F3'),
+        t(locale, 'plan2F4'),
+        t(locale, 'plan2F5'),
+      ],
+      cta: t(locale, 'plan2Cta'),
+      highlight: true,
+    },
+    {
+      name: t(locale, 'plan3Name'),
+      price: t(locale, 'plan3Price'),
+      sub: t(locale, 'plan3Sub'),
+      badge: null,
+      features: [
+        t(locale, 'plan3F1'),
+        t(locale, 'plan3F2'),
+        t(locale, 'plan3F3'),
+        t(locale, 'plan3F4'),
+        t(locale, 'plan3F5'),
+      ],
+      cta: t(locale, 'plan3Cta'),
+      highlight: false,
+    },
+  ]
+}
 
-function PlanCard({ plan, index }: { plan: typeof PLANS[0], index: number }) {
+function PlanCard({ plan, index }: { plan: ReturnType<typeof getPlans>[0]; index: number }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
 
@@ -115,6 +119,8 @@ function PlanCard({ plan, index }: { plan: typeof PLANS[0], index: number }) {
 export default function Pricing() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+  const { locale } = useLocale()
+  const plans = getPlans(locale)
 
   return (
     <section id="fiyatlar" className="py-24 px-6 md:px-10 bg-white">
@@ -126,15 +132,15 @@ export default function Pricing() {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#9b4a6a] mb-3">Fiyatlandırma</p>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#9b4a6a] mb-3">{t(locale, 'pricingLabel')}</p>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl font-bold text-[#1a1a1a] mb-4">
-            Etkinlik başına tek seferlik
+            {t(locale, 'pricingTitle')}
           </h2>
-          <p className="text-[#7a6a5a]">Abonelik yok. Gizli ücret yok. Sadece etkinliğiniz için ödeyin.</p>
+          <p className="text-[#7a6a5a]">{t(locale, 'pricingDesc')}</p>
         </motion.div>
 
         <div className="grid gap-5 md:grid-cols-3 items-center">
-          {PLANS.map((plan, i) => (
+          {plans.map((plan, i) => (
             <PlanCard key={i} plan={plan} index={i} />
           ))}
         </div>

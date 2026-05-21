@@ -16,7 +16,7 @@ function formatDate(d: string) {
 function BotanicalCorner({ flip }: { flip?: boolean }) {
   return (
     <svg
-      width="140" height="115"
+      width="100" height="85"
       viewBox="0 0 120 100"
       fill="none"
       style={flip ? { transform: 'rotate(180deg)' } : undefined}
@@ -78,7 +78,7 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
     <div style={{
       width: 756, height: 403, background: '#ffffff', position: 'relative',
       overflow: 'hidden', border: '1.5px solid #c8dbb8', borderRadius: 6,
-      display: 'flex', flexShrink: 0,
+      display: 'flex', flexShrink: 0, paddingTop: 48, paddingBottom: 48,
     }}>
       <div style={{ position: 'absolute', top: 0, right: 0 }}><BotanicalCorner /></div>
       <div style={{ position: 'absolute', bottom: 0, left: 0 }}><BotanicalCorner flip /></div>
@@ -92,7 +92,7 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
       <div style={{ width: 1, background: '#d0e4c0', margin: '50px 0' }} />
 
       {/* Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 32, paddingRight: 48, gap: 6 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 32, paddingRight: 120, gap: 6 }}>
         <div style={{ fontSize: 14, color: '#c9a84c', marginBottom: 2 }}>♥</div>
         {eventType && (
           <p style={{ margin: 0, fontSize: 11, letterSpacing: 4, textTransform: 'uppercase', color: '#7a9e6a', fontFamily: 'Arial, sans-serif', fontWeight: 600 }}>
@@ -108,9 +108,9 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
           </p>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, margin: '4px 0' }}>
-          <div style={{ height: 1, width: 24, background: '#c9a84c' }} />
+          <div style={{ height: 1, flex: 1, background: '#c9a84c' }} />
           <div style={{ width: 5, height: 5, background: '#c9a84c', transform: 'rotate(45deg)' }} />
-          <div style={{ height: 1, width: 24, background: '#c9a84c' }} />
+          <div style={{ height: 1, flex: 1, background: '#c9a84c' }} />
         </div>
         <p style={{ margin: 0, fontSize: 13, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
           QR kodu okutarak anılarınızı<br />bizimle paylaşın.
@@ -131,10 +131,10 @@ function Portrait({ title, eventType, eventDate, qrDataUrl }: CardProps) {
       overflow: 'hidden', border: '1.5px solid #c8dbb8', borderRadius: 6,
       display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0,
     }}>
-      <div style={{ position: 'absolute', top: 0, right: 0, transform: 'scale(0.75)', transformOrigin: 'top right' }}>
+      <div style={{ position: 'absolute', top: 0, right: 0, transform: 'scale(0.65)', transformOrigin: 'top right' }}>
         <BotanicalCorner />
       </div>
-      <div style={{ position: 'absolute', bottom: 0, left: 0, transform: 'scale(0.75)', transformOrigin: 'bottom left' }}>
+      <div style={{ position: 'absolute', bottom: 0, left: 0, transform: 'scale(0.65)', transformOrigin: 'bottom left' }}>
         <BotanicalCorner flip />
       </div>
 

@@ -4,12 +4,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { useLocale } from '@/components/providers/locale-provider'
+import { t } from '@/lib/i18n/site'
 
 export default function Hero() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { locale } = useLocale()
 
   useEffect(() => {
-    // Check auth cookie from supabase
     const hasCookie = document.cookie.split(';').some(c => c.trim().startsWith('sb-'))
     setIsLoggedIn(hasCookie)
   }, [])
@@ -19,7 +21,6 @@ export default function Hero() {
       id="hero"
       className="relative overflow-hidden bg-[#FAF7F2] pt-32 pb-20 px-6 md:px-10"
     >
-      {/* Soft radial glow */}
       <div className="pointer-events-none absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-[#6D1A3E]/5 blur-3xl" />
       <div className="pointer-events-none absolute top-60 right-0 w-[500px] h-[500px] rounded-full bg-[#9b4a6a]/5 blur-3xl" />
 
@@ -41,22 +42,20 @@ export default function Hero() {
           >
             <span className="text-sm">💍</span>
             <span className="text-xs font-semibold tracking-wide text-[#6D1A3E]">
-              Düğün Fotoğrafları için #1 Platform
+              {t(locale, 'heroBadge')}
             </span>
           </motion.div>
 
           {/* Heading */}
           <h1 className="font-[family-name:var(--font-playfair)] text-[2.75rem] sm:text-[3.25rem] font-bold text-[#1a1a1a] leading-[1.1] tracking-tight">
-            Misafirlerinizin{' '}
-            <span className="italic text-[#6D1A3E]">anıları</span>
+            {t(locale, 'heroHeading1')}{' '}
+            <span className="italic text-[#6D1A3E]">{t(locale, 'heroHeading2')}</span>
             <br />
-            tek bir çatı altında.
+            {t(locale, 'heroHeading3')}
           </h1>
 
           <p className="text-lg text-[#7a6a5a] leading-relaxed max-w-lg">
-            Uygulama indirmeye gerek kalmadan, masalardaki QR kodu okutarak
-            misafirlerinizin en güzel anlarını anında toplayın. Düğün albümünüz
-            gerçek zamanlı biriksin.
+            {t(locale, 'heroDesc')}
           </p>
 
           {/* CTAs */}
@@ -65,14 +64,14 @@ export default function Hero() {
               href="/giris"
               className="inline-flex justify-center items-center bg-[#6D1A3E] text-white font-semibold px-8 py-4 rounded-full hover:bg-[#5a1533] active:scale-[0.97] transition-all shadow-lg shadow-[#6D1A3E]/20"
             >
-              {isLoggedIn ? 'Panele Git →' : 'Ücretsiz Etkinlik Oluştur →'}
+              {isLoggedIn ? t(locale, 'heroCtaLoggedIn') : t(locale, 'heroCta')}
             </Link>
             <a
               href="#nasil-calisir"
               className="inline-flex justify-center items-center gap-2 text-[#6D1A3E] border border-[#6D1A3E]/25 font-medium px-8 py-4 rounded-full hover:bg-[#f5e6ed] hover:border-[#6D1A3E]/50 transition-all"
             >
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              Nasıl Çalışır?
+              {t(locale, 'heroSecondaryCta')}
             </a>
           </div>
 
@@ -86,9 +85,9 @@ export default function Hero() {
               ))}
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1a1a1a]">500+ etkinlik</p>
+              <p className="text-sm font-semibold text-[#1a1a1a]">{t(locale, 'heroSocialProof')}</p>
               <p className="text-xs text-[#9ca3af] flex items-center gap-1">
-                <span className="text-amber-400">★</span> 4.9/5 Ortalama Puan
+                <span className="text-amber-400">★</span> {t(locale, 'heroRating')}
               </p>
             </div>
           </div>
@@ -113,9 +112,9 @@ export default function Hero() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316zM16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
                 </svg>
               </div>
-              <p className="text-[10px] font-bold text-[#6D1A3E]">2.4K</p>
+              <p className="text-[10px] font-bold text-[#6D1A3E]">{t(locale, 'heroPhotoCount')}</p>
             </div>
-            <p className="text-[9px] text-[#9ca3af] font-medium">fotoğraf yüklendi</p>
+            <p className="text-[9px] text-[#9ca3af] font-medium">{t(locale, 'heroPhotoUploaded')}</p>
           </motion.div>
 
           {/* Floating upload success card — bottom right */}
@@ -130,8 +129,8 @@ export default function Hero() {
               </svg>
             </div>
             <div>
-              <p className="text-[10px] font-semibold text-[#1a1a1a]">Yüklendi!</p>
-              <p className="text-[9px] text-[#9ca3af]">Ahmet · 6 dosya</p>
+              <p className="text-[10px] font-semibold text-[#1a1a1a]">{t(locale, 'heroUploaded')}</p>
+              <p className="text-[9px] text-[#9ca3af]">Ahmet · {t(locale, 'heroGuestFiles')}</p>
             </div>
           </motion.div>
 
@@ -164,7 +163,6 @@ export default function Hero() {
                   Ayşe & Burak
                 </h3>
                 <p className="text-[8px] text-[#9ca3af] mt-0.5">12 Ağustos 2025</p>
-                {/* Ornamental divider */}
                 <div className="flex items-center gap-2 px-6 mt-3">
                   <div className="flex-1 h-px bg-[#e8ddd5]" />
                   <div className="w-1.5 h-1.5 rounded-full bg-[#e8849a]" />
@@ -184,7 +182,7 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Single upload button — new design */}
+              {/* Upload button */}
               <div className="px-4 mt-4">
                 <div className="bg-[#6D1A3E] text-white rounded-full py-3 flex items-center justify-center gap-2">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

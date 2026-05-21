@@ -35,8 +35,9 @@ async function renderCardToCanvas(
 
   const cardProps = { title, eventType, eventDate, guestUrl, qrDataUrl, orientation }
 
+  const isPortrait = orientation === 'portrait'
   const container = document.createElement('div')
-  container.style.cssText = 'position:fixed;left:-9999px;top:-9999px;z-index:-1;'
+  container.style.cssText = `position:fixed;left:0;top:0;width:${isPortrait ? 480 : 756}px;height:${isPortrait ? 580 : 403}px;z-index:99999;opacity:0;pointer-events:none;`
   document.body.appendChild(container)
 
   const root = createRoot(container)
@@ -52,8 +53,8 @@ async function renderCardToCanvas(
           : React.createElement(CardMinimal, cardProps)
       )
     )
-    // Give React a tick to flush
-    setTimeout(resolve, 100)
+    // Give React a tick to flush + SVG/font rendering
+    setTimeout(resolve, 200)
   })
 
   const cardEl = container.firstElementChild as HTMLElement
@@ -62,6 +63,12 @@ async function renderCardToCanvas(
     useCORS: true,
     logging: false,
     backgroundColor: null,
+    width: isPortrait ? 480 : 756,
+    height: isPortrait ? 580 : 403,
+    windowWidth: isPortrait ? 480 : 756,
+    windowHeight: isPortrait ? 580 : 403,
+    scrollX: 0,
+    scrollY: 0,
   })
 
   root.unmount()

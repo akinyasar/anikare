@@ -6,6 +6,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
+import { useLocale } from '@/components/providers/locale-provider'
+import { t } from '@/lib/i18n/site'
 
 const ERROR_MAP: Record<string, string> = {
   'User already registered': 'Bu e-posta zaten kayıtlı. Giriş yapmayı dene.',
@@ -24,6 +26,7 @@ function friendlyError(msg: string): string {
 export default function RegisterPage() {
   const supabase = createClient()
   const router = useRouter()
+  const { locale } = useLocale()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -57,7 +60,6 @@ export default function RegisterPage() {
 
     if (err) { setError(friendlyError(err.message)); return }
 
-    // If email confirmation is disabled, user is immediately logged in
     if (data.session) {
       router.push('/dashboard')
     } else {
@@ -78,16 +80,16 @@ export default function RegisterPage() {
           </svg>
         </div>
         <h2 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-[#1a1a1a] mb-2">
-          E-posta doğrulama gönderildi
+          {t(locale, 'authCheckEmail')}
         </h2>
         <p className="text-sm text-[#7a6a5a] leading-relaxed mb-6">
-          <strong>{email}</strong> adresine bir doğrulama linki gönderdik. Gelen kutunu kontrol et.
+          <strong>{email}</strong> — {t(locale, 'authLinkSent')}
         </p>
         <Link
           href="/giris"
           className="block w-full bg-[#6D1A3E] text-white py-3.5 rounded-full text-sm font-semibold text-center hover:bg-[#5a1533] transition-colors"
         >
-          Giriş Sayfasına Dön
+          {t(locale, 'authBackToLogin')}
         </Link>
       </motion.div>
     )
@@ -104,7 +106,7 @@ export default function RegisterPage() {
         <Image src="/brand/logo.svg" alt="AnıKare" width={36} height={39} />
         <span className="text-lg font-bold text-[#6D1A3E] tracking-widest uppercase">AnıKare</span>
       </div>
-      <p className="text-[#7a6a5a] text-sm text-center mb-6">Hesap oluştur, ücretsiz başla</p>
+      <p className="text-[#7a6a5a] text-sm text-center mb-6">{t(locale, 'authSubtitle')}</p>
 
       {/* Social signup */}
       <div className="space-y-2.5 mb-5">
@@ -118,21 +120,21 @@ export default function RegisterPage() {
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          Google ile Kayıt Ol
+          {t(locale, 'authGoogleBtn')}
         </button>
       </div>
 
       {/* Divider */}
       <div className="flex items-center gap-3 mb-5">
         <div className="flex-1 h-px bg-[#e8ddd5]" />
-        <span className="text-xs text-[#9ca3af] font-medium">veya e-posta ile</span>
+        <span className="text-xs text-[#9ca3af] font-medium">{locale === 'tr' ? 'veya e-posta ile' : locale === 'de' ? 'oder per E-Mail' : 'or with email'}</span>
         <div className="flex-1 h-px bg-[#e8ddd5]" />
       </div>
 
       {/* Email form */}
       <form onSubmit={handleRegister} className="space-y-3.5">
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#374151]">Ad Soyad</label>
+          <label className="text-sm font-medium text-[#374151]">{t(locale, 'authNameLabel')}</label>
           <input
             type="text"
             required
@@ -143,7 +145,7 @@ export default function RegisterPage() {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#374151]">E-posta</label>
+          <label className="text-sm font-medium text-[#374151]">{t(locale, 'authEmailLabel')}</label>
           <input
             type="email"
             required
@@ -154,13 +156,13 @@ export default function RegisterPage() {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-[#374151]">Şifre</label>
+          <label className="text-sm font-medium text-[#374151]">{t(locale, 'authPasswordLabel')}</label>
           <input
             type="password"
             required
             value={password}
             onChange={e => setPassword(e.target.value)}
-            placeholder="En az 6 karakter"
+            placeholder="••••••••"
             className="w-full bg-white border border-[#e8ddd5] rounded-2xl px-4 py-3 text-sm text-[#1a1a1a] placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-[#6D1A3E]/30 focus:border-[#6D1A3E] transition"
           />
         </div>
@@ -176,14 +178,14 @@ export default function RegisterPage() {
           disabled={loading}
           className="w-full bg-[#6D1A3E] text-white py-3.5 rounded-full text-sm font-semibold hover:bg-[#5a1533] disabled:opacity-50 active:scale-[0.98] transition-all mt-1"
         >
-          {loading ? 'Kaydediliyor...' : 'Hesap Oluştur'}
+          {loading ? t(locale, 'authRegistering') : t(locale, 'authRegisterBtn')}
         </button>
       </form>
 
       <p className="text-xs text-[#9ca3af] text-center mt-4">
-        Zaten hesabın var mı?{' '}
+        {t(locale, 'authHaveAccount')}{' '}
         <Link href="/giris" className="text-[#6D1A3E] font-medium hover:underline">
-          Giriş yap
+          {t(locale, 'authLoginLink')}
         </Link>
       </p>
     </motion.div>

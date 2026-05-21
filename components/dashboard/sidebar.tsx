@@ -39,7 +39,7 @@ export default function Sidebar({ user }: SidebarProps) {
 
   async function handleSignOut() {
     await supabase.auth.signOut()
-    router.push('/giris')
+    router.push('/')
   }
 
   return (

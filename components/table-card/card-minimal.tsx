@@ -43,7 +43,7 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
     <div style={{
       width: 756, height: 403, background: '#FAF7F2', position: 'relative',
       overflow: 'hidden', border: '1.5px solid #e8ddd5', borderRadius: 6,
-      display: 'flex', flexShrink: 0,
+      display: 'flex', flexShrink: 0, paddingTop: 48, paddingBottom: 48,
     }}>
       {/* Accent bars */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 5, background: '#6D1A3E' }} />
@@ -61,7 +61,7 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
       <div style={{ width: 1, background: '#e8ddd5', margin: '46px 0' }} />
 
       {/* Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 32, paddingRight: 48, gap: 8 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 32, paddingRight: 120, gap: 8 }}>
         {eventType && (
           <p style={{ margin: 0, fontSize: 10, letterSpacing: 4, textTransform: 'uppercase', color: '#6D1A3E', fontFamily: 'Arial, sans-serif', fontWeight: 700 }}>
             {eventType}
@@ -76,9 +76,9 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
           </p>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '2px 0' }}>
-          <div style={{ height: 1.5, width: 28, background: '#6D1A3E' }} />
+          <div style={{ height: 1.5, flex: 1, background: '#6D1A3E' }} />
           <div style={{ width: 5, height: 5, background: '#6D1A3E', transform: 'rotate(45deg)' }} />
-          <div style={{ height: 1.5, width: 28, background: '#6D1A3E' }} />
+          <div style={{ height: 1.5, flex: 1, background: '#6D1A3E' }} />
         </div>
         <p style={{ margin: 0, fontSize: 13, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
           QR kodu okutarak anılarınızı<br />bizimle paylaşın.

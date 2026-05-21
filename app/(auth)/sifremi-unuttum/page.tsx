@@ -5,9 +5,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
+import { useLocale } from '@/components/providers/locale-provider'
+import { t } from '@/lib/i18n/site'
 
 export default function ForgotPasswordPage() {
   const supabase = createClient()
+  const { locale } = useLocale()
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
@@ -43,19 +46,22 @@ export default function ForgotPasswordPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
           </div>
+          <h2 className="font-[family-name:var(--font-playfair)] text-lg font-bold text-[#1a1a1a] mb-2">
+            {t(locale, 'authCheckEmail')}
+          </h2>
           <p className="text-sm text-[#7a6a5a] mb-5">
-            <strong>{email}</strong> adresine şifre sıfırlama linki gönderdik.
+            {t(locale, 'authLinkSent')}
           </p>
           <Link href="/giris" className="text-sm text-[#6D1A3E] font-medium hover:underline">
-            ← Giriş sayfasına dön
+            ← {t(locale, 'authBackToLogin')}
           </Link>
         </div>
       ) : (
         <>
-          <p className="text-[#7a6a5a] text-sm text-center mb-6 mt-1">Şifreni sıfırlamak için e-postanı gir</p>
+          <p className="text-[#7a6a5a] text-sm text-center mb-6 mt-1">{t(locale, 'authForgotDesc')}</p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-[#374151]">E-posta</label>
+              <label className="text-sm font-medium text-[#374151]">{t(locale, 'authEmailLabel')}</label>
               <input
                 type="email"
                 required
@@ -71,12 +77,12 @@ export default function ForgotPasswordPage() {
               disabled={loading}
               className="w-full bg-[#6D1A3E] text-white py-3.5 rounded-full text-sm font-semibold hover:bg-[#5a1533] disabled:opacity-50 transition-all"
             >
-              {loading ? 'Gönderiliyor...' : 'Sıfırlama Linki Gönder'}
+              {loading ? t(locale, 'authSending') : t(locale, 'authSendLink')}
             </button>
           </form>
           <p className="text-xs text-[#9ca3af] text-center mt-4">
             <Link href="/giris" className="text-[#6D1A3E] font-medium hover:underline">
-              ← Giriş sayfasına dön
+              ← {t(locale, 'authBackToLogin')}
             </Link>
           </p>
         </>
