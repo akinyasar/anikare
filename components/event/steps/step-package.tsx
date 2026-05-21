@@ -5,21 +5,21 @@ import type { PackageType } from '@/types'
 const PACKAGES = [
   {
     value: 'eco' as PackageType,
-    name: 'Eko',
+    name: 'Ücretsiz',
     price: 'Ücretsiz',
-    features: ['150 fotoğraf', '10 video', '1080p kalite', 'Standart QR kart'],
+    features: ['10 fotoğraf', '2 video', 'Temel QR kart', 'Akışı keşfet'],
   },
   {
     value: 'standard' as PackageType,
     name: 'Standart',
-    price: '₺299',
+    price: '₺1.000',
     popular: true,
-    features: ['Sınırsız fotoğraf', '30 video', '4K kalite', 'Özel masa kartı'],
+    features: ['Sınırsız fotoğraf', '20 video', '4K kalite', 'Özel masa kartı'],
   },
   {
     value: 'premium' as PackageType,
     name: 'Premium',
-    price: '₺499',
+    price: '₺1.399',
     features: [
       'Sınırsız fotoğraf & video',
       'Orijinal kalite',
@@ -37,8 +37,8 @@ interface Props {
 export default function StepPackage({ state, update }: Props) {
   return (
     <div className="space-y-3">
-      <p className="text-sm text-gray-500 mb-4">
-        Etkinliğinize uygun paketi seçin. İstediğiniz zaman yükseltebilirsiniz.
+      <p className="text-sm text-[#7a6a5a] mb-4">
+        Etkinliğinize uygun paketi seçin. Ücretsiz paket ile akışı görebilirsiniz.
       </p>
       {PACKAGES.map((pkg) => (
         <button
@@ -47,25 +47,25 @@ export default function StepPackage({ state, update }: Props) {
           onClick={() => update({ packageType: pkg.value })}
           className={`w-full text-left p-4 rounded-2xl border-2 transition-all ${
             state.packageType === pkg.value
-              ? 'border-rose-400 bg-rose-50'
-              : 'border-gray-200 hover:border-gray-300 bg-white'
+              ? 'border-[#6D1A3E] bg-[#f5e6ed]'
+              : 'border-[#e8ddd5] hover:border-[#6D1A3E]/30 bg-white'
           }`}
         >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-gray-900">{pkg.name}</span>
+              <span className="font-semibold text-[#1a1a1a]">{pkg.name}</span>
               {pkg.popular && (
-                <span className="text-xs bg-rose-500 text-white px-2 py-0.5 rounded-full">
-                  Popüler
+                <span className="text-[10px] bg-[#6D1A3E] text-white px-2 py-0.5 rounded-full font-semibold">
+                  En Popüler
                 </span>
               )}
             </div>
-            <span className="font-bold text-gray-900">{pkg.price}</span>
+            <span className="font-bold text-[#6D1A3E]">{pkg.price}</span>
           </div>
           <ul className="space-y-1">
             {pkg.features.map((f) => (
-              <li key={f} className="text-sm text-gray-500 flex items-center gap-1.5">
-                <span className="text-rose-400">✓</span> {f}
+              <li key={f} className="text-sm text-[#7a6a5a] flex items-center gap-1.5">
+                <span className="text-[#6D1A3E]">✓</span> {f}
               </li>
             ))}
           </ul>

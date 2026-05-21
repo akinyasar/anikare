@@ -12,16 +12,17 @@ export const PACKAGES: Record<
   }
 > = {
   eco: {
-    maxPhotos: 150,
-    maxVideos: 10,
-    compressionTarget: 1080,
-    compressionQuality: 0.75,
+    // "Ücretsiz" — sadece akışı görmek için
+    maxPhotos: 10,
+    maxVideos: 2,
+    compressionTarget: 720,
+    compressionQuality: 0.7,
     liveSlideshow: false,
     premiumTemplates: false,
   },
   standard: {
     maxPhotos: Infinity,
-    maxVideos: 30,
+    maxVideos: 20,
     compressionTarget: 2160,
     compressionQuality: 0.85,
     liveSlideshow: false,

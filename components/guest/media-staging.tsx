@@ -65,7 +65,7 @@ export default function MediaStaging({
           <p className="text-[11px] text-[#7a6a5a]">{formatBytes(totalSize)}</p>
         </div>
         <span className="text-[11px] bg-[#f5e6ed] text-[#6D1A3E] font-semibold px-2.5 py-1 rounded-full">
-          {packageType === 'eco' ? 'Eko' : packageType === 'standard' ? 'Standart' : 'Premium'}
+          {packageType === 'eco' ? 'Ücretsiz' : packageType === 'standard' ? 'Standart' : 'Premium'}
         </span>
       </div>
 

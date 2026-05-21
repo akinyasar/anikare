@@ -7,28 +7,28 @@ import { useRef } from 'react'
 
 const PLANS = [
   {
-    name: 'Eko',
+    name: 'Ücretsiz',
     price: 'Ücretsiz',
-    sub: 'Sonsuza kadar',
+    sub: 'Akışı keşfetmek için',
     badge: null,
     features: [
-      '150 fotoğraf',
-      '10 video',
-      '1080p kalite',
-      'Standart QR kart',
-      'Türkçe / İngilizce',
+      '10 fotoğraf',
+      '2 video',
+      'Temel QR kart',
+      'Türkçe / İngilizce / Almanca',
+      'Sınırsız süre',
     ],
     cta: 'Ücretsiz Başla',
     highlight: false,
   },
   {
     name: 'Standart',
-    price: '₺299',
+    price: '₺1.000',
     sub: 'Tek etkinlik · tek seferlik',
     badge: 'En Popüler',
     features: [
       'Sınırsız fotoğraf',
-      '30 video',
+      '20 video',
       '4K kalite',
       'Özel masa kartı tasarımı',
       'Tüm diller',
@@ -38,7 +38,7 @@ const PLANS = [
   },
   {
     name: 'Premium',
-    price: '₺499',
+    price: '₺1.399',
     sub: 'Tek etkinlik · tek seferlik',
     badge: null,
     features: [
