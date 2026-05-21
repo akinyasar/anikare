@@ -32,22 +32,28 @@ export default function MediaGrid({ eventId, count = 8 }: Props) {
     fetchMedia()
   }, [fetchMedia])
 
-  async function handleToggleVisibility(item: MediaItem) {
-    await fetch(`/api/media/${item.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ is_visible: !item.is_visible }),
-    })
+  function handleToggleVisibility(item: MediaItem) {
+    // Optimistic update — flip immediately, fire API in background
     setMedia((prev) =>
       prev.map((m) => (m.id === item.id ? { ...m, is_visible: !m.is_visible } : m))
     )
+    fetch(`/api/media/${item.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ is_visible: !item.is_visible }),
+    }).catch(() => {
+      // Revert on failure
+      setMedia((prev) =>
+        prev.map((m) => (m.id === item.id ? { ...m, is_visible: item.is_visible } : m))
+      )
+    })
   }
 
   async function handleDelete(item: MediaItem) {
     if (!confirm('Bu içeriği kalıcı olarak silmek istiyor musunuz?')) return
-    await fetch(`/api/media/${item.id}`, { method: 'DELETE' })
     setMedia((prev) => prev.filter((m) => m.id !== item.id))
     if (selected?.id === item.id) setSelected(null)
+    fetch(`/api/media/${item.id}`, { method: 'DELETE' }).catch(() => fetchMedia())
   }
 
   const filtered = filter === 'all' ? media : media.filter((m) => m.file_type === filter)
@@ -158,7 +164,7 @@ export default function MediaGrid({ eventId, count = 8 }: Props) {
 
       {selected && (
         <MediaModal
-          item={selected}
+          item={media.find(m => m.id === selected.id) ?? selected}
           onClose={() => setSelected(null)}
           onToggleVisibility={handleToggleVisibility}
           onDelete={handleDelete}
