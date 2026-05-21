@@ -67,7 +67,12 @@ export default function TableCardSection({ templateId, title, eventType, eventDa
           ))}
         </div>
 
-        <div className="bg-[#f5f5f0] rounded-2xl p-6 flex justify-center items-center overflow-hidden">
+        {/* Mobile landscape: horizontally scrollable */}
+        <div className={`bg-[#f5f5f0] rounded-2xl flex items-center justify-center ${
+          orientation === 'landscape'
+            ? 'overflow-x-auto overflow-y-hidden p-4 sm:p-6'
+            : 'overflow-hidden p-6'
+        }`}>
           <TableCard
             templateId={template}
             title={title}

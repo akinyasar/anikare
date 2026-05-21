@@ -11,9 +11,7 @@ export default async function EventDashboardPage({
 }) {
   const { slug } = await params
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/giris')
 
   const { data: event } = await supabase
@@ -41,17 +39,18 @@ export default async function EventDashboardPage({
         <p className="text-[#9ca3af] text-sm mt-1">
           {event.event_date
             ? new Date(event.event_date).toLocaleDateString('tr-TR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
+                day: 'numeric', month: 'long', year: 'numeric',
               })
             : 'Tarih belirlenmedi'}{' '}
           · <span className="capitalize">{event.package_type}</span>
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-start gap-6 mb-8">
-        <div className="flex-1">
+      {/* Desktop: 2-column (content | QR) — Mobile: single column */}
+      <div className="flex flex-col lg:flex-row lg:items-start gap-6 mb-8">
+
+        {/* LEFT — stats + slideshow + table card */}
+        <div className="flex-1 min-w-0 space-y-6">
           {/* Stats */}
           <div className={`grid gap-3 ${event.guest_count_estimate ? 'grid-cols-4' : 'grid-cols-3'}`}>
             <div className="bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-[#e8ddd5] text-center">
@@ -88,24 +87,27 @@ export default async function EventDashboardPage({
               href={`/sunum/${slug}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 mt-4 text-sm text-[#6D1A3E] font-medium hover:text-[#5a1533]"
+              className="inline-flex items-center gap-2 text-sm text-[#6D1A3E] font-medium hover:text-[#5a1533]"
             >
               ✨ Canlı Slayt Gösterisini Aç →
             </a>
           )}
+
+          {/* Table card — stays in left column on desktop */}
+          <TableCardSection
+            templateId={event.template_id}
+            title={event.title}
+            eventType={EVENT_LABELS[event.event_type] ?? 'Etkinlik'}
+            eventDate={event.event_date}
+            slug={slug}
+          />
         </div>
 
-        <QrDownload slug={slug} eventTitle={event.title} />
+        {/* RIGHT — QR code (sticky on desktop) */}
+        <div className="w-full lg:w-80 lg:shrink-0 lg:sticky lg:top-6">
+          <QrDownload slug={slug} eventTitle={event.title} />
+        </div>
       </div>
-
-      {/* Masa kartı */}
-      <TableCardSection
-        templateId={event.template_id}
-        title={event.title}
-        eventType={EVENT_LABELS[event.event_type] ?? 'Etkinlik'}
-        eventDate={event.event_date}
-        slug={slug}
-      />
 
       <h2 className="text-base font-semibold text-[#1a1a1a] mb-4">Yüklenen İçerikler</h2>
       <MediaGrid eventId={event.id} />
