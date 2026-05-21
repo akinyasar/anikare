@@ -36,13 +36,15 @@ export default function MediaCard({ item, onClick, onToggleVisibility, onDelete 
       ) : (
         <>
           {!imgLoaded && (
-            <div className="absolute inset-0 bg-[#F0EBE3] animate-pulse" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#F0EBE3] to-[#e8ddd5] animate-pulse" />
           )}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={item.viewUrl ?? item.file_url}
             alt={item.guest_name}
-            className={`w-full h-full object-cover transition-all group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            loading="eager"
+            decoding="async"
+            className={`w-full h-full object-cover transition-opacity duration-300 group-hover:scale-105 transition-transform ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImgLoaded(true)}
             onError={() => setImgError(true)}
           />

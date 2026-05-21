@@ -8,11 +8,13 @@ import type { MediaItem } from '@/types'
 
 interface Props {
   eventId: string
+  /** Known item count for correct skeleton count while loading */
+  count?: number
 }
 
 type Filter = 'all' | 'photo' | 'video'
 
-export default function MediaGrid({ eventId }: Props) {
+export default function MediaGrid({ eventId, count = 8 }: Props) {
   const [media, setMedia] = useState<MediaItem[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<Filter>('all')
@@ -73,10 +75,17 @@ export default function MediaGrid({ eventId }: Props) {
   }
 
   if (loading) {
+    const skeletonCount = Math.max(count, 4)
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="aspect-square bg-[#F0EBE3] rounded-2xl animate-pulse" />
+        {Array.from({ length: skeletonCount }).map((_, i) => (
+          <div
+            key={i}
+            className="aspect-square rounded-2xl overflow-hidden"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <div className="w-full h-full bg-gradient-to-br from-[#F0EBE3] to-[#e8ddd5] animate-pulse" />
+          </div>
         ))}
       </div>
     )
@@ -134,14 +143,19 @@ export default function MediaGrid({ eventId }: Props) {
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {filtered.map((item) => (
-            <MediaCard
+          {filtered.map((item, i) => (
+            <div
               key={item.id}
-              item={item}
-              onClick={() => setSelected(item)}
-              onToggleVisibility={handleToggleVisibility}
-              onDelete={handleDelete}
-            />
+              className="animate-fade-in"
+              style={{ animationDelay: `${Math.min(i * 40, 400)}ms`, animationFillMode: 'both' }}
+            >
+              <MediaCard
+                item={item}
+                onClick={() => setSelected(item)}
+                onToggleVisibility={handleToggleVisibility}
+                onDelete={handleDelete}
+              />
+            </div>
           ))}
         </div>
       )}

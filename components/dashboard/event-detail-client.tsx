@@ -119,7 +119,7 @@ export default function EventDetailClient({ event, slug }: Props) {
       </div>
 
       <h2 className="text-base font-semibold text-[#1a1a1a] mb-4">{t(locale, 'uploadedContent')}</h2>
-      <MediaGrid eventId={event.id} />
+      <MediaGrid eventId={event.id} count={event.photo_count + event.video_count} />
     </div>
   )
 }

@@ -44,5 +44,12 @@ export async function GET(req: NextRequest) {
     })
   )
 
-  return Response.json({ media: enriched })
+  return new Response(JSON.stringify({ media: enriched }), {
+    headers: {
+      'Content-Type': 'application/json',
+      // Cache presigned URLs for 30s — eliminates redundant calls on back-nav
+      // Presigned URLs are valid 1hr so this is safe
+      'Cache-Control': 'private, max-age=30',
+    },
+  })
 }
