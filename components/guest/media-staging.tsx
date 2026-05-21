@@ -95,7 +95,7 @@ export default function MediaStaging({
   const overVideoLimit = pkg.maxVideos !== Infinity && totalVideos > pkg.maxVideos
   const canUpload = items.length > 0 && !overPhotoLimit && !overVideoLimit
 
-  const packageLabel = packageType === 'eco' ? 'Ücretsiz' : packageType === 'standard' ? 'Standart' : 'Premium'
+  const packageLabel = dict.packageLabel ?? (packageType === 'eco' ? 'Ücretsiz' : packageType === 'standard' ? 'Standart' : 'Premium')
 
   return (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
@@ -113,7 +113,7 @@ export default function MediaStaging({
             </svg>
           </button>
           <div className="text-center">
-            <p className="text-sm font-semibold text-[#1a1a1a]">{items.length} dosya seçildi</p>
+            <p className="text-sm font-semibold text-[#1a1a1a]">{items.length} {dict.filesSelected ?? 'dosya seçildi'}</p>
             <p className="text-[11px] text-[#7a6a5a]">{formatBytes(totalSize)}</p>
           </div>
           <span className="text-[11px] bg-[#f5e6ed] text-[#6D1A3E] font-semibold px-2.5 py-1 rounded-full">
@@ -125,10 +125,10 @@ export default function MediaStaging({
         <div className="px-5 py-2.5 bg-white border-b border-[#e8ddd5] flex items-center justify-between">
           <span className="text-xs text-[#7a6a5a] flex items-center gap-2">
             {photoItems.length > 0 && (
-              <span className="inline-flex items-center gap-1"><CameraIcon className="w-3.5 h-3.5"/>{photoItems.length} fotoğraf</span>
+              <span className="inline-flex items-center gap-1"><CameraIcon className="w-3.5 h-3.5"/>{photoItems.length} {dict.photoCount ?? 'fotoğraf'}</span>
             )}
             {videoItems.length > 0 && (
-              <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5"/>{videoItems.length} video</span>
+              <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5"/>{videoItems.length} {dict.videoCount ?? 'video'}</span>
             )}
           </span>
           <button
@@ -138,19 +138,19 @@ export default function MediaStaging({
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            Daha Fazla Ekle
+            {dict.addMore ?? 'Daha Fazla Ekle'}
           </button>
         </div>
 
         {/* Warnings */}
         {overPhotoLimit && (
           <div className="mx-5 mt-2 bg-red-50 border border-red-200 rounded-2xl px-4 py-2.5 text-sm text-red-600">
-            Fotoğraf limiti aşıldı ({totalPhotos}/{pkg.maxPhotos})
+            {dict.photoLimitExceeded ?? 'Fotoğraf limiti aşıldı'} ({totalPhotos}/{pkg.maxPhotos})
           </div>
         )}
         {overVideoLimit && (
           <div className="mx-5 mt-2 bg-red-50 border border-red-200 rounded-2xl px-4 py-2.5 text-sm text-red-600">
-            Video limiti aşıldı ({totalVideos}/{pkg.maxVideos})
+            {dict.videoLimitExceeded ?? 'Video limiti aşıldı'} ({totalVideos}/{pkg.maxVideos})
           </div>
         )}
 
@@ -185,11 +185,11 @@ export default function MediaStaging({
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
-              Geri
+              {dict.back ?? 'Geri'}
             </button>
             <div className="h-4 w-px bg-[#e8ddd5]" />
             <h1 className="text-lg font-semibold text-[#1a1a1a]">
-              {items.length} dosya seçildi
+              {items.length} {dict.filesSelected ?? 'dosya seçildi'}
             </h1>
             <span className="text-sm text-[#9ca3af]">· {formatBytes(totalSize)}</span>
           </div>
@@ -212,7 +212,7 @@ export default function MediaStaging({
 
                 {/* Package */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-[#7a6a5a]">Paket</span>
+                  <span className="text-sm font-medium text-[#7a6a5a]">{dict.packageLabel ?? 'Paket'}</span>
                   <span className="text-sm font-semibold text-[#6D1A3E] bg-[#f5e6ed] px-3 py-1 rounded-full">
                     {packageLabel}
                   </span>
@@ -221,13 +221,13 @@ export default function MediaStaging({
                 {/* Counts */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#7a6a5a] flex items-center gap-1"><CameraIcon className="w-3.5 h-3.5"/>Fotoğraf</span>
+                    <span className="text-[#7a6a5a] flex items-center gap-1"><CameraIcon className="w-3.5 h-3.5"/>{dict.photoCount ?? 'Fotoğraf'}</span>
                     <span className={`font-semibold ${overPhotoLimit ? 'text-red-500' : 'text-[#1a1a1a]'}`}>
                       {totalPhotos} / {photoLimit}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#7a6a5a] flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5"/>Video</span>
+                    <span className="text-[#7a6a5a] flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5"/>{dict.videoCount ?? 'Video'}</span>
                     <span className={`font-semibold ${overVideoLimit ? 'text-red-500' : 'text-[#1a1a1a]'}`}>
                       {totalVideos} / {videoLimit}
                     </span>
@@ -237,12 +237,12 @@ export default function MediaStaging({
                 {/* Warnings */}
                 {overPhotoLimit && (
                   <p className="text-xs text-red-500 bg-red-50 rounded-xl px-3 py-2">
-                    Fotoğraf limiti aşıldı
+                    {dict.photoLimitExceeded ?? 'Fotoğraf limiti aşıldı'}
                   </p>
                 )}
                 {overVideoLimit && (
                   <p className="text-xs text-red-500 bg-red-50 rounded-xl px-3 py-2">
-                    Video limiti aşıldı
+                    {dict.videoLimitExceeded ?? 'Video limiti aşıldı'}
                   </p>
                 )}
 
@@ -256,12 +256,11 @@ export default function MediaStaging({
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
-                  Daha Fazla Ekle
+                  {dict.addMore ?? 'Daha Fazla Ekle'}
                 </button>
 
-                {/* Upload button */}
                 <Button variant="primary" size="lg" disabled={!canUpload} onClick={onUpload} className="w-full">
-                  Yükle ({items.length} dosya)
+                  {dict.upload ?? 'Yükle'} ({items.length} {dict.filesSelected ?? 'dosya'})
                 </Button>
               </div>
             </div>

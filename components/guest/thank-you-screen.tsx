@@ -4,13 +4,14 @@ import { motion } from 'framer-motion'
 import Button from '@/components/ui/button'
 
 interface Props {
+  title: string
   message: string
   videoUrl: string | null
   uploadMoreLabel: string
   onUploadMore: () => void
 }
 
-export default function ThankYouScreen({ message, videoUrl, uploadMoreLabel, onUploadMore }: Props) {
+export default function ThankYouScreen({ title, message, videoUrl, uploadMoreLabel, onUploadMore }: Props) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -58,7 +59,7 @@ export default function ThankYouScreen({ message, videoUrl, uploadMoreLabel, onU
         transition={{ delay: 0.3 }}
       >
         <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-[#1a1a1a] mb-3">
-          Teşekkürler! 🤍
+          {title}
         </h1>
         <p className="text-base text-[#7a6a5a] max-w-xs leading-relaxed mb-10">
           {message}

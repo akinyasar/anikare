@@ -77,11 +77,15 @@ export interface Dictionary {
     openCamera: string;
     selectFromGallery: string;
     uploading: string;
+    upload?: string;
     uploadMore: string;
+    addMore?: string;
+    back?: string;
     pinTitle: string;
     pinDescription: string;
     pinError: string;
     confirm: string;
+    thankYouTitle?: string;
     thankYouDefault: string;
     shareMemories: string;
     shareMemoriesDesc: string;
@@ -90,6 +94,11 @@ export interface Dictionary {
     uploadingCount: string;
     uploadError: string;
     filesSelected: string;
+    photoCount?: string;
+    videoCount?: string;
+    packageLabel?: string;
+    photoLimitExceeded?: string;
+    videoLimitExceeded?: string;
   };
   errors: {
     uploadFailed: string;

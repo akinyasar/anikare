@@ -138,6 +138,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
   if (stage === 'thankyou') {
     return (
       <ThankYouScreen
+        title={g.thankYouTitle ?? 'Teşekkürler! 🤍'}
         message={event.thank_you_message ?? (g.thankYouDefault ?? 'Anılarınızı paylaştığınız için teşekkürler!')}
         videoUrl={event.thank_you_video_url ?? null}
         uploadMoreLabel={g.uploadMore ?? 'Başka Anı Ekle'}
