@@ -8,6 +8,22 @@ import type { UploadItem } from '@/hooks/use-media-upload'
 import type { PackageType, Locale } from '@/types'
 import { PACKAGES } from '@/lib/packages'
 
+function CameraIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316zM16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+    </svg>
+  )
+}
+
+function VideoIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+    </svg>
+  )
+}
+
 interface Props {
   items: UploadItem[]
   packageType: PackageType
@@ -27,7 +43,7 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-function VideoIcon() {
+function PlayIcon() {
   return (
     <svg className="w-8 h-8 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
@@ -43,7 +59,7 @@ function GridItem({ item, index, onRemove }: { item: UploadItem; index: number; 
         <img src={item.preview} alt={item.file.name} className="w-full h-full object-cover" />
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-          <VideoIcon />
+          <PlayIcon />
           <span className="text-xs text-white/60 truncate max-w-[80px] px-1">{item.file.name}</span>
         </div>
       )}
@@ -108,7 +124,9 @@ export default function MediaStaging({
         {/* Limits bar */}
         <div className="px-5 py-2.5 bg-white border-b border-[#e8ddd5] flex items-center justify-between">
           <span className="text-xs text-[#7a6a5a]">
-            📷 {totalPhotos}/{photoLimit} &nbsp;·&nbsp; 🎬 {totalVideos}/{videoLimit}
+            <span className="inline-flex items-center gap-1"><CameraIcon className="w-3.5 h-3.5"/>{totalPhotos}/{photoLimit}</span>
+            <span className="text-[#c4b5a5]">·</span>
+            <span className="inline-flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5"/>{totalVideos}/{videoLimit}</span>
           </span>
           <button
             onClick={onAddMore}
@@ -124,12 +142,12 @@ export default function MediaStaging({
         {/* Warnings */}
         {overPhotoLimit && (
           <div className="mx-5 mt-2 bg-red-50 border border-red-200 rounded-2xl px-4 py-2.5 text-sm text-red-600">
-            ⚠️ Fotoğraf limiti aşıldı ({totalPhotos}/{pkg.maxPhotos})
+            Fotoğraf limiti aşıldı ({totalPhotos}/{pkg.maxPhotos})
           </div>
         )}
         {overVideoLimit && (
           <div className="mx-5 mt-2 bg-red-50 border border-red-200 rounded-2xl px-4 py-2.5 text-sm text-red-600">
-            ⚠️ Video limiti aşıldı ({totalVideos}/{pkg.maxVideos})
+            Video limiti aşıldı ({totalVideos}/{pkg.maxVideos})
           </div>
         )}
 
@@ -205,13 +223,13 @@ export default function MediaStaging({
                 {/* Counts */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#7a6a5a]">📷 Fotoğraf</span>
+                    <span className="text-[#7a6a5a] flex items-center gap-1"><CameraIcon className="w-3.5 h-3.5"/>Fotoğraf</span>
                     <span className={`font-semibold ${overPhotoLimit ? 'text-red-500' : 'text-[#1a1a1a]'}`}>
                       {totalPhotos} / {photoLimit}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#7a6a5a]">🎬 Video</span>
+                    <span className="text-[#7a6a5a] flex items-center gap-1"><VideoIcon className="w-3.5 h-3.5"/>Video</span>
                     <span className={`font-semibold ${overVideoLimit ? 'text-red-500' : 'text-[#1a1a1a]'}`}>
                       {totalVideos} / {videoLimit}
                     </span>
@@ -221,12 +239,12 @@ export default function MediaStaging({
                 {/* Warnings */}
                 {overPhotoLimit && (
                   <p className="text-xs text-red-500 bg-red-50 rounded-xl px-3 py-2">
-                    ⚠️ Fotoğraf limiti aşıldı
+                    Fotoğraf limiti aşıldı
                   </p>
                 )}
                 {overVideoLimit && (
                   <p className="text-xs text-red-500 bg-red-50 rounded-xl px-3 py-2">
-                    ⚠️ Video limiti aşıldı
+                    Video limiti aşıldı
                   </p>
                 )}
 

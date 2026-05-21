@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import LocaleSwitcher from '@/components/ui/locale-switcher'
 
 export default function MarketingNav() {
   const [scrolled, setScrolled] = useState(false)
@@ -77,6 +78,7 @@ export default function MarketingNav() {
 
         {/* Desktop actions */}
         <div className="hidden md:flex items-center gap-3">
+          <LocaleSwitcher />
           {user ? (
             <Link
               href="/dashboard"
@@ -128,6 +130,7 @@ export default function MarketingNav() {
             </a>
           ))}
           <div className="pt-2 border-t border-[#e8ddd5] flex flex-col gap-2">
+            <LocaleSwitcher className="self-start" />
             {user ? (
               <Link href="/dashboard" className="bg-[#6D1A3E] text-white text-center py-3 rounded-full text-sm font-semibold">
                 Panele Git →
