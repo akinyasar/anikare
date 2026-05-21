@@ -38,13 +38,6 @@ export default function LoginPage() {
     })
   }
 
-  async function signInWithApple() {
-    await supabase.auth.signInWithOAuth({
-      provider: 'apple',
-      options: { redirectTo: `${location.origin}/auth/callback` },
-    })
-  }
-
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -97,16 +90,6 @@ export default function LoginPage() {
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
               </svg>
               Google ile Devam Et
-            </button>
-
-            <button
-              onClick={signInWithApple}
-              className="w-full flex items-center justify-center gap-3 bg-[#1a1a1a] rounded-2xl px-5 py-3.5 text-sm font-medium text-white hover:bg-black active:scale-[0.98] transition-all"
-            >
-              <svg className="w-5 h-5 shrink-0 fill-white" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.29.07 2.19.73 2.94.77.78.04 2.24-.89 3.77-.77 1.44.12 2.5.63 3.2 1.6-3.28 1.97-2.74 6.32.74 7.52-.43 1.1-.93 2.17-2.65 3.76zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-              </svg>
-              Apple ile Devam Et
             </button>
 
             <p className="text-xs text-[#9ca3af] text-center pt-1">
