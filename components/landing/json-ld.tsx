@@ -1,4 +1,4 @@
-const SITE_URL = 'https://anikare.vercel.app' // TODO: anikare.co alındığında güncelle
+import { SITE_URL } from '@/lib/config'
 
 const schema = {
   '@context': 'https://schema.org',

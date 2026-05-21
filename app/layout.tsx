@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SITE_URL } from '@/lib/config'
 import './globals.css'
 
 const playfair = Playfair_Display({
@@ -15,8 +16,6 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap',
 })
-
-const SITE_URL = 'https://anikare.vercel.app' // TODO: anikare.co alındığında güncelle
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
