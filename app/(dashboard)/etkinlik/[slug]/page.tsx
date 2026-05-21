@@ -52,7 +52,7 @@ export default async function EventDashboardPage({
       <div className="flex flex-col sm:flex-row sm:items-start gap-6 mb-8">
         <div className="flex-1">
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className={`grid gap-3 ${event.guest_count_estimate ? 'grid-cols-4' : 'grid-cols-3'}`}>
             <div className="bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-[#e8ddd5] text-center">
               <p className="text-2xl font-bold text-[#6D1A3E]">{event.photo_count}</p>
               <p className="text-xs text-[#9ca3af] mt-1">Fotoğraf</p>
@@ -61,6 +61,12 @@ export default async function EventDashboardPage({
               <p className="text-2xl font-bold text-[#6D1A3E]">{event.video_count}</p>
               <p className="text-xs text-[#9ca3af] mt-1">Video</p>
             </div>
+            {event.guest_count_estimate && (
+              <div className="bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-[#e8ddd5] text-center">
+                <p className="text-2xl font-bold text-[#6D1A3E]">{event.guest_count_estimate}</p>
+                <p className="text-xs text-[#9ca3af] mt-1">Beklenen</p>
+              </div>
+            )}
             <div className="bg-white rounded-2xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-[#e8ddd5] text-center">
               <div className="flex items-center justify-center mt-0.5">
                 {event.is_upload_active ? (

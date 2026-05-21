@@ -49,8 +49,11 @@ export default function EventWizard() {
   }
 
   function canProceed() {
-    if (step === 0) return state.title.trim().length > 0
-    if (step === 1 && state.pinEnabled) return state.pinCode.length === 4
+    if (step === 0) {
+      if (!state.title.trim()) return false
+      if (state.pinEnabled && state.pinCode.length !== 4) return false
+      return true
+    }
     return true
   }
 
@@ -111,13 +114,13 @@ export default function EventWizard() {
               <div className="flex-1">
                 <div
                   className={`h-1.5 rounded-full transition-colors duration-300 ${
-                    i <= step ? 'bg-rose-500' : 'bg-gray-200'
+                    i <= step ? 'bg-[#6D1A3E]' : 'bg-gray-200'
                   }`}
                 />
               </div>
               <span
                 className={`text-xs font-medium transition-colors ${
-                  i === step ? 'text-rose-500' : i < step ? 'text-gray-400' : 'text-gray-300'
+                  i === step ? 'text-[#6D1A3E]' : i < step ? 'text-gray-400' : 'text-gray-300'
                 }`}
               >
                 {s}
@@ -149,7 +152,7 @@ export default function EventWizard() {
               type="button"
               onClick={() => setStep((s) => s + 1)}
               disabled={!canProceed()}
-              className="flex-1 bg-rose-500 text-white rounded-xl py-3 text-sm font-medium hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 bg-[#6D1A3E] text-white rounded-xl py-3 text-sm font-medium hover:bg-[#5a1533] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Devam
             </button>
@@ -158,7 +161,7 @@ export default function EventWizard() {
               type="button"
               onClick={handleSubmit}
               disabled={loading}
-              className="flex-1 bg-rose-500 text-white rounded-xl py-3 text-sm font-medium hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 bg-[#6D1A3E] text-white rounded-xl py-3 text-sm font-medium hover:bg-[#5a1533] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? 'Oluşturuluyor...' : 'Etkinliği Oluştur ✨'}
             </button>
@@ -167,8 +170,16 @@ export default function EventWizard() {
       </div>
 
       {/* Live preview */}
-      <div className="hidden lg:block w-72 sticky top-6">
+      <div className="hidden lg:block w-72 sticky top-6 space-y-4">
         <TableCardPreview state={state} />
+        {state.thankYouMessage && (
+          <div className="bg-[#f5e6ed] rounded-2xl p-4 text-sm">
+            <p className="text-xs font-semibold text-[#6D1A3E] uppercase tracking-wide mb-2">
+              Misafir yükleme sonrası şunu görecek:
+            </p>
+            <p className="text-[#7a6a5a] italic leading-relaxed">{state.thankYouMessage}</p>
+          </div>
+        )}
       </div>
     </div>
   )

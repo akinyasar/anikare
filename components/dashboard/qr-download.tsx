@@ -43,10 +43,6 @@ export default function QrDownload({ slug, eventTitle }: Props) {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  function openLink() {
-    window.open(guestUrl, '_blank', 'noopener,noreferrer')
-  }
-
   return (
     <div className="bg-white rounded-3xl p-5 border border-[#e8ddd5] shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col items-center gap-3 w-full sm:w-auto">
       <p className="text-xs font-semibold text-[#7a6a5a] tracking-wide uppercase">Misafir QR Kodu</p>
@@ -66,15 +62,17 @@ export default function QrDownload({ slug, eventTitle }: Props) {
           {copied ? '✓ Kopyalandı' : 'Linki Kopyala'}
         </button>
       </div>
-      <button
-        onClick={openLink}
+      <a
+        href={guestUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         className="w-full bg-white border border-[#e8ddd5] text-[#7a6a5a] text-xs py-2.5 rounded-xl font-medium hover:bg-[#FAF7F2] hover:text-[#6D1A3E] transition-colors flex items-center justify-center gap-1.5"
       >
         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
         </svg>
         Linki Aç
-      </button>
+      </a>
     </div>
   )
 }

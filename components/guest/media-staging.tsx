@@ -48,10 +48,11 @@ export default function MediaStaging({
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="min-h-screen bg-[#FAF7F2] flex flex-col safe-top"
+      className="min-h-screen bg-[#FAF7F2] safe-top"
     >
+      <div className="max-w-2xl mx-auto flex flex-col min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3.5 border-b border-[#e8ddd5] bg-white">
+      <div className="flex items-center justify-between px-4 py-3.5 border-b border-[#e8ddd5] bg-white sm:bg-transparent sm:border-0 sm:pt-6 sm:pb-0">
         <button
           onClick={onBack}
           className="w-9 h-9 rounded-full flex items-center justify-center text-[#7a6a5a] hover:bg-[#f5e6ed] transition-colors"
@@ -99,7 +100,7 @@ export default function MediaStaging({
 
       {/* Preview grid */}
       <div className="flex-1 px-5 pb-40 overflow-y-auto">
-        <div className="grid grid-cols-2 gap-2 mt-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-1">
           {items.map((item, i) => (
             <div key={i} className="relative aspect-square rounded-2xl overflow-hidden bg-[#1a1a1a]">
               {item.fileType === 'photo' ? (
@@ -149,6 +150,7 @@ export default function MediaStaging({
           Yükle → ({items.length} dosya)
         </Button>
       </BottomBar>
+      </div>
     </motion.div>
   )
 }

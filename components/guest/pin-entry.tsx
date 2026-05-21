@@ -93,7 +93,9 @@ export default function PinEntry({ eventId, dict, onSuccess }: Props) {
               ref={refs[i]}
               type="text"
               inputMode="numeric"
+              pattern="\d*"
               maxLength={1}
+              autoFocus={i === 0}
               value={digit}
               onChange={(e) => handleChange(i, e.target.value)}
               onKeyDown={(e) => handleKeyDown(i, e)}

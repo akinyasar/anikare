@@ -54,3 +54,12 @@ textarea::placeholder {
 .safe-top {
   padding-top: env(safe-area-inset-top, 0px);
 }
+
+/* Global cursor — disabled overrides per-element */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
