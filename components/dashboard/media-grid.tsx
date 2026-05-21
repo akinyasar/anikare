@@ -56,7 +56,7 @@ export default function MediaGrid({ eventId }: Props) {
     await Promise.all(
       photos.map(async (item, i) => {
         try {
-          const res = await fetch(item.file_url)
+          const res = await fetch(item.viewUrl ?? item.file_url)
           const blob = await res.blob()
           const ext = item.file_url.split('.').pop()?.split('?')[0] ?? 'jpg'
           zip.file(`${item.guest_name.replace(/\s+/g, '_')}_${i + 1}.${ext}`, blob)

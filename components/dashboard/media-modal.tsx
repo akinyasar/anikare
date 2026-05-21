@@ -30,7 +30,7 @@ export default function MediaModal({ item, onClose, onToggleVisibility, onDelete
           <div className="relative bg-gray-900 aspect-square">
             {item.file_type === 'video' ? (
               <video
-                src={item.file_url}
+                src={item.viewUrl ?? item.file_url}
                 controls
                 autoPlay
                 className="w-full h-full object-contain"
@@ -38,7 +38,7 @@ export default function MediaModal({ item, onClose, onToggleVisibility, onDelete
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={item.file_url}
+                src={item.viewUrl ?? item.file_url}
                 alt={item.guest_name}
                 className="w-full h-full object-contain"
               />
@@ -63,7 +63,7 @@ export default function MediaModal({ item, onClose, onToggleVisibility, onDelete
                 </p>
               </div>
               <a
-                href={item.file_url}
+                href={item.viewUrl ?? item.file_url}
                 download
                 target="_blank"
                 rel="noreferrer"

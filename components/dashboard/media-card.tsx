@@ -40,7 +40,7 @@ export default function MediaCard({ item, onClick, onToggleVisibility, onDelete 
           )}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={item.file_url}
+            src={item.viewUrl ?? item.file_url}
             alt={item.guest_name}
             className={`w-full h-full object-cover transition-all group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImgLoaded(true)}

@@ -45,6 +45,7 @@ export interface MediaItem {
   guest_note: string | null;
   file_key: string;
   file_url: string;
+  viewUrl?: string; // presigned GET URL, added by /api/media
   file_type: FileType;
   file_size: number | null;
   original_filename: string | null;

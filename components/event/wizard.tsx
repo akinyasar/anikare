@@ -78,8 +78,10 @@ export default function EventWizard() {
         state.pinEnabled && state.pinCode ? await hashPin(state.pinCode) : null
 
       const eventDate = state.eventDate ? new Date(state.eventDate) : new Date()
-      const uploadExpiresAt = new Date(eventDate.getTime() + 7 * 24 * 60 * 60 * 1000)
-      const mediaRetentionUntil = new Date(eventDate.getTime() + 90 * 24 * 60 * 60 * 1000)
+      // Always give at least 30 days from today for upload window
+      const uploadBase = new Date(Math.max(eventDate.getTime(), Date.now()))
+      const uploadExpiresAt = new Date(uploadBase.getTime() + 30 * 24 * 60 * 60 * 1000)
+      const mediaRetentionUntil = new Date(uploadBase.getTime() + 90 * 24 * 60 * 60 * 1000)
 
       const { data, error: insertError } = await supabase
         .from('events')

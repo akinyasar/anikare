@@ -105,7 +105,15 @@ export default function DownloadPdfBtn({ templateId, title, eventType, eventDate
       pdf.addImage(canvas.toDataURL('image/png', 1.0), 'PNG', 0, 0, pdfW, pdfH)
 
       const safeName = title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ\s]/g, '').trim()
-      pdf.save(`${safeName}-masa-karti-${orientation}.pdf`)
+      const blob = pdf.output('blob')
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${safeName}-masa-karti-${orientation}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
     } catch (e) {
       console.error('PDF error:', e)
     } finally {

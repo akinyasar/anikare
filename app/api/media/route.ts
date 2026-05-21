@@ -1,5 +1,8 @@
 import { NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { GetObjectCommand } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { r2, R2_BUCKET } from '@/lib/r2/client'
 
 export async function GET(req: NextRequest) {
   const eventId = req.nextUrl.searchParams.get('eventId')
@@ -8,9 +11,7 @@ export async function GET(req: NextRequest) {
   }
 
   const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
   if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { data: event } = await supabase
@@ -28,5 +29,20 @@ export async function GET(req: NextRequest) {
     .eq('event_id', eventId)
     .order('uploaded_at', { ascending: false })
 
-  return Response.json({ media: media ?? [] })
+  if (!media?.length) return Response.json({ media: [] })
+
+  // Generate presigned GET URLs (1 hour expiry) so images load without public bucket access
+  const enriched = await Promise.all(
+    media.map(async (item) => {
+      try {
+        const cmd = new GetObjectCommand({ Bucket: R2_BUCKET, Key: item.file_key })
+        const viewUrl = await getSignedUrl(r2, cmd, { expiresIn: 3600 })
+        return { ...item, viewUrl }
+      } catch {
+        return { ...item, viewUrl: item.file_url }
+      }
+    })
+  )
+
+  return Response.json({ media: enriched })
 }
