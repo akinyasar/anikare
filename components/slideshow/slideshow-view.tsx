@@ -118,18 +118,64 @@ export default function SlideshowView({ event, initialMedia }: Props) {
         )}
       </AnimatePresence>
 
-      {/* Bottom gradient overlay */}
+      {/* Bottom gradient — always visible for the info bar */}
       <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
       {/* Top gradient */}
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
 
-      {/* ── Controls (fade out when idle) ──────────────────── */}
+      {/* ── Always-visible: bottom info + nav arrows ───────── */}
+
+      {/* Guest info — always visible, animates per slide */}
+      <div className="absolute bottom-0 left-0 right-0 px-8 pb-8 pointer-events-none">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current?.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-end justify-between"
+          >
+            <div>
+              <p className="text-white font-semibold text-lg drop-shadow-lg">{current?.guest_name}</p>
+              {current?.guest_note && (
+                <p className="text-gray-300 text-sm mt-1 drop-shadow-lg">{current.guest_note}</p>
+              )}
+            </div>
+            <div className="text-right">
+              <p className="text-white font-bold text-xl drop-shadow-lg">{event.title}</p>
+              <p className="text-gray-400 text-sm">{currentIndex + 1} / {media.length}</p>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Prev / Next — always visible, solid enough to be obvious */}
+      <button
+        onClick={prev}
+        className="absolute left-5 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/40 hover:bg-black/65 border border-white/20 hover:border-white/50 backdrop-blur-sm flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95 shadow-xl"
+        title="Önceki"
+      >
+        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-5 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/40 hover:bg-black/65 border border-white/20 hover:border-white/50 backdrop-blur-sm flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95 shadow-xl"
+        title="Sonraki"
+      >
+        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+
+      {/* ── Fade-out controls: top bar only ────────────────── */}
       <motion.div
         animate={{ opacity: controlsVisible ? 1 : 0 }}
         transition={{ duration: 0.4 }}
         className="absolute inset-0 pointer-events-none"
       >
-        {/* Top bar */}
         <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 pt-5 pointer-events-auto">
           {/* Progress dots */}
           <div className="flex items-center gap-1.5">
@@ -149,7 +195,7 @@ export default function SlideshowView({ event, initialMedia }: Props) {
             )}
           </div>
 
-          {/* Right: pause + fullscreen */}
+          {/* Pause + fullscreen */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsPaused(p => !p)}
@@ -169,48 +215,6 @@ export default function SlideshowView({ event, initialMedia }: Props) {
               {isFullscreen ? <ExitFullscreenIcon /> : <FullscreenIcon />}
             </button>
           </div>
-        </div>
-
-        {/* Prev / Next arrows */}
-        <button
-          onClick={prev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/15 hover:bg-white/35 backdrop-blur flex items-center justify-center text-white transition-all hover:scale-110 pointer-events-auto"
-          title="Önceki"
-        >
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-          </svg>
-        </button>
-        <button
-          onClick={next}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/15 hover:bg-white/35 backdrop-blur flex items-center justify-center text-white transition-all hover:scale-110 pointer-events-auto"
-          title="Sonraki"
-        >
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
-
-        {/* Bottom info */}
-        <div className="absolute bottom-0 left-0 right-0 px-8 pb-8 pointer-events-auto">
-          <motion.div
-            key={current?.id}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex items-end justify-between"
-          >
-            <div>
-              <p className="text-white font-semibold text-lg drop-shadow">{current?.guest_name}</p>
-              {current?.guest_note && (
-                <p className="text-gray-300 text-sm mt-1 drop-shadow">{current.guest_note}</p>
-              )}
-            </div>
-            <div className="text-right">
-              <p className="text-white font-bold text-xl drop-shadow">{event.title}</p>
-              <p className="text-gray-400 text-sm">{currentIndex + 1} / {media.length}</p>
-            </div>
-          </motion.div>
         </div>
       </motion.div>
     </div>
