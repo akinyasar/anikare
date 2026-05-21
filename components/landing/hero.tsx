@@ -101,83 +101,97 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
           className="relative flex justify-center"
         >
-          {/* Floating photo card — top left */}
+          {/* Floating stat card — top left */}
           <motion.div
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -left-4 top-8 bg-white rounded-2xl shadow-xl p-2 w-28 z-20 hidden sm:block"
+            className="absolute -left-6 top-10 bg-white rounded-2xl shadow-xl p-3 w-32 z-20 hidden sm:block border border-[#e8ddd5]"
           >
-            <div className="w-full h-16 rounded-xl bg-gradient-to-br from-[#f5e6ed] to-[#FAF7F2] flex items-center justify-center text-2xl">📷</div>
-            <p className="text-[10px] text-[#7a6a5a] mt-1.5 text-center font-medium">+2.4K fotoğraf</p>
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="w-6 h-6 rounded-full bg-[#f5e6ed] flex items-center justify-center">
+                <svg className="w-3.5 h-3.5 text-[#6D1A3E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316zM16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                </svg>
+              </div>
+              <p className="text-[10px] font-bold text-[#6D1A3E]">2.4K</p>
+            </div>
+            <p className="text-[9px] text-[#9ca3af] font-medium">fotoğraf yüklendi</p>
           </motion.div>
 
-          {/* Floating card — bottom right */}
+          {/* Floating upload success card — bottom right */}
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-            className="absolute -right-4 bottom-16 bg-white rounded-2xl shadow-xl px-3 py-2.5 z-20 hidden sm:flex items-center gap-2"
+            className="absolute -right-4 bottom-20 bg-white rounded-2xl shadow-xl px-3 py-2.5 z-20 hidden sm:flex items-center gap-2.5 border border-[#e8ddd5]"
           >
-            <span className="text-lg">🎉</span>
+            <div className="w-7 h-7 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
+              <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+            </div>
             <div>
-              <p className="text-[10px] font-semibold text-[#1a1a1a]">Yükleme tamamlandı!</p>
-              <p className="text-[9px] text-[#9ca3af]">Ahmet & Ayşe · 34 dosya</p>
+              <p className="text-[10px] font-semibold text-[#1a1a1a]">Yüklendi!</p>
+              <p className="text-[9px] text-[#9ca3af]">Ahmet · 6 dosya</p>
             </div>
           </motion.div>
 
           {/* Phone frame */}
-          <div className="relative w-[260px] h-[540px] bg-white rounded-[36px] shadow-[0_24px_60px_rgba(109,26,62,0.18)] border-[6px] border-[#e8ddd5] overflow-hidden flex flex-col z-10">
-            {/* Notch */}
-            <div className="absolute top-0 inset-x-0 flex justify-center z-20 pt-1.5">
-              <div className="w-20 h-4 bg-[#e8ddd5] rounded-full" />
+          <div className="relative w-[260px] h-[540px] bg-white rounded-[36px] shadow-[0_24px_60px_rgba(109,26,62,0.18)] border-[6px] border-[#1a1a1a] overflow-hidden flex flex-col z-10">
+            {/* Dynamic island */}
+            <div className="absolute top-0 inset-x-0 flex justify-center z-20 pt-2">
+              <div className="w-24 h-5 bg-[#1a1a1a] rounded-full" />
             </div>
 
             {/* Screen */}
-            <div className="flex-1 bg-[#FAF7F2] flex flex-col pt-7">
-              {/* Mini header */}
-              <div className="flex items-center justify-center py-2 border-b border-[#e8ddd5]">
-                <div className="flex items-center gap-1.5">
-                  <Image src="/brand/logo.svg" alt="AnıKare" width={16} height={17} />
-                  <span className="text-[9px] font-bold text-[#6D1A3E] tracking-widest uppercase">AnıKare</span>
+            <div className="flex-1 bg-[#FAF7F2] flex flex-col pt-8 overflow-hidden">
+              {/* Header with locale switcher */}
+              <div className="flex items-center justify-between px-4 py-2 border-b border-[#e8ddd5]/60 bg-white/80">
+                <div className="flex items-center gap-1">
+                  <Image src="/brand/logo.svg" alt="AnıKare" width={13} height={14} />
+                  <span className="text-[8px] font-bold text-[#6D1A3E] tracking-widest uppercase">AnıKare</span>
+                </div>
+                <div className="flex items-center gap-0.5 bg-[#F0EBE3] rounded-full px-1 py-0.5">
+                  {['TR','EN'].map((l) => (
+                    <span key={l} className={`text-[7px] font-bold px-1.5 py-0.5 rounded-full ${l === 'TR' ? 'bg-[#6D1A3E] text-white' : 'text-[#9ca3af]'}`}>{l}</span>
+                  ))}
                 </div>
               </div>
 
               {/* Event info */}
-              <div className="px-5 pt-5 text-center">
-                <p className="text-[9px] font-semibold tracking-widest uppercase text-[#9b4a6a] mb-1">Düğün</p>
-                <h3 className="font-[family-name:var(--font-playfair)] text-base font-bold text-[#1a1a1a]">
+              <div className="px-4 pt-4 text-center">
+                <p className="text-[8px] font-semibold tracking-[0.2em] uppercase text-[#9b4a6a] mb-1">Düğün</p>
+                <h3 className="font-[family-name:var(--font-playfair)] text-[15px] font-bold text-[#1a1a1a] leading-tight">
                   Ayşe & Burak
                 </h3>
-                <p className="text-[9px] text-[#9ca3af] mt-0.5">12 Ağustos 2025 · Çırağan Sarayı</p>
+                <p className="text-[8px] text-[#9ca3af] mt-0.5">12 Ağustos 2025</p>
+                {/* Ornamental divider */}
+                <div className="flex items-center gap-2 px-6 mt-3">
+                  <div className="flex-1 h-px bg-[#e8ddd5]" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#e8849a]" />
+                  <div className="flex-1 h-px bg-[#e8ddd5]" />
+                </div>
               </div>
 
-              {/* Divider */}
-              <div className="flex items-center gap-2 px-8 my-3">
-                <div className="flex-1 h-px bg-[#e8ddd5]" />
-                <svg className="w-2.5 h-2.5 text-[#6D1A3E] opacity-50" viewBox="0 0 12 12" fill="currentColor">
-                  <path d="M6 0l1.5 4.5H12L8.25 7.5 9.75 12 6 9l-3.75 3 1.5-4.5L0 4.5h4.5z"/>
-                </svg>
-                <div className="flex-1 h-px bg-[#e8ddd5]" />
-              </div>
-
-              {/* Form area */}
-              <div className="px-4 space-y-2">
+              {/* Form inputs */}
+              <div className="px-4 mt-3 space-y-1.5">
                 <div className="bg-white rounded-xl px-3 py-2 border border-[#e8ddd5]">
-                  <p className="text-[8px] text-[#374151] font-medium mb-0.5">Adınız</p>
-                  <p className="text-[9px] text-[#9ca3af]">Örn: Mehmet Yılmaz</p>
+                  <p className="text-[7.5px] text-[#9ca3af] font-medium mb-0.5">Adınız</p>
+                  <p className="text-[9px] text-[#1a1a1a] font-medium">Mehmet Yılmaz</p>
                 </div>
                 <div className="bg-white rounded-xl px-3 py-2 border border-[#e8ddd5]">
-                  <p className="text-[8px] text-[#374151] font-medium mb-0.5">Bir not bırakın</p>
-                  <p className="text-[9px] text-[#9ca3af]">Dileklerinizi yazın...</p>
+                  <p className="text-[7.5px] text-[#9ca3af] font-medium mb-0.5">Bir not bırakın (isteğe bağlı)</p>
+                  <p className="text-[8.5px] text-[#c4b5a5]">Dileklerinizi yazın...</p>
                 </div>
               </div>
 
-              {/* Upload buttons */}
-              <div className="px-4 mt-3 space-y-2">
-                <div className="bg-[#6D1A3E] text-white text-[9px] font-semibold py-2.5 rounded-full text-center">
-                  🖼 Galeriden Seç
-                </div>
-                <div className="border border-[#6D1A3E] text-[#6D1A3E] text-[9px] font-semibold py-2.5 rounded-full text-center">
-                  📷 Kamera ile Çek
+              {/* Single upload button — new design */}
+              <div className="px-4 mt-4">
+                <div className="bg-[#6D1A3E] text-white rounded-full py-3 flex items-center justify-center gap-2">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75v-4.5m0 0V12m0 2.25H9.75M12 14.25h2.25" />
+                  </svg>
+                  <span className="text-[9.5px] font-semibold">Anı Ekle</span>
                 </div>
               </div>
             </div>

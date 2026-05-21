@@ -91,7 +91,7 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
             </g>
             <g transform="translate(4, 10)">
               <rect width="52" height="68" rx="4" fill="white" stroke="#6D1A3E" strokeWidth="3"/>
-              <path d="M26 42 C 26 42 4 29 4 15 C 4 6 11 2 17 2 C 21 2 24 5 26 8 C 28 5 31 2 35 2 C 41 2 48 6 48 15 C 48 29 26 42 26 42 Z" fill="#6D1A3E"/>
+              <path d="M26 37 C 26 37 10 27 10 17 C 10 10 15 7 19 7 C 22 7 25 9 26 12 C 28 9 30 7 33 7 C 37 7 43 10 43 17 C 43 27 26 37 26 37 Z" fill="#6D1A3E"/>
             </g>
           </svg>
           <span style={{ fontSize: 10, color: '#6D1A3E', fontFamily: 'Arial, sans-serif', fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase' }}>
