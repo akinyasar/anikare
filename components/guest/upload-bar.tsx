@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef } from 'react'
-import BottomBar from '@/components/ui/bottom-bar'
 import Button from '@/components/ui/button'
 
 interface Props {
@@ -11,18 +10,9 @@ interface Props {
 }
 
 export default function UploadBar({ dict, disabled, onFiles }: Props) {
-  const cameraRef = useRef<HTMLInputElement>(null)
-  const galleryRef = useRef<HTMLInputElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
 
-  function handleGallery(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files?.length) {
-      onFiles(e.target.files)
-      // Reset so same files can be selected again
-      e.target.value = ''
-    }
-  }
-
-  function handleCamera(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files?.length) {
       onFiles(e.target.files)
       e.target.value = ''
@@ -30,44 +20,31 @@ export default function UploadBar({ dict, disabled, onFiles }: Props) {
   }
 
   return (
-    <BottomBar>
-      <div className="flex flex-col gap-2.5 max-w-sm mx-auto w-full">
+    <div className="px-5 pt-3 pb-[max(20px,env(safe-area-inset-bottom))] border-t border-[#e8ddd5]/60 bg-[#FAF7F2]">
+      <div className="max-w-sm mx-auto">
         <Button
           variant="primary"
           size="lg"
           disabled={disabled}
-          onClick={() => galleryRef.current?.click()}
+          onClick={() => fileRef.current?.click()}
         >
-          🖼 {dict.selectFromGallery ?? 'Galeriden Seç'}
-        </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          disabled={disabled}
-          onClick={() => cameraRef.current?.click()}
-        >
-          📷 {dict.openCamera ?? 'Kamera ile Çek'}
+          📸 {dict.selectFromGallery ?? 'Fotoğraf / Video Ekle'}
         </Button>
       </div>
-
-      {/* Gallery: multiple files allowed */}
+      {/*
+        Tek input — iOS bu noktada native action sheet gösterir:
+        "Fotoğraf veya Video Çek / Fotoğraf Kitaplığı / Dosyalara Göz At"
+        capture attribute'u YOK — kullanıcı seçsin.
+        multiple: birden fazla dosya seçilebilir.
+      */}
       <input
-        ref={galleryRef}
+        ref={fileRef}
         type="file"
         accept="image/*,video/*"
         multiple
         className="hidden"
-        onChange={handleGallery}
+        onChange={handleChange}
       />
-      {/* Camera: NO multiple — required for capture to work on iOS */}
-      <input
-        ref={cameraRef}
-        type="file"
-        accept="image/*,video/*"
-        capture="environment"
-        className="hidden"
-        onChange={handleCamera}
-      />
-    </BottomBar>
+    </div>
   )
 }

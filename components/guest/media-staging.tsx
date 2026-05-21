@@ -3,8 +3,9 @@
 import { motion } from 'framer-motion'
 import BottomBar from '@/components/ui/bottom-bar'
 import Button from '@/components/ui/button'
+import GuestHeader from './guest-header'
 import type { UploadItem } from '@/hooks/use-media-upload'
-import type { PackageType } from '@/types'
+import type { PackageType, Locale } from '@/types'
 import { PACKAGES } from '@/lib/packages'
 
 interface Props {
@@ -17,6 +18,8 @@ interface Props {
   onUpload: () => void
   onBack: () => void
   dict: Record<string, string>
+  locale: string
+  onLocaleChange: (l: Locale) => void
 }
 
 function formatBytes(bytes: number): string {
@@ -59,7 +62,7 @@ function GridItem({ item, index, onRemove }: { item: UploadItem; index: number; 
 
 export default function MediaStaging({
   items, packageType, existingPhotoCount, existingVideoCount,
-  onRemove, onAddMore, onUpload, onBack, dict,
+  onRemove, onAddMore, onUpload, onBack, dict, locale, onLocaleChange,
 }: Props) {
   const pkg = PACKAGES[packageType]
   const photoItems = items.filter(i => i.fileType === 'photo')
@@ -153,8 +156,9 @@ export default function MediaStaging({
       </div>
 
       {/* ── DESKTOP LAYOUT (md+) ─────────────────────────────────── */}
-      <div className="hidden md:block min-h-screen bg-[#FAF7F2] py-10">
-        <div className="max-w-5xl mx-auto px-8">
+      <div className="hidden md:flex flex-col min-h-screen bg-[#FAF7F2]">
+        <GuestHeader locale={locale} onLocaleChange={onLocaleChange} />
+        <div className="max-w-5xl mx-auto px-8 py-10 w-full">
 
           {/* Top bar */}
           <div className="flex items-center gap-4 mb-8">
@@ -186,8 +190,8 @@ export default function MediaStaging({
               </div>
             </div>
 
-            {/* Right: sticky summary panel */}
-            <div className="w-72 shrink-0 sticky top-6">
+            {/* Right: sticky summary panel — top accounts for GuestHeader height (~50px) */}
+            <div className="w-72 shrink-0 sticky top-20">
               <div className="bg-white rounded-3xl border border-[#e8ddd5] shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6 space-y-5">
 
                 {/* Package */}

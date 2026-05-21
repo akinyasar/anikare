@@ -8,6 +8,7 @@ import UploadBar from './upload-bar'
 import MediaStaging from './media-staging'
 import UploadProgress from './upload-progress'
 import ThankYouScreen from './thank-you-screen'
+import GuestHeader from './guest-header'
 import { useMediaUpload, createUploadItems, type UploadItem } from '@/hooks/use-media-upload'
 import type { PublicEvent, Dictionary, PackageType, Locale } from '@/types'
 
@@ -99,7 +100,16 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
 
   // PIN stage
   if (stage === 'pin') {
-    return <PinEntry eventId={event.id} dict={g} onSuccess={() => setStage('welcome')} />
+    return (
+      <PinEntry
+        eventId={event.id}
+        dict={g}
+        onSuccess={() => {
+          window.scrollTo({ top: 0, behavior: 'instant' })
+          setStage('welcome')
+        }}
+      />
+    )
   }
 
   // Upload progress stage
@@ -142,6 +152,8 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
           onUpload={handleUpload}
           onBack={() => { items.forEach(i => URL.revokeObjectURL(i.preview)); setItems([]); setStage('welcome') }}
           dict={g}
+          locale={locale}
+          onLocaleChange={setLocale}
         />
         {/* Hidden input for "add more" from staging */}
         <input
@@ -161,12 +173,12 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
 
   // Welcome stage
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-[100dvh] bg-[#FAF7F2] flex flex-col">
+      <GuestHeader locale={locale} onLocaleChange={setLocale} />
       <WelcomeScreen
         event={event}
         dict={g}
         locale={locale}
-        onLocaleChange={setLocale}
         guestName={guestName}
         setGuestName={setGuestName}
         guestNote={guestNote}
