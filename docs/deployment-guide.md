@@ -195,12 +195,66 @@ PWA olmadan site çalışır ama "Ana ekrana ekle" özelliği ikonlar olmadan ta
 
 ---
 
-## 6. Vercel Cron Doğrulama
+## 6. Vercel Analytics Aktive Et
+
+Kod layout'a eklendi (`<Analytics />`), ama Vercel tarafında bir kez enable etmen gerekiyor:
+
+1. **Vercel → Projen → Analytics** sekmesine tıkla
+2. **"Enable Analytics"** butonuna bas (ücretsiz, Hobby plan dahil)
+3. Production'da trafik geldiğinde sayfa görüntüleme, ülke, cihaz gibi veriler buraya akar
+
+> Local'de (`npm run dev`) analytics çalışmaz — sadece production deployment'ta veri toplanır.
+
+---
+
+## 7. Vercel Cron Doğrulama
 
 Vercel Hobby plan günde 1 cron çalıştırır, her gece 03:00 UTC.
 
 Kontrol etmek için: **Vercel → Projen → Cron Jobs** sekmesine bak.
 `/api/cron/cleanup` listelenmiş olmalı, son çalışma zamanı görünür.
+
+---
+
+## 8. Günlük Geliştirme Akışı (İlk Deploy Sonrası)
+
+### Kod push ettikten sonra ne olur?
+
+```
+git push origin main
+       ↓  (~10 saniye)
+Vercel GitHub'ı algılar, build başlar
+       ↓  (~1-2 dakika)
+Production otomatik güncellenir
+```
+
+**Yapman gereken hiçbir şey yok.** Push = deploy.
+
+### Build durumunu nerede görürsün?
+
+**vercel.com → Projen → Deployments** sekmesi:
+- Her push bir satır olarak listelenir
+- Yeşil ✓ = başarılı, kırmızı ✗ = hata (tıklayınca build logları açılır)
+- "Visit" butonuyla production'a gidebilirsin
+
+### Preview URL nedir?
+
+`main` dışında bir branch push edersen Vercel otomatik bir preview URL üretir:
+```
+https://anikare-git-feature-xyz-akinyasar.vercel.app
+```
+Production'a almadan önce burada test edebilirsin. PR açarsan GitHub'da doğrudan preview linki görünür.
+
+### Bir deploy'u geri almak istersen
+
+**Vercel → Deployments → İstediğin eski deploy → ⋯ → Promote to Production**
+Tek tıkla eski versiyona dönersin, sıfır downtime.
+
+### Environment variable değiştirince ne olur?
+
+Vercel Dashboard'dan değiştirip kaydettin diyelim — **otomatik deploy tetiklenmez.**
+Manuel olarak son deployment'ı Redeploy etmen gerekir:
+**Deployments → En üstteki → ⋯ → Redeploy**
 
 ---
 
