@@ -14,7 +14,7 @@ const PACKAGES = [
     name: 'Standart',
     price: '₺1.000',
     popular: true,
-    features: ['Sınırsız fotoğraf', '20 video', '4K kalite', 'Özel masa kartı'],
+    features: ['Sınırsız fotoğraf', '20 video', '4K kalite', '3 masa kartı şablonu (PDF)'],
   },
   {
     value: 'premium' as PackageType,
@@ -23,7 +23,7 @@ const PACKAGES = [
     features: [
       'Sınırsız fotoğraf & video',
       'Orijinal kalite',
-      'Premium masa kartı',
+      '3 masa kartı şablonu (PDF)',
       'Canlı slayt gösterisi',
     ],
   },

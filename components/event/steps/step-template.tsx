@@ -22,9 +22,14 @@ export default function StepTemplate({ state, update }: Props) {
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-[#7a6a5a] mb-4">
-        Masa kartı tasarımını seçin — etkinlik detay sayfasında PDF olarak indirebilirsiniz.
-      </p>
+      <div className="mb-5 p-3.5 bg-[#f5e6ed]/50 border border-[#e8ddd5] rounded-2xl">
+        <p className="text-sm font-medium text-[#6D1A3E] mb-1">📄 Dijital Masa Kartı Şablonu</p>
+        <p className="text-xs text-[#7a6a5a] leading-relaxed">
+          Seçtiğiniz tasarım etkinliğinizin QR kodu ve bilgileriyle otomatik doldurulur.
+          Etkinlik sayfasından <strong>yatay veya dikey PDF</strong> olarak indirip kendi tercih ettiğiniz baskı merkezinde yazdırabilirsiniz.
+          Fiziksel kart gönderimi yapılmamaktadır.
+        </p>
+      </div>
 
       {TEMPLATES.map((tpl) => {
         const locked = PACKAGE_ORDER[tpl.minPackage] > userLevel

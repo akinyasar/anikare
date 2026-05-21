@@ -30,7 +30,7 @@ const PLANS = [
       'Sınırsız fotoğraf',
       '20 video',
       '4K kalite',
-      'Özel masa kartı tasarımı',
+      '3 masa kartı şablonu (indirilebilir PDF)',
       'Tüm diller',
     ],
     cta: 'Hemen Al',
@@ -44,7 +44,7 @@ const PLANS = [
     features: [
       'Sınırsız fotoğraf & video',
       'Orijinal kalite (sıkıştırma yok)',
-      'Premium masa kartı',
+      '3 masa kartı şablonu (indirilebilir PDF)',
       'Canlı slayt gösterisi',
       'Tüm özellikler dahil',
     ],
