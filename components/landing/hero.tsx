@@ -136,7 +136,7 @@ export default function Hero() {
               {/* Mini header */}
               <div className="flex items-center justify-center py-2 border-b border-[#e8ddd5]">
                 <div className="flex items-center gap-1.5">
-                  <Image src="/brand/logo.svg" alt="AnıKare" width={14} height={18} />
+                  <Image src="/brand/logo.svg" alt="AnıKare" width={16} height={17} />
                   <span className="text-[9px] font-bold text-[#6D1A3E] tracking-widest uppercase">AnıKare</span>
                 </div>
               </div>

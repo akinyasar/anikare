@@ -29,7 +29,7 @@ export default function Sidebar({ user }: SidebarProps) {
     <aside className="hidden lg:flex w-64 shrink-0 flex-col bg-white border-r border-[#e8ddd5] h-screen sticky top-0">
       <div className="p-6 border-b border-[#e8ddd5]">
         <Link href="/" className="flex items-center gap-2 group">
-          <Image src="/brand/logo.svg" alt="AnıKare" width={44} height={58} className="group-hover:scale-105 transition-transform" />
+          <Image src="/brand/logo.svg" alt="AnıKare" width={44} height={48} className="group-hover:scale-105 transition-transform" />
           <span className="text-base font-bold text-[#6D1A3E] tracking-widest uppercase">AnıKare</span>
         </Link>
       </div>

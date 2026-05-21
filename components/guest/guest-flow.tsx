@@ -13,8 +13,9 @@ import type { PublicEvent, Dictionary, PackageType, Locale } from '@/types'
 
 type Stage = 'pin' | 'welcome' | 'staging' | 'uploading' | 'thankyou'
 
-export default function GuestFlow({ event, locale = 'tr' }: { event: PublicEvent; locale?: Locale }) {
+export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { event: PublicEvent; locale?: Locale }) {
   const [stage, setStage] = useState<Stage>(event.pin_enabled ? 'pin' : 'welcome')
+  const [locale, setLocale] = useState<Locale>(initialLocale)
   const [guestName, setGuestName] = useState('')
   const [guestNote, setGuestNote] = useState('')
   const [dict, setDict] = useState<Dictionary | null>(null)
@@ -164,6 +165,8 @@ export default function GuestFlow({ event, locale = 'tr' }: { event: PublicEvent
       <WelcomeScreen
         event={event}
         dict={g}
+        locale={locale}
+        onLocaleChange={setLocale}
         guestName={guestName}
         setGuestName={setGuestName}
         guestNote={guestNote}

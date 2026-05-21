@@ -1,16 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260" fill="none">
-  <!-- Back frame - rotated 8deg, polaroid style -->
-  <g transform="translate(100, 100) rotate(8) translate(-30, -45)">
-    <rect width="60" height="80" rx="2" stroke="#6D1A3E" stroke-width="1.5" fill="#FAF7F2"/>
-    <line x1="0" y1="65" x2="60" y2="65" stroke="#6D1A3E" stroke-width="1.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 96" fill="none">
+  <!-- Back polaroid frame — rotated 8° clockwise, peeking top-right -->
+  <g transform="translate(50,44) rotate(8) translate(-26,-34)">
+    <rect width="52" height="68" rx="4" fill="#f5e6ed" stroke="#6D1A3E" stroke-width="2.8"/>
+    <line x1="3" y1="52" x2="49" y2="52" stroke="#6D1A3E" stroke-width="2"/>
   </g>
-  <!-- Front frame - straight, polaroid style -->
-  <g transform="translate(70, 55)">
-    <rect width="60" height="80" rx="2" fill="#FAF7F2" stroke="#6D1A3E" stroke-width="1.5"/>
-    <line x1="0" y1="65" x2="60" y2="65" stroke="#6D1A3E" stroke-width="1.5"/>
-    <!-- Heart -->
-    <path d="M30 36 C30 36 22 29 22 24 C22 20.5 24.5 18 27.5 18 C29 18 30 19 30 19 C30 19 31 18 32.5 18 C35.5 18 38 20.5 38 24 C38 29 30 36 30 36Z" fill="#6D1A3E"/>
+  <!-- Front polaroid frame — straight, main focus -->
+  <g transform="translate(4, 10)">
+    <rect width="52" height="68" rx="4" fill="white" stroke="#6D1A3E" stroke-width="2.8"/>
+    <line x1="3" y1="52" x2="49" y2="52" stroke="#6D1A3E" stroke-width="2"/>
+    <!-- Heart — large, centered in 52×52 photo area -->
+    <path d="M26 42 C 26 42 4 29 4 15 C 4 6 11 2 17 2 C 21 2 24 5 26 8 C 28 5 31 2 35 2 C 41 2 48 6 48 15 C 48 29 26 42 26 42 Z" fill="#6D1A3E"/>
   </g>
-  <!-- Wordmark -->
-  <text x="100" y="168" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="800" fill="#6D1A3E" text-anchor="middle" letter-spacing="3">ANIKARE</text>
 </svg>

@@ -53,7 +53,7 @@ export default function MarketingNav() {
             src="/brand/logo.svg"
             alt="AnıKare"
             width={32}
-            height={42}
+            height={35}
             className="group-hover:scale-105 transition-transform duration-300"
           />
           <span className="text-sm font-bold text-[#6D1A3E] tracking-[0.2em] uppercase">

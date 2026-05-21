@@ -9,6 +9,8 @@ import type { PublicEvent } from '@/types'
 interface Props {
   event: PublicEvent
   dict: Record<string, string>
+  locale: string
+  onLocaleChange: (l: 'tr' | 'en' | 'de') => void
   guestName: string
   setGuestName: (v: string) => void
   guestNote: string
@@ -20,7 +22,13 @@ const EVENT_LABELS: Record<string, string> = {
   graduation: 'Mezuniyet', engagement: 'Nişan', other: 'Etkinlik',
 }
 
-export default function WelcomeScreen({ event, dict, guestName, setGuestName, guestNote, setGuestNote }: Props) {
+const LOCALES = [
+  { code: 'tr' as const, label: 'TR' },
+  { code: 'en' as const, label: 'EN' },
+  { code: 'de' as const, label: 'DE' },
+]
+
+export default function WelcomeScreen({ event, dict, locale, onLocaleChange, guestName, setGuestName, guestNote, setGuestNote }: Props) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -28,10 +36,26 @@ export default function WelcomeScreen({ event, dict, guestName, setGuestName, gu
       className="flex-1 flex flex-col bg-[#FAF7F2] pb-36"
     >
       {/* Minimal brand header */}
-      <header className="flex items-center justify-center py-3.5 border-b border-[#e8ddd5]/60">
-        <div className="flex items-center gap-2">
-          <Image src="/brand/logo.svg" alt="AnıKare" width={18} height={24} />
+      <header className="flex items-center justify-between px-4 py-3 border-b border-[#e8ddd5]/60">
+        <a href="/" className="flex items-center gap-2 group">
+          <Image src="/brand/logo.svg" alt="AnıKare" width={24} height={26} className="group-hover:scale-105 transition-transform" />
           <span className="text-[11px] font-bold text-[#6D1A3E] tracking-[0.22em] uppercase">AnıKare</span>
+        </a>
+        {/* Language switcher */}
+        <div className="flex items-center gap-0.5 bg-[#F0EBE3] rounded-full p-0.5">
+          {LOCALES.map(({ code, label }) => (
+            <button
+              key={code}
+              onClick={() => onLocaleChange(code)}
+              className={`text-[10px] font-bold px-2.5 py-1 rounded-full transition-all ${
+                locale === code
+                  ? 'bg-[#6D1A3E] text-white shadow-sm'
+                  : 'text-[#9ca3af] hover:text-[#6D1A3E]'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </header>
 

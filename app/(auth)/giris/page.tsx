@@ -23,7 +23,7 @@ export default function LoginPage() {
       className="bg-white rounded-3xl shadow-[0_8px_40px_rgba(109,26,62,0.12)] p-10 w-full max-w-sm text-center"
     >
       <div className="flex items-center justify-center gap-3 mb-2">
-        <Image src="/brand/logo.svg" alt="AnıKare" width={32} height={40} />
+        <Image src="/brand/logo.svg" alt="AnıKare" width={36} height={39} />
         <span className="text-lg font-bold text-[#6D1A3E] tracking-widest uppercase">AnıKare</span>
       </div>
       <p className="text-[#7a6a5a] text-sm mb-8">Düğününüzün dijital anı defteri</p>
