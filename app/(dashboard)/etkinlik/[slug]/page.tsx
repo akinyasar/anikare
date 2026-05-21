@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import MediaGrid from '@/components/dashboard/media-grid'
 import QrDownload from '@/components/dashboard/qr-download'
+import TableCardSection from '@/components/table-card/table-card-section'
 
 export default async function EventDashboardPage({
   params,
@@ -96,6 +97,14 @@ export default async function EventDashboardPage({
 
         <QrDownload slug={slug} eventTitle={event.title} />
       </div>
+
+      {/* Masa kartı */}
+      <TableCardSection
+        templateId={event.template_id}
+        title={event.title}
+        eventType={EVENT_LABELS[event.event_type] ?? 'Etkinlik'}
+        slug={slug}
+      />
 
       <h2 className="text-base font-semibold text-[#1a1a1a] mb-4">Yüklenen İçerikler</h2>
       <MediaGrid eventId={event.id} />
