@@ -64,13 +64,13 @@ function PlanCard({ plan, index }: { plan: ReturnType<typeof getPlans>[0]; index
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 28 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      initial={{ opacity: 0, y: 28, scale: plan.highlight ? 1.03 : 1 }}
+      animate={inView ? { opacity: 1, y: 0, scale: plan.highlight ? 1.03 : 1 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className={`relative rounded-3xl p-8 flex flex-col ${
         plan.highlight
-          ? 'bg-[#6D1A3E] text-white shadow-2xl shadow-[#6D1A3E]/30 scale-[1.03] z-10'
-          : 'bg-white border border-[#e8ddd5] hover:border-[#6D1A3E]/25 hover:shadow-lg transition-all'
+          ? 'bg-[#6D1A3E] text-white shadow-2xl shadow-[#6D1A3E]/30 z-10'
+          : 'bg-white border border-[#e8ddd5] hover:border-[#6D1A3E]/25 hover:shadow-lg transition-[border-color,box-shadow]'
       }`}
     >
       {plan.badge && (

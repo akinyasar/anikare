@@ -64,7 +64,7 @@ function FeatureCard({ icon, title, desc, index }: { icon: React.ReactNode; titl
       initial={{ opacity: 0, x: xDir }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.06, ease: EASE }}
-      className="bg-white p-7 rounded-3xl border border-[#e8ddd5] hover:border-[#6D1A3E]/25 hover:shadow-[0_8px_32px_rgba(109,26,62,0.1)] transition-all duration-300 group"
+      className="bg-white p-7 rounded-3xl border border-[#e8ddd5] hover:border-[#6D1A3E]/25 hover:shadow-[0_8px_32px_rgba(109,26,62,0.1)] transition-[border-color,box-shadow] duration-300 group"
     >
       <div className="w-12 h-12 rounded-2xl bg-[#f5e6ed] flex items-center justify-center mb-5 text-[#6D1A3E] group-hover:bg-[#6D1A3E] group-hover:text-white transition-all duration-300">
         {icon}
