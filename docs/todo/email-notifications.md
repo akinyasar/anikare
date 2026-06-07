@@ -15,11 +15,11 @@ Modern transactional email servisi. Supabase'in auth emaillerinden farklı — �
 Supabase kendi SMTP'si sadece auth emaillerini gönderir (doğrulama, şifre sıfırlama).
 **Özel bildirimler için ayrı servis şart.**
 
-## Gerekli Ortam Değişkeni
+## Gerekli Ortam Değişkenleri
 
 ```
 RESEND_API_KEY=re_xxxxxxxxxxxx
-RESEND_FROM=bildirim@anikare.co    # domain doğrulaması gerekir
+RESEND_FROM=bildirim@anikare.net    # domain doğrulaması gerekir
 # veya: onboarding@resend.dev (doğrulama gerekmez, test için)
 ```
 
@@ -51,23 +51,21 @@ RESEND_FROM=bildirim@anikare.co    # domain doğrulaması gerekir
 
 ## Resend Domain Kurulumu
 
-Domain sahibiysen (anikare.co):
-1. resend.com → Domains → Add Domain → `anikare.co`
-2. DNS kayıtları ekle (3 adet TXT/MX): Vercel Domain Settings'te
+1. resend.com → Domains → Add Domain → `anikare.net`
+2. DNS kayıtları ekle (3 adet TXT/MX): Cloudflare DNS Settings'te
 3. ~24 saat sonra doğrulanır
 
 Domain yoksa test için `onboarding@resend.dev` adresinden gönderim yapılabilir.
 
 ## Rate Limiting — Fotoğraf Bildirimi
 
-Her yüklemede mail atmak spam'e dönüşür. Çözüm:
+Her yüklemede mail atmak spam'e dönüşür. Basit çözüm:
+
+`profiles` tablosuna `last_upload_notified_at TIMESTAMPTZ` ekle.
+Upload confirm'de: son bildirimden 10+ dk geçmişse mail at, güncelle.
 
 ```typescript
 // lib/email/notification-throttle.ts
-// Supabase'de bir "last_notification_sent_at" kolonu veya
-// Redis/KV ile son bildirim zamanı kontrol edilir.
+// profiles.last_upload_notified_at kontrolü:
 // Aynı event için 10 dakikada bir max 1 mail.
 ```
-
-Basit çözüm: `profiles` tablosuna `last_upload_notified_at TIMESTAMPTZ` ekle.
-Upload confirm'de: son bildirimden 10+ dk geçmişse mail at, güncelle.

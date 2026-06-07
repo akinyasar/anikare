@@ -15,19 +15,19 @@ Türkiye'de TCKN + banka hesabıyla bireysel ürün satışı yapılabilen platf
 
 1. **shopier.com** → Hesap aç → Bireysel seç → TCKN + IBAN gir
 2. İki ürün oluştur:
-   - "AnıKare Standart" → ₺1.000
-   - "AnıKare Premium" → ₺1.399
+   - "AnıKare Standart" → ₺X
+   - "AnıKare Premium" → ₺X
 3. Her ürün için bir ödeme linki al
 4. Shopier Dashboard → Entegrasyonlar → Webhook URL ekle:
    ```
-   https://anikare.co/api/webhooks/shopier
+   https://www.anikare.net/api/webhooks/shopier
    ```
 5. Webhook Secret'ı kopyala → Vercel env'e ekle:
    ```
    SHOPIER_WEBHOOK_SECRET=xxx
    ```
 
-### Kodlanacaklar (Claude Yapacak)
+### Kodlanacaklar
 
 - [ ] `app/api/webhooks/shopier/route.ts` — Webhook handler
   - İmza doğrulama (HMAC-SHA256)
@@ -43,7 +43,7 @@ Türkiye'de TCKN + banka hesabıyla bireysel ürün satışı yapılabilen platf
 Kullanıcı paket seçer
 → "Ödemeye Geç" butonuna basar
 → /api/payment/create-checkout çağrılır
-→ Shopier ürün linkine yönlendirilir (user_id query param ile)
+→ Shopier ürün linkine yönlendirilir (?uye_id=USER_SUPABASE_ID ile)
 → Shopier'da ödeme tamamlanır
 → Shopier webhook'u /api/webhooks/shopier'e POST atar
 → Webhook handler: events.package_type güncellenir
@@ -99,7 +99,7 @@ Kullanıcı ödemeye geç → /api/payment/create-checkout
 
 ## Ortak: Paket Aktivasyon Fonksiyonu
 
-Her iki entegrasyon da aynı DB işlemini yapacak. Buraya merkezi bir fonksiyon:
+Her iki entegrasyon da aynı DB işlemini yapacak:
 
 ```typescript
 // lib/payment/activate-package.ts
