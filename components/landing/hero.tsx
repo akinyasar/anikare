@@ -21,8 +21,8 @@ export default function Hero() {
       id="hero"
       className="relative overflow-hidden bg-[#FAF7F2] pt-32 pb-20 px-6 md:px-10"
     >
-      <div className="pointer-events-none absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-[#6D1A3E]/5 blur-3xl" />
-      <div className="pointer-events-none absolute top-60 right-0 w-[500px] h-[500px] rounded-full bg-[#9b4a6a]/5 blur-3xl" />
+      <div className="pointer-events-none absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-[#6D1A3E]/5 blur-3xl hidden md:block" />
+      <div className="pointer-events-none absolute top-60 right-0 w-[500px] h-[500px] rounded-full bg-[#9b4a6a]/5 blur-3xl hidden md:block" />
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-14 items-center">
 
@@ -103,8 +103,8 @@ export default function Hero() {
           {/* Floating stat card — top left */}
           <motion.div
             animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -left-6 top-10 bg-white rounded-2xl shadow-xl p-3 w-32 z-20 hidden sm:block border border-[#e8ddd5]"
+            transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
+            className="absolute -left-6 top-10 bg-white rounded-2xl shadow-xl p-3 w-32 z-20 hidden lg:block border border-[#e8ddd5]"
           >
             <div className="flex items-center gap-2 mb-1.5">
               <div className="w-6 h-6 rounded-full bg-[#f5e6ed] flex items-center justify-center">
@@ -120,8 +120,8 @@ export default function Hero() {
           {/* Floating upload success card — bottom right */}
           <motion.div
             animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-            className="absolute -right-4 bottom-20 bg-white rounded-2xl shadow-xl px-3 py-2.5 z-20 hidden sm:flex items-center gap-2.5 border border-[#e8ddd5]"
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.8, repeatType: 'mirror' }}
+            className="absolute -right-4 bottom-20 bg-white rounded-2xl shadow-xl px-3 py-2.5 z-20 hidden lg:flex items-center gap-2.5 border border-[#e8ddd5]"
           >
             <div className="w-7 h-7 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
               <svg className="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

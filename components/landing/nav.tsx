@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import LocaleSwitcher from '@/components/ui/locale-switcher'
 import { useLocale } from '@/components/providers/locale-provider'
 import { t } from '@/lib/i18n/site'
@@ -11,7 +10,7 @@ import { t } from '@/lib/i18n/site'
 export default function MarketingNav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [user, setUser] = useState<{ email?: string } | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { locale } = useLocale()
 
   useEffect(() => {
@@ -21,10 +20,8 @@ export default function MarketingNav() {
   }, [])
 
   useEffect(() => {
-    const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user ?? null)
-    })
+    const hasCookie = document.cookie.split(';').some(c => c.trim().startsWith('sb-'))
+    setIsLoggedIn(hasCookie)
   }, [])
 
   const NAV_LINKS = [
@@ -44,7 +41,7 @@ export default function MarketingNav() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
         scrolled
           ? 'bg-white/90 backdrop-blur-md shadow-[0_2px_20px_rgba(109,26,62,0.07)] border-b border-[#e8ddd5]'
           : 'bg-transparent'
@@ -82,7 +79,7 @@ export default function MarketingNav() {
         {/* Desktop actions */}
         <div className="hidden md:flex items-center gap-3">
           <LocaleSwitcher />
-          {user ? (
+          {isLoggedIn ? (
             <Link
               href="/dashboard"
               className="bg-[#6D1A3E] text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#5a1533] transition-colors"
@@ -113,9 +110,9 @@ export default function MarketingNav() {
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Menü"
         >
-          <span className={`w-5 h-0.5 bg-[#6D1A3E] transition-all ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`w-5 h-0.5 bg-[#6D1A3E] transition-all ${menuOpen ? 'opacity-0' : ''}`} />
-          <span className={`w-5 h-0.5 bg-[#6D1A3E] transition-all ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <span className={`w-5 h-0.5 bg-[#6D1A3E] transition-transform duration-200 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+          <span className={`w-5 h-0.5 bg-[#6D1A3E] transition-opacity duration-200 ${menuOpen ? 'opacity-0' : ''}`} />
+          <span className={`w-5 h-0.5 bg-[#6D1A3E] transition-transform duration-200 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </button>
       </nav>
 
@@ -134,7 +131,7 @@ export default function MarketingNav() {
           ))}
           <div className="pt-2 border-t border-[#e8ddd5] flex flex-col gap-2">
             <LocaleSwitcher className="self-start" />
-            {user ? (
+            {isLoggedIn ? (
               <Link href="/dashboard" className="bg-[#6D1A3E] text-white text-center py-3 rounded-full text-sm font-semibold">
                 {t(locale, 'goToDashboard')}
               </Link>
