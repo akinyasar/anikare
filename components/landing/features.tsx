@@ -6,6 +6,8 @@ import { useLocale } from '@/components/providers/locale-provider'
 import { t } from '@/lib/i18n/site'
 import type { Locale } from '@/types'
 
+const EASE = [0.22, 1, 0.36, 1] as const
+
 const FEATURE_ICONS = [
   (
     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -53,13 +55,15 @@ function getFeatures(locale: Locale) {
 function FeatureCard({ icon, title, desc, index }: { icon: React.ReactNode; title: string; desc: string; index: number }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
+  // Çift kartlar soldan, tek kartlar sağdan
+  const xDir = index % 2 === 0 ? -16 : 16
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.07, ease: 'easeOut' }}
+      initial={{ opacity: 0, x: xDir }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.06, ease: EASE }}
       className="bg-white p-7 rounded-3xl border border-[#e8ddd5] hover:border-[#6D1A3E]/25 hover:shadow-[0_8px_32px_rgba(109,26,62,0.1)] transition-all duration-300 group"
     >
       <div className="w-12 h-12 rounded-2xl bg-[#f5e6ed] flex items-center justify-center mb-5 text-[#6D1A3E] group-hover:bg-[#6D1A3E] group-hover:text-white transition-all duration-300">
@@ -80,14 +84,14 @@ export default function Features() {
   const features = getFeatures(locale)
 
   return (
-    <section id="ozellikler" className="py-24 px-6 md:px-10 bg-[#FAF7F2]">
+    <section id="ozellikler" className="py-16 px-6 md:py-24 md:px-10 bg-[#FAF7F2]">
       <div className="max-w-6xl mx-auto">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-14"
+          initial={{ opacity: 0, x: -20 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.55, ease: EASE }}
+          className="mb-10 md:mb-14"
         >
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#9b4a6a] mb-3">{t(locale, 'featuresLabel')}</p>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl font-bold text-[#1a1a1a] mb-3">

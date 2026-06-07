@@ -66,7 +66,7 @@ function PlanCard({ plan, index }: { plan: ReturnType<typeof getPlans>[0]; index
       ref={ref}
       initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className={`relative rounded-3xl p-8 flex flex-col ${
         plan.highlight
           ? 'bg-[#6D1A3E] text-white shadow-2xl shadow-[#6D1A3E]/30 scale-[1.03] z-10'
@@ -123,14 +123,14 @@ export default function Pricing() {
   const plans = getPlans(locale)
 
   return (
-    <section id="fiyatlar" className="py-24 px-6 md:px-10 bg-white">
+    <section id="fiyatlar" className="py-16 px-6 md:py-24 md:px-10 bg-white">
       <div className="max-w-5xl mx-auto">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-10 md:mb-16"
         >
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#9b4a6a] mb-3">{t(locale, 'pricingLabel')}</p>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl font-bold text-[#1a1a1a] mb-4">

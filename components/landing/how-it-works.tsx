@@ -6,6 +6,8 @@ import { useLocale } from '@/components/providers/locale-provider'
 import { t } from '@/lib/i18n/site'
 import type { Locale } from '@/types'
 
+const EASE = [0.22, 1, 0.36, 1] as const
+
 const STEP_ICONS = [
   (
     <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -40,9 +42,9 @@ function Step({ num, icon, title, desc, index }: { num: string; icon: React.Reac
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 36 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.15, ease: 'easeOut' }}
+      transition={{ duration: 0.55, delay: index * 0.13, ease: EASE }}
       className="flex flex-col items-center text-center group"
     >
       <div className="relative w-24 h-24 rounded-full bg-[#FAF7F2] border-2 border-[#e8ddd5] flex items-center justify-center mb-6 group-hover:bg-[#f5e6ed] group-hover:border-[#6D1A3E]/30 transition-all duration-300 text-[#6D1A3E]">
@@ -66,14 +68,14 @@ export default function HowItWorks() {
   const steps = getSteps(locale)
 
   return (
-    <section id="nasil-calisir" className="py-24 px-6 md:px-10 bg-white">
+    <section id="nasil-calisir" className="py-16 px-6 md:py-24 md:px-10 bg-white">
       <div className="max-w-5xl mx-auto">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.55, ease: EASE }}
+          className="text-center mb-10 md:mb-16"
         >
           <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#9b4a6a] mb-3">{t(locale, 'howItWorksLabel')}</p>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl font-bold text-[#1a1a1a] mb-4">
@@ -84,7 +86,7 @@ export default function HowItWorks() {
           </p>
         </motion.div>
 
-        <div className="relative grid md:grid-cols-3 gap-12">
+        <div className="relative grid md:grid-cols-3 gap-8 md:gap-12">
           <div className="hidden md:block absolute top-11 left-[20%] right-[20%] h-0.5 border-t-2 border-dashed border-[#e8ddd5] z-0" />
           {steps.map((step, i) => (
             <Step key={i} num={step.num} icon={STEP_ICONS[i]} title={step.title} desc={step.desc} index={i} />
