@@ -15,6 +15,23 @@ The product is designed to be completely frictionless for guests: no account, no
 
 ---
 
+## Stack
+
+| | What it does in this project |
+|--|------------------------------|
+| **Next.js 16** (App Router) | Full-stack framework — server components for data fetching, API routes for backend logic, `proxy.ts` for auth guard |
+| **Supabase** | PostgreSQL database with Row Level Security, Google OAuth, and Realtime subscriptions (live slideshow updates) |
+| **Cloudflare R2** | Media storage — S3-compatible, zero egress fees; guests upload directly via presigned PUT URLs, never through our server |
+| **Vercel** | Deployment + free daily cron job (nightly media cleanup) |
+| **Tailwind CSS v4** | Utility-first styling — no config file, `@import "tailwindcss"` only |
+| **Framer Motion** | Slideshow transitions, stagger animations, page-level motion |
+| **bcryptjs** | PIN codes are hashed server-side and never stored in plaintext |
+| **html2canvas + jsPDF** | Client-side PDF generation for printable QR table cards |
+| **browser-image-compression** | Client-side photo compression before upload — quality tier depends on package |
+| **AWS SDK v3** | Used for generating presigned R2 URLs (R2 is S3-compatible, no Cloudflare SDK needed) |
+
+---
+
 ## Features
 
 ### For Guests
