@@ -182,6 +182,21 @@ Design tokens, base UI components, MIME fixes, batch upload hook, PIN/welcome/up
 - **R2 CDN domain** — `media.anikare.net` active, CORS updated
 - **Supabase OAuth** — site URL + redirect URL updated to `https://www.anikare.net`
 
+## Operational Reference
+
+**Cron test:**
+```bash
+curl -H "Authorization: Bearer CRON_SECRET_DEGERIN" \
+  https://www.anikare.net/api/cron/cleanup
+# Beklenen: {"deleted":0,"message":"No expired events"}
+```
+
+**Rollback:** Vercel → Deployments → istediğin deploy → ⋯ → Promote to Production
+
+**Env var değişikliği sonrası:** Otomatik deploy tetiklenmez — Deployments → en üstteki → ⋯ → Redeploy
+
+**Yeni domain eklenirse:** Vercel Auto Configure → Supabase redirect URL ekle → R2 CORS'a ekle
+
 ## Next Steps (Roadmap)
 1. **Payment integration** (see `docs/todo/payment.md`) — Shopier for individual sellers (no company needed), iyzico later when incorporated
 2. **Email notifications** (see `docs/todo/email-notifications.md`) — Resend for upload + event creation notifications
