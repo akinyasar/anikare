@@ -208,3 +208,11 @@ curl -H "Authorization: Bearer CRON_SECRET_DEGERIN" \
 - After completing code changes, always run `npm run build` to verify no TS errors before committing
 - User is an experienced frontend developer — no need to explain React/Tailwind basics
 - For backend/DevOps steps: explain exactly which panel to open, where to click, what to paste
+
+## Doc Maintenance (Mandatory)
+Before starting any task, read CLAUDE.md fully to understand the current project state.
+After every feature or significant change:
+- Update **CLAUDE.md** — reflect new components, architectural decisions, env vars, or completed tasks
+- Update **docs/todo/** files if a task was completed or a new one surfaced
+- Update **README.md** if a user-facing feature, stack change, or setup step changed
+No doc update = task not done.
