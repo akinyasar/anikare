@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import LocaleSwitcher from '@/components/ui/locale-switcher'
 import { useLocale } from '@/components/providers/locale-provider'
 import { t } from '@/lib/i18n/site'
@@ -12,6 +13,11 @@ export default function MarketingNav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { locale } = useLocale()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -23,6 +29,13 @@ export default function MarketingNav() {
     const hasCookie = document.cookie.split(';').some(c => c.trim().startsWith('sb-'))
     setIsLoggedIn(hasCookie)
   }, [])
+
+  function handleLogoClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (pathname === '/') {
+      e.preventDefault()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
 
   const NAV_LINKS = [
     { href: '#ozellikler', label: t(locale, 'features') },
@@ -49,7 +62,7 @@ export default function MarketingNav() {
     >
       <nav className="max-w-6xl mx-auto px-6 h-18 flex items-center justify-between py-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link href="/" onClick={handleLogoClick} className="flex items-center gap-2.5 group">
           <Image
             src="/brand/logo.svg"
             alt="AnıKare"
