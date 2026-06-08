@@ -37,7 +37,16 @@ export async function POST(req: NextRequest) {
   const osbUsername = process.env.SHOPIER_OSB_USERNAME!
   const osbSecret   = process.env.SHOPIER_OSB_SECRET!
 
+  console.log('[OSB] params:', {
+    apiKey,
+    platformOrderId,
+    totalOrderValue,
+    signature: signature.slice(0, 10) + '...',
+    allKeys: [...params.keys()],
+  })
+
   if (apiKey !== osbUsername) {
+    console.log('[OSB] API key mismatch. received:', apiKey, 'expected:', osbUsername)
     return NextResponse.json({ error: 'Invalid API key' }, { status: 401 })
   }
 
@@ -52,6 +61,7 @@ export async function POST(req: NextRequest) {
   )
 
   if (!isValid) {
+    console.log('[OSB] Signature mismatch. websiteUrl used:', websiteUrl)
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
   }
 
