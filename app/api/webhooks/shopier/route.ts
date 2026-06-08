@@ -26,13 +26,12 @@ function verifySignature(
 }
 
 export async function POST(req: NextRequest) {
-  const text = await req.text()
-  const params = new URLSearchParams(text)
+  const formData = await req.formData()
 
-  const platformOrderId = params.get('platform_order_id') ?? ''
-  const totalOrderValue  = params.get('total_order_value') ?? ''
-  const signature        = params.get('signature') ?? ''
-  const apiKey           = params.get('API_key') ?? ''
+  const platformOrderId = (formData.get('platform_order_id') as string) ?? ''
+  const totalOrderValue  = (formData.get('total_order_value') as string) ?? ''
+  const signature        = (formData.get('signature') as string) ?? ''
+  const apiKey           = (formData.get('API_key') as string) ?? ''
 
   const osbUsername = process.env.SHOPIER_OSB_USERNAME!
   const osbSecret   = process.env.SHOPIER_OSB_SECRET!
