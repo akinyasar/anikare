@@ -9,7 +9,7 @@ function verifyHash(
   receivedHash: string
 ): boolean {
   const expected = crypto
-    .createHash('md5')
+    .createHash('sha256')
     .update(osbUsername + osbSecret + orderNo)
     .digest('hex')
   console.log('[OSB] expected hash:', expected)
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
   console.log('[OSB] order:', JSON.stringify(order))
 
-  const orderNo = order.order_id ?? order.orderNo ?? order.identity ?? ''
+  const orderNo = order.orderid ?? ''
   if (!verifyHash(osbUsername, osbSecret, orderNo, hash)) {
     return NextResponse.json({ error: 'Invalid hash' }, { status: 401 })
   }
