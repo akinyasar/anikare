@@ -37,15 +37,12 @@ export async function POST(req: NextRequest) {
 
   const platformOrderId = order.platform_order_id ?? ''
   const parts = platformOrderId.split(':')
-  if (parts.length !== 2) {
-    return NextResponse.json({ ok: true, skipped: true })
+  if (parts.length === 2) {
+    const [eventId, packageType] = parts
+    if (packageType === 'standard' || packageType === 'premium') {
+      await activatePackage(eventId, packageType)
+    }
   }
 
-  const [eventId, packageType] = parts
-  if (packageType !== 'standard' && packageType !== 'premium') {
-    return NextResponse.json({ ok: true, skipped: true })
-  }
-
-  await activatePackage(eventId, packageType)
-  return NextResponse.json({ ok: true })
+  return new Response('OK', { status: 200 })
 }
