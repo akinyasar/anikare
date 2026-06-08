@@ -102,6 +102,10 @@ R2_BUCKET_NAME
 R2_PUBLIC_URL
 R2_PUBLIC_HOSTNAME
 CRON_SECRET
+SHOPIER_OSB_USERNAME
+SHOPIER_OSB_SECRET
+SHOPIER_URL_STANDARD
+SHOPIER_URL_PREMIUM
 ```
 Set `.env.local` locally, and add all vars to Vercel dashboard before deploying.
 
@@ -113,11 +117,11 @@ Set `.env.local` locally, and add all vars to Vercel dashboard before deploying.
 - RLS: enabled on all tables — hosts own their events/media, guests read public events
 
 ## Package Limits (lib/packages.ts)
-| Package | Photos | Videos | Compression | Slideshow |
-|---------|--------|--------|-------------|-----------|
-| Eco | 150 | 10 | 1080p | ✗ |
-| Standard | ∞ | 30 | 4K | ✗ |
-| Premium | ∞ | ∞ | None | ✓ |
+| Package | Photos | Videos | Compression | Slideshow | Price |
+|---------|--------|--------|-------------|-----------|-------|
+| Eco | 10 | 2 | 720p | ✗ | Free |
+| Standard | ∞ | 20 | 1080p | ✗ | ₺899 |
+| Premium | ∞ | ∞ | None | ✓ | ₺1.299 |
 
 ## Cloudflare R2
 - Bucket: `anikare-media`
@@ -181,6 +185,8 @@ Design tokens, base UI components, MIME fixes, batch upload hook, PIN/welcome/up
 - **Custom domain** — `anikare.net` via Cloudflare Registrar, connected to Vercel via auto-configure
 - **R2 CDN domain** — `media.anikare.net` active, CORS updated
 - **Supabase OAuth** — site URL + redirect URL updated to `https://www.anikare.net`
+- **Shopier OSB payment integration** — eco→standard/premium upgrade on OSB notification; `platform_order_id=eventId:packageType`; `app/api/webhooks/shopier` + `app/api/payment/create-checkout` + `lib/payment/activate-package.ts`
+- **Package rebalance** — Standard 1080p/₺899, Premium ₺1.299; wizard always inserts `eco`, OSB activates on payment
 
 ## Operational Reference
 
@@ -198,9 +204,9 @@ curl -H "Authorization: Bearer CRON_SECRET_DEGERIN" \
 **Yeni domain eklenirse:** Vercel Auto Configure → Supabase redirect URL ekle → R2 CORS'a ekle
 
 ## Next Steps (Roadmap)
-1. **Payment integration** (see `docs/todo/payment.md`) — Shopier for individual sellers (no company needed), iyzico later when incorporated
-2. **Email notifications** (see `docs/todo/email-notifications.md`) — Resend for upload + event creation notifications
-3. **Slideshow host control** — `/etkinlik/[slug]/slayt` management page (not yet built)
+1. **Email notifications** (see `docs/todo/email-notifications.md`) — Resend for upload + event creation notifications
+2. **Slideshow host control** — `/etkinlik/[slug]/slayt` management page (not yet built)
+3. ~~**Payment integration**~~ — Shopier OSB complete; iyzico later when incorporated
 
 ## Collaboration Rules
 - **Commit messages:** `feat: ...` / `fix: ...` only — no Co-Authored-By lines

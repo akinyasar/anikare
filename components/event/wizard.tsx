@@ -68,9 +68,7 @@ export default function EventWizard() {
 
     try {
       const supabase = createClient()
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+      const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Oturum bulunamadı')
 
       const slug = generateSlug(state.title, state.eventType)
@@ -78,11 +76,11 @@ export default function EventWizard() {
         state.pinEnabled && state.pinCode ? await hashPin(state.pinCode) : null
 
       const eventDate = state.eventDate ? new Date(state.eventDate) : new Date()
-      // Always give at least 30 days from today for upload window
       const uploadBase = new Date(Math.max(eventDate.getTime(), Date.now()))
       const uploadExpiresAt = new Date(uploadBase.getTime() + 30 * 24 * 60 * 60 * 1000)
       const mediaRetentionUntil = new Date(uploadBase.getTime() + 90 * 24 * 60 * 60 * 1000)
 
+      // Event her zaman eco oluşturulur — OSB onayından sonra aktive edilir
       const { data, error: insertError } = await supabase
         .from('events')
         .insert({
@@ -94,16 +92,30 @@ export default function EventWizard() {
           thank_you_message: state.thankYouMessage || null,
           pin_enabled: state.pinEnabled,
           pin_code_hash: pinHash,
-          package_type: state.packageType,
+          package_type: 'eco',
           template_id: state.templateId,
-          guest_count_estimate: state.guestCountEstimate ? Number(state.guestCountEstimate) : null,
+          guest_count_estimate: state.guestCountEstimate
+            ? Number(state.guestCountEstimate)
+            : null,
           upload_expires_at: uploadExpiresAt.toISOString(),
           media_retention_until: mediaRetentionUntil.toISOString(),
         })
-        .select('slug')
+        .select('id, slug')
         .single()
 
       if (insertError) throw new Error(insertError.message)
+
+      // Ücretli paket seçildiyse Shopier'a yönlendir
+      if (state.packageType === 'standard' || state.packageType === 'premium') {
+        const res = await fetch(
+          `/api/payment/create-checkout?eventId=${data!.id}&package=${state.packageType}`
+        )
+        const json = await res.json()
+        if (!res.ok) throw new Error(json.error || 'Ödeme başlatılamadı')
+        window.location.href = json.url
+        return
+      }
+
       router.push(`/etkinlik/${data!.slug}`)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Bir hata oluştu')
@@ -170,7 +182,11 @@ export default function EventWizard() {
               disabled={loading}
               className="flex-1 bg-[#6D1A3E] text-white rounded-xl py-3 text-sm font-medium hover:bg-[#5a1533] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? 'Oluşturuluyor...' : 'Etkinliği Oluştur ✨'}
+              {loading
+                ? 'İşleniyor...'
+                : state.packageType === 'eco'
+                  ? 'Etkinliği Oluştur ✨'
+                  : 'Etkinliği Oluştur & Ödemeye Geç →'}
             </button>
           )}
         </div>

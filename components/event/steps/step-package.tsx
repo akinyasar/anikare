@@ -12,14 +12,14 @@ const PACKAGES = [
   {
     value: 'standard' as PackageType,
     name: 'Standart',
-    price: '₺1.000',
+    price: '₺899',
     popular: true,
-    features: ['Sınırsız fotoğraf', '20 video', '4K kalite', '3 masa kartı şablonu (PDF)'],
+    features: ['Sınırsız fotoğraf', '20 video', '1080p kalite', '3 masa kartı şablonu (PDF)'],
   },
   {
     value: 'premium' as PackageType,
     name: 'Premium',
-    price: '₺1.399',
+    price: '₺1.299',
     features: [
       'Sınırsız fotoğraf & video',
       'Orijinal kalite',

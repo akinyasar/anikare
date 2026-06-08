@@ -23,7 +23,7 @@ export const PACKAGES: Record<
   standard: {
     maxPhotos: Infinity,
     maxVideos: 20,
-    compressionTarget: 2160,
+    compressionTarget: 1080,
     compressionQuality: 0.85,
     liveSlideshow: false,
     premiumTemplates: false,
