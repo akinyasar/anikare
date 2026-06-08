@@ -57,12 +57,13 @@ export async function POST(req: NextRequest) {
 
   const parts = platformOrderId.split(':')
   if (parts.length !== 2) {
-    return NextResponse.json({ error: 'Invalid order ID' }, { status: 400 })
+    // platform_order_id formatı bizim değil (ör. OSB testi) — işlem yapma, 200 dön
+    return NextResponse.json({ ok: true, skipped: true })
   }
 
   const [eventId, packageType] = parts
   if (packageType !== 'standard' && packageType !== 'premium') {
-    return NextResponse.json({ error: 'Unknown package' }, { status: 400 })
+    return NextResponse.json({ ok: true, skipped: true })
   }
 
   await activatePackage(eventId, packageType)
