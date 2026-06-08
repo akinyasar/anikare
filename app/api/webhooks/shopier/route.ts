@@ -2,19 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { activatePackage } from '@/lib/payment/activate-package'
 
-function verifyHash(res: string, receivedHash: string, osbSecret: string): boolean {
+function verifyHash(
+  osbUsername: string,
+  osbSecret: string,
+  orderNo: string,
+  receivedHash: string
+): boolean {
   const expected = crypto
-    .createHmac('sha256', osbSecret)
-    .update(res)
-    .digest('base64')
-  try {
-    return crypto.timingSafeEqual(
-      Buffer.from(expected),
-      Buffer.from(receivedHash)
-    )
-  } catch {
-    return false
-  }
+    .createHash('md5')
+    .update(osbUsername + osbSecret + orderNo)
+    .digest('hex')
+  console.log('[OSB] expected hash:', expected)
+  console.log('[OSB] received hash:', receivedHash)
+  return expected === receivedHash
 }
 
 export async function POST(req: NextRequest) {
@@ -22,29 +22,27 @@ export async function POST(req: NextRequest) {
   const res  = (formData.get('res') as string) ?? ''
   const hash = (formData.get('hash') as string) ?? ''
 
-  console.log('[OSB] res (first 300):', res.slice(0, 300))
-  console.log('[OSB] hash:', hash.slice(0, 20) + '...')
-
-  const osbSecret = process.env.SHOPIER_OSB_SECRET!
-
-  const isValid = verifyHash(res, hash, osbSecret)
-  if (!isValid) {
-    console.log('[OSB] Hash mismatch')
-    return NextResponse.json({ error: 'Invalid hash' }, { status: 401 })
-  }
+  const osbUsername = process.env.SHOPIER_OSB_USERNAME!
+  const osbSecret   = process.env.SHOPIER_OSB_SECRET!
 
   let order: Record<string, string>
   try {
-    order = JSON.parse(res)
+    order = JSON.parse(Buffer.from(res, 'base64').toString('utf-8'))
   } catch {
+    console.log('[OSB] Failed to parse res')
     return NextResponse.json({ error: 'Invalid res payload' }, { status: 400 })
   }
 
-  const platformOrderId = order.platform_order_id ?? ''
+  console.log('[OSB] order:', JSON.stringify(order))
 
+  const orderNo = order.order_id ?? order.orderNo ?? order.identity ?? ''
+  if (!verifyHash(osbUsername, osbSecret, orderNo, hash)) {
+    return NextResponse.json({ error: 'Invalid hash' }, { status: 401 })
+  }
+
+  const platformOrderId = order.platform_order_id ?? ''
   const parts = platformOrderId.split(':')
   if (parts.length !== 2) {
-    // platform_order_id bizim formatımızda değil — işlem yapma
     return NextResponse.json({ ok: true, skipped: true })
   }
 
