@@ -2,23 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { activatePackage } from '@/lib/payment/activate-package'
 
-function verifySignature(
-  osbUsername: string,
-  websiteUrl: string,
-  totalOrderValue: string,
-  platformOrderId: string,
-  receivedSignature: string,
-  osbSecret: string
-): boolean {
-  const data = `${osbUsername}${websiteUrl}${totalOrderValue}${platformOrderId}`
+function verifyHash(res: string, receivedHash: string, osbSecret: string): boolean {
   const expected = crypto
     .createHmac('sha256', osbSecret)
-    .update(data)
+    .update(res)
     .digest('base64')
   try {
     return crypto.timingSafeEqual(
       Buffer.from(expected),
-      Buffer.from(receivedSignature)
+      Buffer.from(receivedHash)
     )
   } catch {
     return false
@@ -27,46 +19,32 @@ function verifySignature(
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData()
+  const res  = (formData.get('res') as string) ?? ''
+  const hash = (formData.get('hash') as string) ?? ''
 
-  const platformOrderId = (formData.get('platform_order_id') as string) ?? ''
-  const totalOrderValue  = (formData.get('total_order_value') as string) ?? ''
-  const signature        = (formData.get('signature') as string) ?? ''
-  const apiKey           = (formData.get('API_key') as string) ?? ''
+  console.log('[OSB] res (first 300):', res.slice(0, 300))
+  console.log('[OSB] hash:', hash.slice(0, 20) + '...')
 
-  const osbUsername = process.env.SHOPIER_OSB_USERNAME!
-  const osbSecret   = process.env.SHOPIER_OSB_SECRET!
+  const osbSecret = process.env.SHOPIER_OSB_SECRET!
 
-  console.log('[OSB] params:', {
-    apiKey,
-    platformOrderId,
-    totalOrderValue,
-    signature: signature.slice(0, 10) + '...',
-    allKeys: [...formData.keys()],
-  })
-
-  if (apiKey !== osbUsername) {
-    console.log('[OSB] API key mismatch. received:', apiKey, 'expected:', osbUsername)
-    return NextResponse.json({ error: 'Invalid API key' }, { status: 401 })
-  }
-
-  const websiteUrl = 'www.anikare.net'
-  const isValid = verifySignature(
-    osbUsername,
-    websiteUrl,
-    totalOrderValue,
-    platformOrderId,
-    signature,
-    osbSecret
-  )
-
+  const isValid = verifyHash(res, hash, osbSecret)
   if (!isValid) {
-    console.log('[OSB] Signature mismatch. websiteUrl used:', websiteUrl)
-    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+    console.log('[OSB] Hash mismatch')
+    return NextResponse.json({ error: 'Invalid hash' }, { status: 401 })
   }
+
+  let order: Record<string, string>
+  try {
+    order = JSON.parse(res)
+  } catch {
+    return NextResponse.json({ error: 'Invalid res payload' }, { status: 400 })
+  }
+
+  const platformOrderId = order.platform_order_id ?? ''
 
   const parts = platformOrderId.split(':')
   if (parts.length !== 2) {
-    // platform_order_id formatı bizim değil (ör. OSB testi) — işlem yapma, 200 dön
+    // platform_order_id bizim formatımızda değil — işlem yapma
     return NextResponse.json({ ok: true, skipped: true })
   }
 
