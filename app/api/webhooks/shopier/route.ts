@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     platformOrderId,
     totalOrderValue,
     signature: signature.slice(0, 10) + '...',
-    allKeys: [...params.keys()],
+    allKeys: [...formData.keys()],
   })
 
   if (apiKey !== osbUsername) {
