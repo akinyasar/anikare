@@ -44,5 +44,5 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  return new Response('OK', { status: 200 })
+  return new Response('1', { status: 200 })
 }
