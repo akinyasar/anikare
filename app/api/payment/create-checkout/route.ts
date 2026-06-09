@@ -24,9 +24,10 @@ export async function GET(req: NextRequest) {
   }
 
   const platformOrderId = `${eventId}:${packageType}`
+  const separator = baseUrl.includes('?') ? '&' : '?'
   const checkoutUrl =
-    `${baseUrl}` +
-    `&buyer_id=${encodeURIComponent(user.id)}` +
+    `${baseUrl}${separator}` +
+    `buyer_id=${encodeURIComponent(user.id)}` +
     `&platform_order_id=${encodeURIComponent(platformOrderId)}`
 
   return NextResponse.json({ url: checkoutUrl })
