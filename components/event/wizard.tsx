@@ -105,14 +105,28 @@ export default function EventWizard() {
 
       if (insertError) throw new Error(insertError.message)
 
-      // Ücretli paket seçildiyse Shopier'a yönlendir
+      // Ücretli paket seçildiyse Shopier ödeme formunu gönder
       if (state.packageType === 'standard' || state.packageType === 'premium') {
-        const res = await fetch(
-          `/api/payment/create-checkout?eventId=${data!.id}&package=${state.packageType}`
-        )
+        const res = await fetch('/api/payment/initiate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: data!.id, packageType: state.packageType }),
+        })
         const json = await res.json()
         if (!res.ok) throw new Error(json.error || 'Ödeme başlatılamadı')
-        window.location.href = json.url
+
+        const form = document.createElement('form')
+        form.method = 'POST'
+        form.action = json.action
+        for (const [key, value] of Object.entries(json.fields)) {
+          const input = document.createElement('input')
+          input.type = 'hidden'
+          input.name = key
+          input.value = String(value)
+          form.appendChild(input)
+        }
+        document.body.appendChild(form)
+        form.submit()
         return
       }
 

@@ -185,8 +185,8 @@ Design tokens, base UI components, MIME fixes, batch upload hook, PIN/welcome/up
 - **Custom domain** — `anikare.net` via Cloudflare Registrar, connected to Vercel via auto-configure
 - **R2 CDN domain** — `media.anikare.net` active, CORS updated
 - **Supabase OAuth** — site URL + redirect URL updated to `https://www.anikare.net`
-- **Shopier OSB payment integration** — eco→standard/premium upgrade on OSB notification; `platform_order_id=eventId:packageType`; `app/api/webhooks/shopier` + `app/api/payment/create-checkout` + `lib/payment/activate-package.ts`
-- **Package rebalance** — Standard 1080p/₺899, Premium ₺1.299; wizard always inserts `eco`, OSB activates on payment
+- **Shopier payment integration** — Shopier PHP SDK–style form POST (`shopier.php`); direkt ödeme ekranı (ürün sayfası bypass); callback redirect sonrası paket aktivasyonu; OSB fallback da aktif. `app/api/payment/initiate` + `app/api/payment/callback` + `app/api/webhooks/shopier` + `lib/payment/activate-package.ts`
+- **Package rebalance** — Standard 1080p/₺899, Premium ₺1.299; wizard always inserts `eco`, ödeme sonrası aktive edilir
 
 ## Operational Reference
 
@@ -206,7 +206,7 @@ curl -H "Authorization: Bearer CRON_SECRET_DEGERIN" \
 ## Next Steps (Roadmap)
 1. **Email notifications** (see `docs/todo/email-notifications.md`) — Resend for upload + event creation notifications
 2. **Slideshow host control** — `/etkinlik/[slug]/slayt` management page (not yet built)
-3. ~~**Payment integration**~~ — Shopier OSB complete; iyzico later when incorporated
+3. ~~**Payment integration**~~ — Shopier form POST + callback complete; iyzico later when incorporated
 
 ## Collaboration Rules
 - **Commit messages:** `feat: ...` / `fix: ...` only — no Co-Authored-By lines
