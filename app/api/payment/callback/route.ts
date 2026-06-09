@@ -18,9 +18,10 @@ export async function POST(req: NextRequest) {
   const apiKey    = process.env.SHOPIER_OSB_USERNAME!
   const apiSecret = process.env.SHOPIER_OSB_SECRET!
 
+  // Shopier callback verification: base64(HMAC-SHA256-raw(randomNr + platformOrderId, apiSecret))
   const expected = crypto
     .createHmac('sha256', apiSecret)
-    .update(randomNr + apiKey + '1')
+    .update(randomNr + platformOrderId)
     .digest('base64')
 
   if (expected !== signature) {
