@@ -1,21 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import crypto from 'crypto'
 import { activatePackage } from '@/lib/payment/activate-package'
-
-function logHash(
-  osbUsername: string,
-  osbSecret: string,
-  orderNo: string,
-  receivedHash: string
-): void {
-  const expected = crypto
-    .createHash('sha256')
-    .update(osbUsername + osbSecret + orderNo)
-    .digest('hex')
-  console.log('[OSB] expected hash:', expected)
-  console.log('[OSB] received hash:', receivedHash)
-  console.log('[OSB] match:', expected === receivedHash)
-}
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData()
@@ -25,17 +10,24 @@ export async function POST(req: NextRequest) {
   const osbUsername = process.env.SHOPIER_OSB_USERNAME!
   const osbSecret   = process.env.SHOPIER_OSB_SECRET!
 
-  let order: Record<string, string>
+  const expected = crypto
+    .createHmac('sha256', osbSecret)
+    .update(res + osbUsername)
+    .digest('hex')
+
+  if (expected !== hash) {
+    console.log('[OSB] Hash mismatch')
+    return new Response('fail', { status: 401 })
+  }
+
+  let order: Record<string, unknown>
   try {
     order = JSON.parse(Buffer.from(res, 'base64').toString('utf-8'))
   } catch {
-    return NextResponse.json({ error: 'Invalid res payload' }, { status: 400 })
+    return new Response('fail', { status: 400 })
   }
 
-  // Hash formülü henüz doğrulanmadı — gerçek sipariş geldikten sonra aktif edilecek
-  logHash(osbUsername, osbSecret, order.orderid ?? '', hash)
-
-  const platformOrderId = order.platform_order_id ?? ''
+  const platformOrderId = (order.platform_order_id as string) ?? ''
   const parts = platformOrderId.split(':')
   if (parts.length === 2) {
     const [eventId, packageType] = parts
@@ -44,5 +36,5 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  return new Response('1', { status: 200 })
+  return new Response('success', { status: 200 })
 }
