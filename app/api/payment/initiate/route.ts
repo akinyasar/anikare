@@ -20,12 +20,17 @@ export async function POST(req: NextRequest) {
       ? process.env.POLAR_PRODUCT_STANDARD!
       : process.env.POLAR_PRODUCT_PREMIUM!
 
-  const checkout = await polar.checkouts.create({
-    products: [productId],
-    customerEmail: user.email ?? undefined,
-    successUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/odeme-tamamlandi`,
-    metadata: { referenceId: `${eventId}:${packageType}` },
-  })
-
-  return NextResponse.json({ url: checkout.url })
+  try {
+    const checkout = await polar.checkouts.create({
+      products: [productId],
+      customerEmail: user.email ?? undefined,
+      successUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/odeme-tamamlandi`,
+      metadata: { referenceId: `${eventId}:${packageType}` },
+    })
+    return NextResponse.json({ url: checkout.url })
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
+    console.error('[Payment] Polar checkout error:', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
+  }
 }
