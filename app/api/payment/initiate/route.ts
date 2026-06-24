@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const checkout = await polar.checkouts.create({
       products: [productId],
       customerEmail: user.email ?? undefined,
-      successUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/odeme-tamamlandi`,
+      successUrl: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.anikare.net'}/odeme-tamamlandi`,
       metadata: { referenceId: `${eventId}:${packageType}` },
     })
     return NextResponse.json({ url: checkout.url })
