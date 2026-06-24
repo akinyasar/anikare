@@ -95,7 +95,7 @@ export default function MediaStaging({
   const overVideoLimit = pkg.maxVideos !== Infinity && totalVideos > pkg.maxVideos
   const canUpload = items.length > 0 && !overPhotoLimit && !overVideoLimit
 
-  const packageLabel = dict.packageLabel ?? (packageType === 'eco' ? 'Ücretsiz' : packageType === 'standard' ? 'Standart' : 'Premium')
+  const packageName = packageType === 'eco' ? 'Ücretsiz' : packageType === 'standard' ? 'Standart' : 'Premium'
 
   return (
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
@@ -117,7 +117,7 @@ export default function MediaStaging({
             <p className="text-[11px] text-[#7a6a5a]">{formatBytes(totalSize)}</p>
           </div>
           <span className="text-[11px] bg-[#f5e6ed] text-[#6D1A3E] font-semibold px-2.5 py-1 rounded-full">
-            {packageLabel}
+            {packageName}
           </span>
         </div>
 
@@ -214,7 +214,7 @@ export default function MediaStaging({
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-[#7a6a5a]">{dict.packageLabel ?? 'Paket'}</span>
                   <span className="text-sm font-semibold text-[#6D1A3E] bg-[#f5e6ed] px-3 py-1 rounded-full">
-                    {packageLabel}
+                    {packageName}
                   </span>
                 </div>
 

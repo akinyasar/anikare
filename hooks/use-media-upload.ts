@@ -71,12 +71,12 @@ export function useMediaUpload() {
           throw new Error(msg)
         }
 
-        const { uploadUrl, fileKey, publicUrl } = await presignRes.json()
+        const { uploadUrl, fileKey, publicUrl, contentType } = await presignRes.json()
 
         const uploadRes = await fetch(uploadUrl, {
           method: 'PUT',
           body: processedFile,
-          headers: { 'Content-Type': processedFile.type || 'application/octet-stream' },
+          headers: { 'Content-Type': contentType },
         })
 
         if (!uploadRes.ok) throw new Error('R2 yüklemesi başarısız')

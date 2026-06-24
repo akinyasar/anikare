@@ -57,6 +57,7 @@ export interface PresignResponse {
   uploadUrl: string;
   fileKey: string;
   publicUrl: string;
+  contentType: string;
 }
 
 export interface UploadPayload {

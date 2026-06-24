@@ -108,5 +108,5 @@ export async function POST(req: NextRequest) {
   const uploadUrl = await getSignedUrl(r2, command, { expiresIn: 300 })
   const publicUrl = `${R2_PUBLIC_URL}/${fileKey}`
 
-  return Response.json({ uploadUrl, fileKey, publicUrl } satisfies PresignResponse)
+  return Response.json({ uploadUrl, fileKey, publicUrl, contentType } satisfies PresignResponse)
 }
