@@ -102,10 +102,10 @@ R2_BUCKET_NAME
 R2_PUBLIC_URL
 R2_PUBLIC_HOSTNAME
 CRON_SECRET
-SHOPIER_OSB_USERNAME
-SHOPIER_OSB_SECRET
-SHOPIER_URL_STANDARD
-SHOPIER_URL_PREMIUM
+POLAR_ACCESS_TOKEN
+POLAR_PRODUCT_STANDARD
+POLAR_PRODUCT_PREMIUM
+POLAR_WEBHOOK_SECRET
 ```
 Set `.env.local` locally, and add all vars to Vercel dashboard before deploying.
 
@@ -185,7 +185,7 @@ Design tokens, base UI components, MIME fixes, batch upload hook, PIN/welcome/up
 - **Custom domain** — `anikare.net` via Cloudflare Registrar, connected to Vercel via auto-configure
 - **R2 CDN domain** — `media.anikare.net` active, CORS updated
 - **Supabase OAuth** — site URL + redirect URL updated to `https://www.anikare.net`
-- **Shopier payment integration** — Shopier PHP SDK–style form POST (`shopier.php`); direkt ödeme ekranı (ürün sayfası bypass); callback redirect sonrası paket aktivasyonu; OSB fallback da aktif. `app/api/payment/initiate` + `app/api/payment/callback` + `app/api/webhooks/shopier` + `lib/payment/activate-package.ts`
+- **Polar payment integration** — Polar.sh MoR; TRY fiyatlandırma; checkout session API → Polar sayfasına redirect → `successUrl` ile geri dönüş; `order.paid` webhook ile otomatik paket aktivasyonu. `app/api/payment/initiate` + `app/api/webhooks/polar` + `lib/payment/activate-package.ts`
 - **Package rebalance** — Standard 1080p/₺899, Premium ₺1.299; wizard always inserts `eco`, ödeme sonrası aktive edilir
 
 ## Operational Reference
@@ -206,7 +206,7 @@ curl -H "Authorization: Bearer CRON_SECRET_DEGERIN" \
 ## Next Steps (Roadmap)
 1. **Email notifications** (see `docs/todo/email-notifications.md`) — Resend for upload + event creation notifications
 2. **Slideshow host control** — `/etkinlik/[slug]/slayt` management page (not yet built)
-3. ~~**Payment integration**~~ — Shopier form POST + callback complete; iyzico later when incorporated
+3. ~~**Payment integration**~~ — Polar.sh MoR entegrasyonu complete; TRY fiyatlandırma, webhook aktivasyon
 
 ## Collaboration Rules
 - **Commit messages:** `feat: ...` / `fix: ...` only — no Co-Authored-By lines

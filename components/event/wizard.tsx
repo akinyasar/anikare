@@ -105,7 +105,7 @@ export default function EventWizard() {
 
       if (insertError) throw new Error(insertError.message)
 
-      // Ücretli paket seçildiyse Shopier ödeme formunu gönder
+      // Ücretli paket seçildiyse Polar ödeme sayfasına yönlendir
       if (state.packageType === 'standard' || state.packageType === 'premium') {
         const res = await fetch('/api/payment/initiate', {
           method: 'POST',
@@ -114,19 +114,7 @@ export default function EventWizard() {
         })
         const json = await res.json()
         if (!res.ok) throw new Error(json.error || 'Ödeme başlatılamadı')
-
-        const form = document.createElement('form')
-        form.method = 'POST'
-        form.action = json.action
-        for (const [key, value] of Object.entries(json.fields)) {
-          const input = document.createElement('input')
-          input.type = 'hidden'
-          input.name = key
-          input.value = String(value)
-          form.appendChild(input)
-        }
-        document.body.appendChild(form)
-        form.submit()
+        window.location.href = json.url
         return
       }
 
