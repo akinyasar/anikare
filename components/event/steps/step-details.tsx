@@ -1,78 +1,16 @@
 'use client'
 
-import { useMemo } from 'react'
 import Input, { Textarea } from '@/components/ui/input'
 import type { EventType } from '@/types'
 
-const MONTHS = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık']
-
-function daysInMonth(year: number, month: number) {
-  return new Date(year, month, 0).getDate()
+function todayStr() {
+  return new Date().toISOString().split('T')[0]
 }
 
-function parseDateStr(str: string): { d: string; m: string; y: string } {
-  if (!str) return { d: '', m: '', y: '' }
-  const [y, m, d] = str.split('-')
-  return { d: String(parseInt(d || '0')), m: String(parseInt(m || '0')), y: y || '' }
-}
-
-function DatePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const today = new Date()
-  const currentYear = today.getFullYear()
-  const years = useMemo(() => Array.from({ length: 11 }, (_, i) => currentYear + i), [currentYear])
-
-  const { d, m, y } = parseDateStr(value)
-  const selYear  = parseInt(y) || 0
-  const selMonth = parseInt(m) || 0
-  const maxDay   = selYear && selMonth ? daysInMonth(selYear, selMonth) : 31
-  const days     = Array.from({ length: maxDay }, (_, i) => i + 1)
-
-  function emit(nextD: string, nextM: string, nextY: string) {
-    const nd = parseInt(nextD), nm = parseInt(nextM), ny = parseInt(nextY)
-    if (!nd || !nm || !ny) { onChange(''); return }
-    const max = daysInMonth(ny, nm)
-    const safeDay = Math.min(nd, max)
-    onChange(`${ny}-${String(nm).padStart(2,'0')}-${String(safeDay).padStart(2,'0')}`)
-  }
-
-  const selectCls = "flex-1 bg-white border border-[#e8ddd5] rounded-2xl px-3 py-3.5 text-sm text-[#1a1a1a] appearance-none focus:outline-none focus:ring-2 focus:ring-[#6D1A3E]/30 focus:border-[#6D1A3E] transition cursor-pointer"
-
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-medium text-[#374151]">Etkinlik Tarihi</label>
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <select className={selectCls} value={d} onChange={e => emit(e.target.value, m, y)}>
-            <option value="">Gün</option>
-            {days.map(n => <option key={n} value={n}>{n}</option>)}
-          </select>
-          <ChevronDown />
-        </div>
-        <div className="relative flex-[1.6]">
-          <select className={selectCls} value={m} onChange={e => emit(d, e.target.value, y)}>
-            <option value="">Ay</option>
-            {MONTHS.map((name, i) => <option key={i+1} value={i+1}>{name}</option>)}
-          </select>
-          <ChevronDown />
-        </div>
-        <div className="relative flex-[1.3]">
-          <select className={selectCls} value={y} onChange={e => emit(d, m, e.target.value)}>
-            <option value="">Yıl</option>
-            {years.map(yr => <option key={yr} value={yr}>{yr}</option>)}
-          </select>
-          <ChevronDown />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ChevronDown() {
-  return (
-    <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-  )
+function maxDateStr() {
+  const d = new Date()
+  d.setFullYear(d.getFullYear() + 10)
+  return d.toISOString().split('T')[0]
 }
 
 const EVENT_TYPES: { value: EventType; label: string; emoji: string }[] = [
@@ -136,9 +74,13 @@ export default function StepDetails({ state, update }: Props) {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <DatePicker
+        <Input
+          label="Etkinlik Tarihi"
+          type="date"
+          min={todayStr()}
+          max={maxDateStr()}
           value={state.eventDate}
-          onChange={(v) => update({ eventDate: v })}
+          onChange={(e) => update({ eventDate: e.target.value })}
         />
         <Input
           label="Tahmini Davetli"
