@@ -75,7 +75,8 @@ export async function POST(req: NextRequest) {
   })
 
   if (error) {
-    return Response.json({ error: 'Failed to save media' }, { status: 500 })
+    console.error('[Confirm] Supabase insert error:', JSON.stringify(error))
+    return Response.json({ error: `Failed to save media: ${error.message}` }, { status: 500 })
   }
 
   return Response.json({ success: true })
