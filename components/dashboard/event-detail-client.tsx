@@ -7,6 +7,12 @@ import MediaGrid from '@/components/dashboard/media-grid'
 import QrDownload from '@/components/dashboard/qr-download'
 import TableCardSection from '@/components/table-card/table-card-section'
 
+const PACKAGE_LABELS: Record<string, string> = {
+  eco: 'Ücretsiz',
+  standard: 'Standart',
+  premium: 'Premium',
+}
+
 const EVENT_TYPE_KEYS: Record<string, SiteKey> = {
   wedding: 'eventTypeWedding',
   birthday: 'eventTypeBirthday',
@@ -52,7 +58,7 @@ export default function EventDetailClient({ event, slug }: Props) {
                 day: 'numeric', month: 'long', year: 'numeric',
               })
             : t(locale, 'noDate')}{' '}
-          · <span className="capitalize">{event.package_type}</span>
+          · <span>{PACKAGE_LABELS[event.package_type] ?? event.package_type}</span>
         </p>
       </div>
 

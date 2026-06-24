@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
       customerEmail: user.email ?? undefined,
       successUrl: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.anikare.net'}/odeme-tamamlandi`,
       metadata: { referenceId: `${eventId}:${packageType}` },
+      locale: 'tr',
     })
     return NextResponse.json({ url: checkout.url })
   } catch (e) {

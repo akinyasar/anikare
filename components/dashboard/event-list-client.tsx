@@ -80,7 +80,7 @@ export default function EventListClient({ events }: { events: Event[] | null }) 
                   <span>🎬 {event.video_count}</span>
                 </div>
                 <span className="text-[10px] text-[#9ca3af] uppercase tracking-wider font-medium">
-                  {event.package_type}
+                  {{ eco: 'Ücretsiz', standard: 'Standart', premium: 'Premium' }[event.package_type] ?? event.package_type}
                 </span>
               </div>
             </Link>
