@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     originalFilename,
   } = parsed.data
 
-  const supabase = await createServiceClient()
+  const supabase = createServiceClient()
 
   const { data: event } = await supabase
     .from('events')

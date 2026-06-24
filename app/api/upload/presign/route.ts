@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
 
   const fileType = resolveFileType(mimeType, fileName, claimedType)
 
-  const supabase = await createServiceClient()
+  const supabase = createServiceClient()
 
   const { data: event, error } = await supabase
     .from('events')

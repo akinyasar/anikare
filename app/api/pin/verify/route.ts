@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   const { eventId, pin } = parsed.data
 
-  const supabase = await createServiceClient()
+  const supabase = createServiceClient()
   const { data: event } = await supabase
     .from('events')
     .select('pin_enabled, pin_code_hash')

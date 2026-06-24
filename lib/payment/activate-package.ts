@@ -5,7 +5,7 @@ export async function activatePackage(
   eventId: string,
   packageType: 'standard' | 'premium'
 ): Promise<void> {
-  const supabase = await createServiceClient()
+  const supabase = createServiceClient()
   const { error } = await supabase
     .from('events')
     .update({ package_type: packageType as PackageType })

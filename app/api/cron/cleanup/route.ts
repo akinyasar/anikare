@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const supabase = await createServiceClient()
+  const supabase = createServiceClient()
 
   const { data: expiredEvents } = await supabase
     .from('events')
