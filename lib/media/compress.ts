@@ -7,14 +7,22 @@ export async function compressImage(file: File, packageType: PackageType): Promi
 
   if (pkg.compressionTarget === null) return file
 
-  const compressed = await imageCompression(file, {
-    maxWidthOrHeight: pkg.compressionTarget,
-    initialQuality: pkg.compressionQuality,
-    useWebWorker: true,
-    fileType: file.type,
-  })
+  const lowerName = file.name.toLowerCase()
+  const isHeic = file.type === 'image/heic' || file.type === 'image/heif' ||
+    lowerName.endsWith('.heic') || lowerName.endsWith('.heif')
+  if (isHeic) return file
 
-  return new File([compressed], file.name, { type: file.type })
+  try {
+    const compressed = await imageCompression(file, {
+      maxWidthOrHeight: pkg.compressionTarget,
+      initialQuality: pkg.compressionQuality,
+      useWebWorker: true,
+      fileType: file.type,
+    })
+    return new File([compressed], file.name, { type: file.type })
+  } catch {
+    return file
+  }
 }
 
 export function isVideoFile(file: File): boolean {

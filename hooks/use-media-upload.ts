@@ -22,9 +22,12 @@ interface BatchUploadArgs {
   onProgress: (done: number, total: number) => void
 }
 
+const LIMIT_ERRORS = new Set(['Photo limit reached', 'Video limit reached'])
+
 export function useMediaUpload() {
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [limitReached, setLimitReached] = useState(false)
 
   const uploadBatch = useCallback(async ({
     items,
@@ -36,6 +39,7 @@ export function useMediaUpload() {
   }: BatchUploadArgs): Promise<boolean> => {
     setUploading(true)
     setError(null)
+    setLimitReached(false)
     let done = 0
 
     try {
@@ -59,7 +63,12 @@ export function useMediaUpload() {
 
         if (!presignRes.ok) {
           const err = await presignRes.json()
-          throw new Error(err.error ?? 'Presign başarısız')
+          const msg: string = err.error ?? 'Presign başarısız'
+          if (LIMIT_ERRORS.has(msg)) {
+            setLimitReached(true)
+            return true
+          }
+          throw new Error(msg)
         }
 
         const { uploadUrl, fileKey, publicUrl } = await presignRes.json()
@@ -105,7 +114,7 @@ export function useMediaUpload() {
     }
   }, [])
 
-  return { uploadBatch, uploading, error, resetError: () => setError(null) }
+  return { uploadBatch, uploading, error, limitReached, resetError: () => { setError(null); setLimitReached(false) } }
 }
 
 export function createUploadItems(files: FileList): UploadItem[] {

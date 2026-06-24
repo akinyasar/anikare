@@ -23,7 +23,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
   const [dict, setDict] = useState<Dictionary | null>(null)
   const [items, setItems] = useState<UploadItem[]>([])
   const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0 })
-  const { uploadBatch, error, resetError } = useMediaUpload()
+  const { uploadBatch, error, limitReached, resetError } = useMediaUpload()
 
   const addMoreRef = useRef<HTMLInputElement>(null)
 
@@ -95,7 +95,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
     if (success) {
       setStage('thankyou')
     }
-    // If error, stage stays 'uploading' and error is shown via UploadProgress
+    // Hard error: stage stays 'uploading', UploadProgress shows error
   }
 
   function handleUploadMore() {
@@ -143,6 +143,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
         videoUrl={event.thank_you_video_url ?? null}
         uploadMoreLabel={g.uploadMore ?? 'Başka Anı Ekle'}
         onUploadMore={handleUploadMore}
+        limitReached={limitReached}
       />
     )
   }

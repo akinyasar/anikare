@@ -9,9 +9,10 @@ interface Props {
   videoUrl: string | null
   uploadMoreLabel: string
   onUploadMore: () => void
+  limitReached?: boolean
 }
 
-export default function ThankYouScreen({ title, message, videoUrl, uploadMoreLabel, onUploadMore }: Props) {
+export default function ThankYouScreen({ title, message, videoUrl, uploadMoreLabel, onUploadMore, limitReached }: Props) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -61,9 +62,14 @@ export default function ThankYouScreen({ title, message, videoUrl, uploadMoreLab
         <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-[#1a1a1a] mb-3">
           {title}
         </h1>
-        <p className="text-base text-[#7a6a5a] max-w-xs leading-relaxed mb-10">
+        <p className="text-base text-[#7a6a5a] max-w-xs leading-relaxed mb-4">
           {message}
         </p>
+        {limitReached && (
+          <p className="text-sm text-[#9b4a6a] bg-[#f5e6ed] rounded-2xl px-4 py-3 max-w-xs mb-6">
+            Fotoğraf limitine ulaşıldı — yüklenen fotoğraflar kaydedildi.
+          </p>
+        )}
 
         <Button variant="primary" size="lg" onClick={onUploadMore} className="max-w-xs">
           {uploadMoreLabel ?? 'Başka Anı Ekle'}
