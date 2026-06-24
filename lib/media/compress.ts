@@ -16,10 +16,9 @@ export async function compressImage(file: File, packageType: PackageType): Promi
     const compressed = await imageCompression(file, {
       maxWidthOrHeight: pkg.compressionTarget,
       initialQuality: pkg.compressionQuality,
-      useWebWorker: true,
-      fileType: file.type,
+      useWebWorker: false,
     })
-    return new File([compressed], file.name, { type: file.type })
+    return new File([compressed], file.name, { type: file.type || compressed.type })
   } catch {
     return file
   }

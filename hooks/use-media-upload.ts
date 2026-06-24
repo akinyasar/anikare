@@ -62,8 +62,8 @@ export function useMediaUpload() {
         })
 
         if (!presignRes.ok) {
-          const err = await presignRes.json()
-          const msg: string = err.error ?? 'Presign başarısız'
+          const err = await presignRes.json().catch(() => ({}))
+          const msg: string = err.error ?? `Presign başarısız (${presignRes.status})`
           if (LIMIT_ERRORS.has(msg)) {
             setLimitReached(true)
             return true
@@ -79,7 +79,7 @@ export function useMediaUpload() {
           headers: { 'Content-Type': contentType },
         })
 
-        if (!uploadRes.ok) throw new Error('R2 yüklemesi başarısız')
+        if (!uploadRes.ok) throw new Error(`R2 yüklemesi başarısız (${uploadRes.status}) — tür: ${contentType}, boyut: ${processedFile.size}`)
 
         const confirmRes = await fetch('/api/upload/confirm', {
           method: 'POST',
@@ -97,8 +97,8 @@ export function useMediaUpload() {
         })
 
         if (!confirmRes.ok) {
-          const err = await confirmRes.json()
-          throw new Error(err.error ?? 'Kayıt başarısız')
+          const err = await confirmRes.json().catch(() => ({}))
+          throw new Error(err.error ?? `Kayıt başarısız (${confirmRes.status})`)
         }
 
         done++
