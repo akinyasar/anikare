@@ -32,7 +32,7 @@ const INITIAL_STATE: WizardState = {
   pinEnabled: false,
   pinCode: '',
   packageType: 'standard',
-  templateId: 'classic',
+  templateId: 'minimal',
 }
 
 const STEPS = ['Detaylar', 'Paket', 'Tasarım']
@@ -58,6 +58,9 @@ export default function EventWizard() {
       if (!state.title.trim()) return false
       if (state.pinEnabled && state.pinCode.length !== 4) return false
       return true
+    }
+    if (step === 2) {
+      return ['minimal', 'floral', 'botanical'].includes(state.templateId)
     }
     return true
   }
