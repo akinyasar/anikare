@@ -80,7 +80,14 @@ export default function StepDetails({ state, update }: Props) {
           min={todayStr()}
           max={maxDateStr()}
           value={state.eventDate}
-          onChange={(e) => update({ eventDate: e.target.value })}
+          onChange={(e) => {
+            const val = e.target.value
+            if (!val) { update({ eventDate: '' }); return }
+            const min = todayStr()
+            const max = maxDateStr()
+            const clamped = val < min ? min : val > max ? max : val
+            update({ eventDate: clamped })
+          }}
         />
         <Input
           label="Tahmini Davetli"
