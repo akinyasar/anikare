@@ -83,6 +83,8 @@ export default function StepDetails({ state, update }: Props) {
           onChange={(e) => {
             const val = e.target.value
             if (!val) { update({ eventDate: '' }); return }
+            const year = parseInt(val.split('-')[0])
+            if (isNaN(year) || year < 1000) { update({ eventDate: val }); return }
             const min = todayStr()
             const max = maxDateStr()
             const clamped = val < min ? min : val > max ? max : val
