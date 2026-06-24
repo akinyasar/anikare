@@ -23,6 +23,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
   const [dict, setDict] = useState<Dictionary | null>(null)
   const [items, setItems] = useState<UploadItem[]>([])
   const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0 })
+  const [limitInfo, setLimitInfo] = useState<{ uploaded: number; total: number } | null>(null)
   const { uploadBatch, error, limitReached, resetError } = useMediaUpload()
 
   const addMoreRef = useRef<HTMLInputElement>(null)
@@ -88,6 +89,10 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
       onProgress: (done, total) => setUploadProgress({ done, total }),
     })
 
+    if (limitReached) {
+      setLimitInfo({ uploaded: uploadProgress.done, total: items.length })
+    }
+
     // Revoke all preview URLs
     items.forEach(item => URL.revokeObjectURL(item.preview))
     setItems([])
@@ -102,6 +107,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
     setGuestName('')
     setGuestNote('')
     setItems([])
+    setLimitInfo(null)
     resetError()
     setStage('welcome')
   }
@@ -144,6 +150,8 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
         uploadMoreLabel={g.uploadMore ?? 'Başka Anı Ekle'}
         onUploadMore={handleUploadMore}
         limitReached={limitReached}
+        uploadedCount={limitInfo?.uploaded}
+        totalCount={limitInfo?.total}
       />
     )
   }

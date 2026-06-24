@@ -10,9 +10,11 @@ interface Props {
   uploadMoreLabel: string
   onUploadMore: () => void
   limitReached?: boolean
+  uploadedCount?: number
+  totalCount?: number
 }
 
-export default function ThankYouScreen({ title, message, videoUrl, uploadMoreLabel, onUploadMore, limitReached }: Props) {
+export default function ThankYouScreen({ title, message, videoUrl, uploadMoreLabel, onUploadMore, limitReached, uploadedCount, totalCount }: Props) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -67,7 +69,9 @@ export default function ThankYouScreen({ title, message, videoUrl, uploadMoreLab
         </p>
         {limitReached && (
           <p className="text-sm text-[#9b4a6a] bg-[#f5e6ed] rounded-2xl px-4 py-3 max-w-xs mb-6">
-            Fotoğraf limitine ulaşıldı — yüklenen fotoğraflar kaydedildi.
+            {uploadedCount != null && totalCount != null && totalCount > uploadedCount
+              ? `${totalCount} fotoğraftan ${uploadedCount}'i yüklendi. Paket limitine ulaşıldığı için ${totalCount - uploadedCount} fotoğraf kaydedilemedi.`
+              : 'Paket limitine ulaşıldı — yüklenen fotoğraflar kaydedildi.'}
           </p>
         )}
 
