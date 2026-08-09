@@ -17,7 +17,7 @@ interface Props {
 const CARD_W_CM = 15
 const CARD_H_CM = 8
 
-async function renderCardToCanvas(
+export async function renderCardToCanvas(
   templateId: TemplateId,
   title: string,
   eventType: string | undefined,

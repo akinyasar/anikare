@@ -1,4 +1,4 @@
-// Botanical table card — Stitch-generated eucalyptus SVG, portrait variant
+// Botanical table card — Stitch-generated watercolor eucalyptus garland corners
 interface CardProps {
   title: string
   eventType?: string
@@ -12,35 +12,35 @@ function formatDate(d: string) {
   return new Date(d).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-// Stitch-generated botanical corner SVG paths (120×100 viewBox)
-function BotanicalCorner({ flip }: { flip?: boolean }) {
+// Two distinct illustrations (not a mirrored duplicate) — each already drawn
+// oriented for its own corner, so no CSS transform (rotate/scale/mirror) is
+// needed to place them. This avoids the html2canvas corner-rotation bug class
+// entirely: these <img> tags carry zero transform in the exported markup.
+function BotanicalCorner({ corner, size }: { corner: 'tr' | 'bl'; size: number }) {
+  const src = corner === 'tr' ? '/table-card/botanical-tr.png' : '/table-card/botanical-bl.png'
+  const position = corner === 'tr'
+    ? { top: -size * 0.03, right: -size * 0.03 }
+    : { bottom: -size * 0.03, left: -size * 0.03 }
   return (
-    <svg width="100" height="85" viewBox="0 0 120 100" fill="none">
-      {/* rotate(180, 60, 50) = 180° around viewBox center — no CSS transform needed */}
-      <g transform={flip ? 'rotate(180, 60, 50)' : undefined}>
-        <path d="M110,10 Q80,20 40,70" stroke="#5c7a3c" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
-        <ellipse cx="102" cy="18" rx="8" ry="5" fill="#7a9e6a" transform="rotate(-30, 102, 18)"/>
-        <ellipse cx="108" cy="8" rx="7" ry="4" fill="#a8c896" transform="rotate(-15, 108, 8)"/>
-        <ellipse cx="88" cy="28" rx="9" ry="6" fill="#a8c896" transform="rotate(-40, 88, 28)"/>
-        <ellipse cx="82" cy="15" rx="8" ry="5" fill="#7a9e6a" transform="rotate(-20, 82, 15)"/>
-        <ellipse cx="68" cy="42" rx="10" ry="6.5" fill="#7a9e6a" transform="rotate(-45, 68, 42)"/>
-        <ellipse cx="60" cy="30" rx="9" ry="6" fill="#a8c896" transform="rotate(-30, 60, 30)"/>
-        <ellipse cx="45" cy="65" rx="8" ry="5" fill="#a8c896" transform="rotate(-50, 45, 65)"/>
-        <path d="M85,22 Q95,45 80,85" stroke="#5c7a3c" strokeWidth="1" fill="none" strokeLinecap="round"/>
-        <ellipse cx="90" cy="35" rx="7" ry="4.5" fill="#7a9e6a" transform="rotate(10, 90, 35)"/>
-        <ellipse cx="95" cy="48" rx="8" ry="5" fill="#a8c896" transform="rotate(20, 95, 48)"/>
-        <ellipse cx="85" cy="70" rx="9" ry="6" fill="#7a9e6a" transform="rotate(30, 85, 70)"/>
-        <circle cx="95" cy="15" r="1.5" fill="#3d5c2d"/>
-        <circle cx="98" cy="18" r="1.2" fill="#3d5c2d"/>
-        <circle cx="93" cy="18" r="1.3" fill="#3d5c2d"/>
-        <circle cx="75" cy="35" r="1.4" fill="#3d5c2d"/>
-        <circle cx="78" cy="38" r="1.2" fill="#3d5c2d"/>
-        <circle cx="72" cy="38" r="1.3" fill="#3d5c2d"/>
-        <circle cx="115" cy="25" r="1" fill="#c9a84c"/>
-        <circle cx="100" cy="50" r="0.7" fill="#c9a84c"/>
-        <circle cx="60" cy="80" r="0.8" fill="#c9a84c"/>
-        <circle cx="50" cy="20" r="0.6" fill="#c9a84c"/>
-      </g>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt=""
+      width={size}
+      height={size}
+      style={{ position: 'absolute', width: size, height: size, ...position }}
+    />
+  )
+}
+
+// Rendered as SVG (not a text glyph) so it sits pixel-perfect centered on the
+// divider line — a "♥" character's baseline sits inside its font em-box at a
+// position that varies by renderer, so flex alignItems:center never lined it
+// up exactly against the 1px line in html2canvas' export.
+function DividerHeart({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }}>
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#c9a84c" />
     </svg>
   )
 }
@@ -66,15 +66,15 @@ function QRContent({ qrDataUrl, size }: { qrDataUrl: string | null; size: number
 }
 
 // ── LANDSCAPE (756×403) ──────────────────────────────────────────────────────
-function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
+function Landscape({ title, eventDate, qrDataUrl }: CardProps) {
   return (
     <div style={{
       width: 756, height: 403, background: '#ffffff', position: 'relative',
       overflow: 'hidden', border: '1.5px solid #c8dbb8', borderRadius: 6,
       display: 'flex', flexShrink: 0, paddingTop: 48, paddingBottom: 48,
     }}>
-      <div style={{ position: 'absolute', top: 0, right: 0 }}><BotanicalCorner /></div>
-      <div style={{ position: 'absolute', bottom: 0, left: 0 }}><BotanicalCorner flip /></div>
+      <BotanicalCorner corner="tr" size={230} />
+      <BotanicalCorner corner="bl" size={200} />
 
       {/* QR */}
       <div style={{ width: '40%', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingLeft: 48, paddingRight: 20 }}>
@@ -85,14 +85,8 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
       <div style={{ width: 1, background: '#d0e4c0', margin: '50px 0' }} />
 
       {/* Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 32, paddingRight: 120, gap: 6 }}>
-        <div style={{ fontSize: 14, color: '#c9a84c', marginBottom: 2 }}>♥</div>
-        {eventType && (
-          <p style={{ margin: 0, fontSize: 11, letterSpacing: 4, textTransform: 'uppercase', color: '#7a9e6a', fontFamily: 'Arial, sans-serif', fontWeight: 600 }}>
-            {eventType}
-          </p>
-        )}
-        <h1 style={{ margin: 0, fontSize: 36, fontWeight: 700, color: '#1a1a1a', lineHeight: 1.15, fontFamily: 'Georgia, serif' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 32, paddingRight: 60, gap: 6, position: 'relative', zIndex: 1, marginTop: -16 }}>
+        <h1 style={{ margin: 0, fontSize: 36, fontWeight: 700, color: '#1a1a1a', lineHeight: 1.15, fontFamily: 'var(--font-heading), Georgia, serif' }}>
           {title}
         </h1>
         {eventDate && (
@@ -102,14 +96,21 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, margin: '4px 0' }}>
           <div style={{ height: 1, flex: 1, background: '#c9a84c' }} />
-          <div style={{ width: 5, height: 5, background: '#c9a84c', transform: 'rotate(45deg)' }} />
+          <DividerHeart size={15} />
           <div style={{ height: 1, flex: 1, background: '#c9a84c' }} />
         </div>
-        <p style={{ margin: 0, fontSize: 13, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
-          QR kodu okutarak anılarınızı<br />bizimle paylaşın.
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
+          Sizden gelen her kare, bu günü daha özel kılıyor. QR kodu okutarak hatıralarınızı bizimle paylaşın.
         </p>
-        <p style={{ margin: '10px 0 0', fontSize: 11, color: '#7a9e6a', fontFamily: 'Arial, sans-serif' }}>
+      </div>
+
+      {/* Brand — bottom right */}
+      <div style={{ position: 'absolute', bottom: 14, right: 20, textAlign: 'right', zIndex: 1 }}>
+        <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: '#7a9e6a', fontFamily: 'Arial, sans-serif' }}>
           <span style={{ color: '#c9a84c' }}>♥</span> AnıKare
+        </p>
+        <p style={{ margin: '2px 0 0', fontSize: 9, color: '#b9b2a6', fontFamily: 'Arial, sans-serif' }}>
+          www.anikare.net
         </p>
       </div>
     </div>
@@ -117,28 +118,18 @@ function Landscape({ title, eventType, eventDate, qrDataUrl }: CardProps) {
 }
 
 // ── PORTRAIT (480×580) ───────────────────────────────────────────────────────
-function Portrait({ title, eventType, eventDate, qrDataUrl }: CardProps) {
+function Portrait({ title, eventDate, qrDataUrl }: CardProps) {
   return (
     <div style={{
       width: 480, height: 580, background: '#ffffff', position: 'relative',
       overflow: 'hidden', border: '1.5px solid #c8dbb8', borderRadius: 6,
       display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0,
     }}>
-      <div style={{ position: 'absolute', top: 0, right: 0, transform: 'scale(0.65)', transformOrigin: 'top right' }}>
-        <BotanicalCorner />
-      </div>
-      <div style={{ position: 'absolute', bottom: 0, left: 0, transform: 'scale(0.65)', transformOrigin: 'bottom left' }}>
-        <BotanicalCorner flip />
-      </div>
+      <BotanicalCorner corner="tr" size={180} />
+      <BotanicalCorner corner="bl" size={160} />
 
       <div style={{ textAlign: 'center', paddingTop: 52, paddingBottom: 8, paddingLeft: 32, paddingRight: 32, zIndex: 1 }}>
-        <div style={{ fontSize: 16, color: '#c9a84c', marginBottom: 6 }}>♥</div>
-        {eventType && (
-          <p style={{ margin: '0 0 8px', fontSize: 10, letterSpacing: 4, textTransform: 'uppercase', color: '#7a9e6a', fontFamily: 'Arial, sans-serif', fontWeight: 600 }}>
-            {eventType}
-          </p>
-        )}
-        <h1 style={{ margin: 0, fontSize: 38, fontWeight: 700, color: '#1a1a1a', lineHeight: 1.15, fontFamily: 'Georgia, serif' }}>
+        <h1 style={{ margin: 0, fontSize: 38, fontWeight: 700, color: '#1a1a1a', lineHeight: 1.15, fontFamily: 'var(--font-heading), Georgia, serif' }}>
           {title}
         </h1>
         {eventDate && (
@@ -148,7 +139,7 @@ function Portrait({ title, eventType, eventDate, qrDataUrl }: CardProps) {
         )}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, margin: '14px auto 0', width: 180 }}>
           <div style={{ flex: 1, height: 1, background: '#c9a84c' }} />
-          <div style={{ width: 5, height: 5, background: '#c9a84c', transform: 'rotate(45deg)' }} />
+          <DividerHeart size={16} />
           <div style={{ flex: 1, height: 1, background: '#c9a84c' }} />
         </div>
       </div>
@@ -158,11 +149,18 @@ function Portrait({ title, eventType, eventDate, qrDataUrl }: CardProps) {
       </div>
 
       <div style={{ textAlign: 'center', paddingLeft: 40, paddingRight: 40, zIndex: 1 }}>
-        <p style={{ margin: 0, fontSize: 13, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
-          QR kodu okutarak anılarınızı<br />bizimle paylaşın.
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
+          Sizden gelen her kare, bu günü daha özel kılıyor. QR kodu okutarak hatıralarınızı bizimle paylaşın.
         </p>
-        <p style={{ margin: '14px 0 0', fontSize: 11, color: '#7a9e6a', fontFamily: 'Arial, sans-serif' }}>
+      </div>
+
+      {/* Brand — bottom right */}
+      <div style={{ position: 'absolute', bottom: 14, right: 20, textAlign: 'right', zIndex: 1 }}>
+        <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: '#7a9e6a', fontFamily: 'Arial, sans-serif' }}>
           <span style={{ color: '#c9a84c' }}>♥</span> AnıKare
+        </p>
+        <p style={{ margin: '2px 0 0', fontSize: 9, color: '#b9b2a6', fontFamily: 'Arial, sans-serif' }}>
+          www.anikare.net
         </p>
       </div>
     </div>
