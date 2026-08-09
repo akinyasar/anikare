@@ -1,4 +1,5 @@
 // Floral table card — Stitch-generated watercolor rose + eucalyptus garland corners
+import { TitleText } from './title-text'
 interface CardProps {
   title: string
   eventType?: string
@@ -46,11 +47,10 @@ function DividerHeart({ size = 14 }: { size?: number }) {
 }
 
 function QRContent({ qrDataUrl, size }: { qrDataUrl: string | null; size: number }) {
-  if (qrDataUrl) {
+  const inner = qrDataUrl ? (
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={qrDataUrl} alt="QR" width={size} height={size} style={{ borderRadius: 4, display: 'block' }} />
-  }
-  return (
+    <img src={qrDataUrl} alt="QR" width={size} height={size} style={{ borderRadius: 4, display: 'block' }} />
+  ) : (
     <svg width={size} height={size} viewBox="0 0 100 100">
       <rect x="5" y="5" width="30" height="30" fill="none" stroke="#1a1a1a" strokeWidth="4" opacity=".15"/>
       <rect x="13" y="13" width="14" height="14" fill="#1a1a1a" opacity=".12"/>
@@ -63,6 +63,11 @@ function QRContent({ qrDataUrl, size }: { qrDataUrl: string | null; size: number
       ))}
     </svg>
   )
+  return (
+    <div style={{ border: '1.5px solid #f0d4dc', borderRadius: 10, padding: 10, background: '#fff' }}>
+      {inner}
+    </div>
+  )
 }
 
 // ── LANDSCAPE (756×403) ──────────────────────────────────────────────────────
@@ -73,8 +78,8 @@ function Landscape({ title, eventDate, qrDataUrl }: CardProps) {
       overflow: 'hidden', border: '1.5px solid #f0d4dc', borderRadius: 6,
       display: 'flex', flexShrink: 0, paddingTop: 48, paddingBottom: 48,
     }}>
-      <FloralCorner corner="tr" size={230} />
-      <FloralCorner corner="bl" size={200} />
+      <FloralCorner corner="tr" size={190} />
+      <FloralCorner corner="bl" size={165} />
 
       {/* QR */}
       <div style={{ width: '40%', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingLeft: 48, paddingRight: 20 }}>
@@ -86,11 +91,11 @@ function Landscape({ title, eventDate, qrDataUrl }: CardProps) {
 
       {/* Content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 32, paddingRight: 60, gap: 6, position: 'relative', zIndex: 1, marginTop: -16 }}>
-        <h1 style={{ margin: 0, fontSize: 36, fontWeight: 700, color: '#1a1a1a', lineHeight: 1.15, fontFamily: 'var(--font-heading), Georgia, serif' }}>
-          {title}
+        <h1 style={{ margin: 0, fontSize: 36, fontWeight: 700, color: '#5A2C3D', lineHeight: 1.15, fontFamily: 'var(--font-heading), Georgia, serif' }}>
+          <TitleText title={title} />
         </h1>
         {eventDate && (
-          <p style={{ margin: 0, fontSize: 13, color: '#9ca3af', fontFamily: 'Arial, sans-serif' }}>
+          <p style={{ margin: 0, fontSize: 13, color: '#9ca3af', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
             {formatDate(eventDate)}
           </p>
         )}
@@ -99,17 +104,17 @@ function Landscape({ title, eventDate, qrDataUrl }: CardProps) {
           <DividerHeart size={15} />
           <div style={{ height: 1.5, flex: 1, background: '#e8849a' }} />
         </div>
-        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           Sizden gelen her kare, bu günü daha özel kılıyor. QR kodu okutarak hatıralarınızı bizimle paylaşın.
         </p>
       </div>
 
       {/* Brand — bottom right */}
       <div style={{ position: 'absolute', bottom: 14, right: 20, textAlign: 'right', zIndex: 1 }}>
-        <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: '#c47a8a', fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: '#c47a8a', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           🤍 AnıKare
         </p>
-        <p style={{ margin: '2px 0 0', fontSize: 9, color: '#c9b8ae', fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: '2px 0 0', fontSize: 9, color: '#c9b8ae', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           www.anikare.net
         </p>
       </div>
@@ -125,16 +130,16 @@ function Portrait({ title, eventDate, qrDataUrl }: CardProps) {
       overflow: 'hidden', border: '1.5px solid #f0d4dc', borderRadius: 6,
       display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0,
     }}>
-      <FloralCorner corner="tr" size={180} />
-      <FloralCorner corner="bl" size={160} />
+      <FloralCorner corner="tr" size={145} />
+      <FloralCorner corner="bl" size={130} />
 
       {/* Top content */}
       <div style={{ textAlign: 'center', paddingTop: 52, paddingBottom: 10, paddingLeft: 32, paddingRight: 32, zIndex: 1 }}>
-        <h1 style={{ margin: 0, fontSize: 38, fontWeight: 700, color: '#1a1a1a', lineHeight: 1.15, fontFamily: 'var(--font-heading), Georgia, serif' }}>
-          {title}
+        <h1 style={{ margin: 0, fontSize: 38, fontWeight: 700, color: '#5A2C3D', lineHeight: 1.15, fontFamily: 'var(--font-heading), Georgia, serif' }}>
+          <TitleText title={title} />
         </h1>
         {eventDate && (
-          <p style={{ margin: '8px 0 0', fontSize: 13, color: '#9ca3af', fontFamily: 'Arial, sans-serif' }}>
+          <p style={{ margin: '8px 0 0', fontSize: 13, color: '#9ca3af', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
             {formatDate(eventDate)}
           </p>
         )}
@@ -153,17 +158,17 @@ function Portrait({ title, eventDate, qrDataUrl }: CardProps) {
 
       {/* Bottom content */}
       <div style={{ textAlign: 'center', paddingLeft: 40, paddingRight: 40, zIndex: 1 }}>
-        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#7a6a5a', lineHeight: 1.7, fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           Sizden gelen her kare, bu günü daha özel kılıyor. QR kodu okutarak hatıralarınızı bizimle paylaşın.
         </p>
       </div>
 
       {/* Brand — bottom right */}
       <div style={{ position: 'absolute', bottom: 14, right: 20, textAlign: 'right', zIndex: 1 }}>
-        <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: '#c47a8a', fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: '#c47a8a', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           🤍 AnıKare
         </p>
-        <p style={{ margin: '2px 0 0', fontSize: 9, color: '#c9b8ae', fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: '2px 0 0', fontSize: 9, color: '#c9b8ae', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           www.anikare.net
         </p>
       </div>

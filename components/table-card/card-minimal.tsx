@@ -1,3 +1,5 @@
+import { TitleText } from './title-text'
+
 // Minimal table card — Cool Modern Gold: cool white background, bright solid
 // gold accents, geometric (not curly) ornamentation. No bordo/purple.
 //
@@ -90,7 +92,7 @@ function Landscape({ title, eventDate, qrDataUrl }: CardProps) {
       {/* QR with border frame */}
       <div style={{ width: '40%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingLeft: 48, paddingRight: 20, gap: 10, position: 'relative', zIndex: 1 }}>
         <QRContent qrDataUrl={qrDataUrl} size={158} bordered />
-        <p style={{ margin: 0, fontSize: 10, color: '#B3AFA5', fontFamily: 'Arial, sans-serif', letterSpacing: 1 }}>
+        <p style={{ margin: 0, fontSize: 10, color: '#B3AFA5', fontFamily: 'var(--font-sans), Arial, sans-serif', letterSpacing: 1 }}>
           anikare.co
         </p>
       </div>
@@ -101,10 +103,10 @@ function Landscape({ title, eventDate, qrDataUrl }: CardProps) {
       {/* Content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 32, paddingRight: 60, gap: 8, position: 'relative', zIndex: 1, marginTop: -16 }}>
         <h1 style={{ margin: 0, fontSize: 38, fontWeight: 700, color: '#1E1E1C', letterSpacing: '-0.01em', lineHeight: 1.15, fontFamily: 'var(--font-heading), Georgia, serif' }}>
-          {title}
+          <TitleText title={title} />
         </h1>
         {eventDate && (
-          <p style={{ margin: 0, fontSize: 13, color: '#9ca3af', fontFamily: 'Arial, sans-serif' }}>
+          <p style={{ margin: 0, fontSize: 13, color: '#9ca3af', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
             {formatDate(eventDate)}
           </p>
         )}
@@ -113,17 +115,17 @@ function Landscape({ title, eventDate, qrDataUrl }: CardProps) {
           <SparkleSeal size={14} />
           <div style={{ height: 1.2, flex: 1, background: GOLD }} />
         </div>
-        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#55554F', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#55554F', lineHeight: 1.7, fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           Sizden gelen her kare, bu günü daha özel kılıyor. QR kodu okutarak hatıralarınızı bizimle paylaşın.
         </p>
       </div>
 
       {/* Brand — bottom right */}
       <div style={{ position: 'absolute', bottom: 14, right: 20, textAlign: 'right', zIndex: 1 }}>
-        <p style={{ margin: 0, fontSize: 10, color: '#9C7A22', fontFamily: 'Arial, sans-serif', fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase' }}>
+        <p style={{ margin: 0, fontSize: 10, color: '#9C7A22', fontFamily: 'var(--font-sans), Arial, sans-serif', fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase' }}>
           AnıKare
         </p>
-        <p style={{ margin: '3px 0 0', fontSize: 9, color: '#B3AFA5', fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: '3px 0 0', fontSize: 9, color: '#B3AFA5', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           www.anikare.net
         </p>
       </div>
@@ -148,10 +150,10 @@ function Portrait({ title, eventDate, qrDataUrl }: CardProps) {
       {/* Header text */}
       <div style={{ textAlign: 'center', paddingTop: 46, paddingBottom: 6, paddingLeft: 50, paddingRight: 50, zIndex: 1 }}>
         <h1 style={{ margin: 0, fontSize: 38, fontWeight: 700, color: '#1E1E1C', letterSpacing: '-0.01em', lineHeight: 1.15, fontFamily: 'var(--font-heading), Georgia, serif' }}>
-          {title}
+          <TitleText title={title} />
         </h1>
         {eventDate && (
-          <p style={{ margin: '8px 0 0', fontSize: 13, color: '#9ca3af', fontFamily: 'Arial, sans-serif' }}>
+          <p style={{ margin: '8px 0 0', fontSize: 13, color: '#9ca3af', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
             {formatDate(eventDate)}
           </p>
         )}
@@ -169,17 +171,17 @@ function Portrait({ title, eventDate, qrDataUrl }: CardProps) {
 
       {/* Bottom content */}
       <div style={{ textAlign: 'center', paddingLeft: 40, paddingRight: 40, zIndex: 1 }}>
-        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#55554F', lineHeight: 1.7, fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: '#55554F', lineHeight: 1.7, fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           Sizden gelen her kare, bu günü daha özel kılıyor. QR kodu okutarak hatıralarınızı bizimle paylaşın.
         </p>
       </div>
 
       {/* Brand — bottom right */}
       <div style={{ position: 'absolute', bottom: 14, right: 20, textAlign: 'right', zIndex: 1 }}>
-        <p style={{ margin: 0, fontSize: 10, color: '#9C7A22', fontFamily: 'Arial, sans-serif', fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase' }}>
+        <p style={{ margin: 0, fontSize: 10, color: '#9C7A22', fontFamily: 'var(--font-sans), Arial, sans-serif', fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase' }}>
           AnıKare
         </p>
-        <p style={{ margin: '3px 0 0', fontSize: 9, color: '#B3AFA5', fontFamily: 'Arial, sans-serif' }}>
+        <p style={{ margin: '3px 0 0', fontSize: 9, color: '#B3AFA5', fontFamily: 'var(--font-sans), Arial, sans-serif' }}>
           www.anikare.net
         </p>
       </div>
