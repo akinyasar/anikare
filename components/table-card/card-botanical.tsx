@@ -38,7 +38,7 @@ function BotanicalCorner({ corner, size }: { corner: 'tr' | 'bl'; size: number }
 // divider line — a "♥" character's baseline sits inside its font em-box at a
 // position that varies by renderer, so flex alignItems:center never lined it
 // up exactly against the 1px line in html2canvas' export.
-function DividerHeart({ size = 14 }: { size?: number }) {
+export function DividerHeart({ size = 14 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: 'block', flexShrink: 0 }}>
       <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#c9a84c" />
@@ -46,7 +46,7 @@ function DividerHeart({ size = 14 }: { size?: number }) {
   )
 }
 
-function QRContent({ qrDataUrl, size }: { qrDataUrl: string | null; size: number }) {
+export function QRContent({ qrDataUrl, size }: { qrDataUrl: string | null; size: number }) {
   const inner = qrDataUrl ? (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={qrDataUrl} alt="QR" width={size} height={size} style={{ borderRadius: 4, display: 'block' }} />

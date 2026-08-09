@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import QRCode from 'qrcode'
 import type { TemplateId } from './table-card'
 import { triggerBlobDownload } from '@/lib/download'
@@ -60,7 +60,7 @@ export async function renderCardToCanvas(
 
   const cardEl = container.firstElementChild as HTMLElement
   const canvas = await html2canvas(cardEl, {
-    scale: 3,
+    scale: 4,
     useCORS: true,
     logging: false,
     backgroundColor: null,

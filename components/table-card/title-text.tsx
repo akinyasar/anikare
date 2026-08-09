@@ -8,7 +8,7 @@ export function TitleText({ title }: { title: string }) {
     <>
       {parts.map((part, i) =>
         part === '&' ? (
-          <span key={i} style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic', fontWeight: 400 }}>
+          <span key={i} style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic', fontWeight: 400, verticalAlign: '0.09em' }}>
             &amp;
           </span>
         ) : (
