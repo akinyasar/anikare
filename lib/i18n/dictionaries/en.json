@@ -36,5 +36,12 @@
     "uploadFailed": "Upload failed, please try again",
     "eventClosed": "Uploads for this event have ended",
     "limitReached": "Package limit reached"
+  },
+  "invitation": {
+    "eyebrow": "INVITATION",
+    "programTitle": "Programme",
+    "getDirections": "Get Directions",
+    "mapUnavailable": "The map cannot be shown right now",
+    "seeYouThere": "We would love to have you with us 🤍"
   }
 }

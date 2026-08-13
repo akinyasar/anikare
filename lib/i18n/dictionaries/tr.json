@@ -36,5 +36,12 @@
     "uploadFailed": "Yükleme başarısız oldu, tekrar deneyin",
     "eventClosed": "Bu etkinlik için yükleme sona erdi",
     "limitReached": "Paket limiti doldu"
+  },
+  "invitation": {
+    "eyebrow": "DAVETİYE",
+    "programTitle": "Program",
+    "getDirections": "Yol Tarifi Al",
+    "mapUnavailable": "Harita şu anda gösterilemiyor",
+    "seeYouThere": "Sizi aramızda görmekten mutluluk duyarız 🤍"
   }
 }
