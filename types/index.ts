@@ -49,8 +49,9 @@ export interface ProgramItem {
   time?: string;       // HH:mm
 }
 
-// pin_code_hash asla client'a gönderilmez — ayrı tip
-export type PublicEvent = Omit<Event, 'pin_code_hash'>;
+// pin_code_hash asla client'a gönderilmez — davetiye alanları da guest
+// upload akışında hiç okunmadığı için burada tutulmuyor
+export type PublicEvent = Omit<Event, 'pin_code_hash' | 'invitation_enabled' | 'programs'>;
 
 export interface MediaItem {
   id: string;

@@ -17,7 +17,7 @@ export default async function Image({
 
   const { data: event } = await supabase
     .from('events')
-    .select('title, event_date')
+    .select('title, event_date, invitation_enabled')
     .eq('slug', slug)
     .single()
 
@@ -26,14 +26,17 @@ export default async function Image({
     join(process.cwd(), 'public/fonts/PlayfairDisplay-Bold.woff')
   )
 
-  const title: string = event?.title ?? 'AnıKare'
-  const dateLabel: string = event?.event_date
-    ? new Date(`${event.event_date}T00:00:00`).toLocaleDateString('tr-TR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    : ''
+  // Davetiye kapalı/hiç açılmamışsa gerçek etkinlik bilgisini sızdırma —
+  // sayfa nasılsa notFound() döner ama OG görseli ayrı bir route, o kontrolü paylaşmaz.
+  const title: string = event?.invitation_enabled ? (event.title ?? 'AnıKare') : 'AnıKare'
+  const dateLabel: string =
+    event?.invitation_enabled && event.event_date
+      ? new Date(`${event.event_date}T00:00:00`).toLocaleDateString('tr-TR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        })
+      : ''
 
   return new ImageResponse(
     (

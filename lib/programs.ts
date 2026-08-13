@@ -23,7 +23,10 @@ export function sanitizePrograms(items: ProgramItem[]): ProgramItem[] {
       name: p.name.trim(),
       venueName: p.venueName.trim(),
       address: p.address.trim(),
-      mapsUrl: p.mapsUrl?.trim() ? p.mapsUrl.trim() : undefined,
+      mapsUrl: (() => {
+        const trimmed = p.mapsUrl?.trim()
+        return trimmed && /^https?:\/\//i.test(trimmed) ? trimmed : undefined
+      })(),
       date: p.date,
       time: p.time?.trim() ? p.time.trim() : undefined,
     }))
@@ -51,7 +54,7 @@ export function normalizePrograms(value: unknown): ProgramItem[] {
 // Android'de Google Maps uygulamasını user-agent kontrolü olmadan açar.
 export function directionsUrl(item: ProgramItem): string | null {
   const pasted = item.mapsUrl?.trim()
-  if (pasted) return pasted
+  if (pasted && /^https?:\/\//i.test(pasted)) return pasted
   const address = item.address.trim()
   if (!address) return null
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`
