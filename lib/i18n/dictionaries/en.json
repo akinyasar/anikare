@@ -23,6 +23,8 @@
     "uploadClosedDesc": "Uploads for this event have ended.",
     "uploadingCount": "files completed",
     "uploadError": "Something went wrong",
+    "retryUpload": "Try Again",
+    "backToList": "Back to Selection",
     "filesSelected": "files selected",
     "photoCount": "photos",
     "videoCount": "videos",

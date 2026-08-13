@@ -23,6 +23,8 @@
     "uploadClosedDesc": "Das Hochladen für diese Veranstaltung ist beendet.",
     "uploadingCount": "Dateien abgeschlossen",
     "uploadError": "Etwas ist schiefgelaufen",
+    "retryUpload": "Erneut versuchen",
+    "backToList": "Zurück zur Auswahl",
     "filesSelected": "Dateien ausgewählt",
     "photoCount": "Fotos",
     "videoCount": "Videos",

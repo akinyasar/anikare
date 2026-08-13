@@ -105,7 +105,8 @@ export async function POST(req: NextRequest) {
     ContentLength: fileSize,
   })
 
-  const uploadUrl = await getSignedUrl(r2, command, { expiresIn: 300 })
+  // 30 min — weak venue wifi/4G can make large uncompressed video PUTs slow
+  const uploadUrl = await getSignedUrl(r2, command, { expiresIn: 1800 })
   const publicUrl = `${R2_PUBLIC_URL}/${fileKey}`
 
   return Response.json({ uploadUrl, fileKey, publicUrl, contentType } satisfies PresignResponse)

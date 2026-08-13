@@ -24,6 +24,10 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
   const [items, setItems] = useState<UploadItem[]>([])
   const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0 })
   const [limitInfo, setLimitInfo] = useState<{ uploaded: number; total: number } | null>(null)
+  // Successes carried over across retries of the same batch, so a partial
+  // failure only re-sends the items that were never confirmed — resending a
+  // succeeded item would create a duplicate media row.
+  const [completedCount, setCompletedCount] = useState(0)
   const { uploadBatch, error, limitReached, resetError } = useMediaUpload()
 
   const addMoreRef = useRef<HTMLInputElement>(null)
@@ -78,29 +82,44 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
 
   async function handleUpload() {
     setStage('uploading')
-    setUploadProgress({ done: 0, total: items.length })
+    const batchTotal = completedCount + items.length
+    setUploadProgress({ done: completedCount, total: batchTotal })
 
-    const success = await uploadBatch({
+    const result = await uploadBatch({
       items,
       eventId: event.id,
       packageType: event.package_type as PackageType,
       guestName,
       guestNote: guestNote || undefined,
-      onProgress: (done, total) => setUploadProgress({ done, total }),
+      onProgress: (done) => setUploadProgress({ done: completedCount + done, total: batchTotal }),
     })
 
-    if (limitReached) {
-      setLimitInfo({ uploaded: uploadProgress.done, total: items.length })
-    }
-
-    // Revoke all preview URLs
-    items.forEach(item => URL.revokeObjectURL(item.preview))
-    setItems([])
-
-    if (success) {
+    if (result.success) {
+      if (limitReached) {
+        setLimitInfo({ uploaded: completedCount + result.completed, total: batchTotal })
+      }
+      items.forEach(item => URL.revokeObjectURL(item.preview))
+      setItems([])
+      setCompletedCount(0)
       setStage('thankyou')
+      return
     }
-    // Hard error: stage stays 'uploading', UploadProgress shows error
+
+    // Partial failure: drop the confirmed items so a retry doesn't
+    // re-upload (and duplicate) them, keep the rest staged for retry.
+    setCompletedCount(prev => prev + result.completed)
+    setItems(prev => prev.slice(result.completed))
+    // stage stays 'uploading', UploadProgress shows the error + retry actions
+  }
+
+  function handleRetryUpload() {
+    resetError()
+    handleUpload()
+  }
+
+  function handleBackToStagingFromError() {
+    resetError()
+    setStage('staging')
   }
 
   function handleUploadMore() {
@@ -108,6 +127,7 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
     setGuestNote('')
     setItems([])
     setLimitInfo(null)
+    setCompletedCount(0)
     resetError()
     setStage('welcome')
   }
@@ -136,6 +156,10 @@ export default function GuestFlow({ event, locale: initialLocale = 'tr' }: { eve
         uploadingLabel={g.uploading}
         countLabel={g.uploadingCount}
         errorLabel={g.uploadError}
+        onRetry={handleRetryUpload}
+        onBack={handleBackToStagingFromError}
+        retryLabel={g.retryUpload}
+        backLabel={g.backToList}
       />
     )
   }

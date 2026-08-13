@@ -36,7 +36,7 @@ export function useMediaUpload() {
     guestName,
     guestNote,
     onProgress,
-  }: BatchUploadArgs): Promise<boolean> => {
+  }: BatchUploadArgs): Promise<{ success: boolean; completed: number }> => {
     setUploading(true)
     setError(null)
     setLimitReached(false)
@@ -66,7 +66,7 @@ export function useMediaUpload() {
           const msg: string = err.error ?? `Presign başarısız (${presignRes.status})`
           if (LIMIT_ERRORS.has(msg)) {
             setLimitReached(true)
-            return true
+            return { success: true, completed: done }
           }
           throw new Error(msg)
         }
@@ -105,10 +105,10 @@ export function useMediaUpload() {
         onProgress(done, items.length)
       }
 
-      return true
+      return { success: true, completed: done }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Bilinmeyen hata')
-      return false
+      return { success: false, completed: done }
     } finally {
       setUploading(false)
     }

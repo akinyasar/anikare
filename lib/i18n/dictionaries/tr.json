@@ -23,6 +23,8 @@
     "uploadClosedDesc": "Bu etkinlik için yükleme sona erdi.",
     "uploadingCount": "dosya tamamlandı",
     "uploadError": "Bir sorun oluştu",
+    "retryUpload": "Tekrar Dene",
+    "backToList": "Seçimlere Dön",
     "filesSelected": "dosya seçildi",
     "photoCount": "fotoğraf",
     "videoCount": "video",

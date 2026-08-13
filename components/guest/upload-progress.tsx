@@ -9,9 +9,16 @@ interface Props {
   uploadingLabel?: string
   countLabel?: string
   errorLabel?: string
+  onRetry?: () => void
+  onBack?: () => void
+  retryLabel?: string
+  backLabel?: string
 }
 
-export default function UploadProgress({ done, total, error, uploadingLabel, countLabel, errorLabel }: Props) {
+export default function UploadProgress({
+  done, total, error, uploadingLabel, countLabel, errorLabel,
+  onRetry, onBack, retryLabel, backLabel,
+}: Props) {
   const pct = total > 0 ? Math.round((done / total) * 100) : 0
 
   return (
@@ -29,7 +36,28 @@ export default function UploadProgress({ done, total, error, uploadingLabel, cou
             <p className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#1a1a1a] mb-2">
               {errorLabel ?? 'Bir sorun oluştu'}
             </p>
-            <p className="text-sm text-[#7a6a5a]">{error}</p>
+            <p className="text-sm text-[#7a6a5a] mb-2">{error}</p>
+            {total > 0 && (
+              <p className="text-xs text-[#9ca3af] mb-6">{done} / {total} {countLabel ?? 'dosya tamamlandı'}</p>
+            )}
+            <div className="flex flex-col gap-2.5">
+              {onRetry && (
+                <button
+                  onClick={onRetry}
+                  className="w-full py-3 rounded-xl bg-[#6D1A3E] text-white text-sm font-semibold hover:bg-[#5a1533] transition-colors"
+                >
+                  {retryLabel ?? 'Tekrar Dene'}
+                </button>
+              )}
+              {onBack && (
+                <button
+                  onClick={onBack}
+                  className="w-full py-3 rounded-xl border border-[#e8ddd5] text-[#7a6a5a] text-sm font-semibold hover:bg-[#f5e6ed] transition-colors"
+                >
+                  {backLabel ?? 'Listeye Dön'}
+                </button>
+              )}
+            </div>
           </>
         ) : (
           <>

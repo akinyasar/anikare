@@ -95,6 +95,8 @@ export interface Dictionary {
     uploadClosedDesc: string;
     uploadingCount: string;
     uploadError: string;
+    retryUpload?: string;
+    backToList?: string;
     filesSelected: string;
     photoCount?: string;
     videoCount?: string;
