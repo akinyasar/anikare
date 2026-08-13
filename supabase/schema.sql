@@ -165,3 +165,19 @@ CREATE POLICY "media_host_all"
 -- MEDIA: herkese görünür medyayı okuma (slayt gösterisi)
 CREATE POLICY "media_public_visible_read"
   ON public.media FOR SELECT USING (is_visible = TRUE);
+
+-- ============================================================
+-- DAVETİYE SAYFASI (additive — 2026-08-13)
+-- Mevcut satırlara ve events.slug'a dokunmaz.
+-- Yeni kurulumda schema.sql'in sonunda çalışır; mevcut
+-- veritabanında bu blok tek başına migration olarak çalıştırılır.
+-- ============================================================
+
+ALTER TABLE public.events
+  ADD COLUMN IF NOT EXISTS invitation_enabled BOOLEAN DEFAULT FALSE,
+  ADD COLUMN IF NOT EXISTS programs           JSONB   DEFAULT '[]'::jsonb;
+
+-- RLS: yeni policy gerekmez.
+--   okuma  → mevcut "events_public_read"  (USING TRUE)
+--   yazma  → mevcut "events_host_all"     (auth.uid() = host_id)
+-- Trigger: mevcut "events_updated_at" bu kolonların UPDATE'inde de çalışır.
