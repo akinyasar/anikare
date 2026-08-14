@@ -19,3 +19,11 @@ export async function getDictionary(locale: Locale): Promise<Dictionary> {
   cache.set(locale, dict.default)
   return dict.default
 }
+
+// Sunucu tarafı locale tespiti — Accept-Language header'ından.
+// (app/e/[slug]/page.tsx içindeki yerel kopyanın paylaşılabilir hâli;
+//  o dosya bilerek değiştirilmiyor.)
+export function detectLocaleFromAcceptLanguage(acceptLang: string): Locale {
+  const primary = acceptLang.split(',')[0].split(';')[0].trim().split('-')[0].toLowerCase()
+  return SUPPORTED_LOCALES.includes(primary as Locale) ? (primary as Locale) : DEFAULT_LOCALE
+}

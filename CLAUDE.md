@@ -30,8 +30,10 @@ app/
   (dashboard)/          # Protected host area (auth required)
     etkinlik/yeni/      # Event creation wizard
     etkinlik/[slug]/    # Event dashboard
+    etkinlik/[slug]/davetiye/  # Host settings page for invitation programs
   e/[slug]/             # Guest upload flow (QR target, public)
   sunum/[slug]/         # Live slideshow display (public, premium only)
+  davetiye/[slug]/      # Public invitation page (program/location) + OG image + Twitter image
   api/
     upload/presign/     # Generate R2 presigned URL
     upload/confirm/     # Record upload in DB (uses service_role)
@@ -51,6 +53,7 @@ lib/
   pin.ts                # bcrypt hash + compare for PIN codes
   packages.ts           # Package limits (eco/standard/premium)
   download.ts           # triggerBlobDownload + fetchAndDownload helpers
+  programs.ts           # Davetiye program helpers — sanitize/normalize/directionsUrl/mapEmbedUrl
 components/
   dashboard/
     event-list-client.tsx   # 'use client' wrapper for locale-aware event list
@@ -60,6 +63,7 @@ components/
     media-card.tsx
     mobile-header.tsx       # Mobile-only sticky header with locale switcher
     bottom-nav.tsx          # 2-item mobile bottom nav (events + new event)
+    invitation-settings-client.tsx  # Host page: toggle invitation_enabled, edit programs
   slideshow/
     slideshow-view.tsx      # Fullscreen slideshow with always-visible guest info + nav
   table-card/
@@ -70,7 +74,9 @@ components/
     media-staging.tsx       # Upload preview grid with package limit indicators
     thank-you-screen.tsx    # Animated thank-you with localized title
   event/
-    wizard.tsx              # 3-step event creation with scroll-to-top
+    wizard.tsx              # 4-step event creation with scroll-to-top (step 4: Program & Konum)
+    programs-editor.tsx     # Add/edit/remove/reorder invitation program items
+    steps/step-programs.tsx # Wizard step 4 wrapper around programs-editor
   providers/
     locale-provider.tsx     # LocaleProvider + useLocale() — localStorage persistence
 hooks/
@@ -106,6 +112,7 @@ POLAR_ACCESS_TOKEN
 POLAR_PRODUCT_STANDARD
 POLAR_PRODUCT_PREMIUM
 POLAR_WEBHOOK_SECRET
+NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY
 ```
 Set `.env.local` locally, and add all vars to Vercel dashboard before deploying.
 
@@ -148,6 +155,7 @@ Set `.env.local` locally, and add all vars to Vercel dashboard before deploying.
 - **Blob downloads** — all downloads (PDF, photos, videos) use `fetchAndDownload()` which fetches as blob + `application/octet-stream` to force download on mobile
 - **Upload expiry** — `max(today, eventDate) + 30 days` so past-dated test events don't expire immediately
 - **Slideshow layout** — guest info + nav arrows always visible; only top control bar fades on 3s idle
+- **Davetiye (invitation page) programs** — `events.programs` JSONB kolonunda saklanır, ayrı child tablo yok; her zaman parent event ile tek parça okunup yazılır. Özellik tüm paketlerde açık (slayt gösterisinin aksine premium kısıtı yok). Wizard'a 4. adım eklendi ("Program & Konum"). Hostun yapıştırdığı Google Maps linki (`mapsUrl`) hem kayıt öncesi (`sanitizePrograms`) hem kullanım anında (`directionsUrl`) `http(s)` şemasına karşı doğrulanır — `javascript:`/`data:` gibi linkler asla misafirlere sunulan `<a href>`'e ulaşmaz.
 
 ## Production URLs
 - Site: `https://www.anikare.net` (apex `anikare.net` → 308 redirects to www)
@@ -187,6 +195,7 @@ Design tokens, base UI components, MIME fixes, batch upload hook, PIN/welcome/up
 - **Supabase OAuth** — site URL + redirect URL updated to `https://www.anikare.net`
 - **Polar payment integration** — Polar.sh MoR; TRY fiyatlandırma; checkout session API → Polar sayfasına redirect → `successUrl` ile geri dönüş; `order.paid` webhook ile otomatik paket aktivasyonu. `app/api/payment/initiate` + `app/api/webhooks/polar` + `lib/payment/activate-package.ts`
 - **Package rebalance** — Standard 1080p/₺899, Premium ₺1.299; wizard always inserts `eco`, ödeme sonrası aktive edilir
+- **Davetiye sayfası** — `app/davetiye/[slug]/` public invitation page (program/venue/date list + Google Maps embed + "Yol Tarifi Al"), gated by `events.invitation_enabled`; host toggles it and edits programs from `app/(dashboard)/etkinlik/[slug]/davetiye/`. OG image + Twitter card render the couple's title/date only when `invitation_enabled` is true, otherwise a neutral "AnıKare" card (no data leak for disabled/never-enabled invitations).
 
 ## Operational Reference
 

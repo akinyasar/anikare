@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useLocale } from '@/components/providers/locale-provider'
 import { t } from '@/lib/i18n/site'
 import type { SiteKey } from '@/lib/i18n/site'
@@ -33,6 +34,7 @@ interface Props {
     video_count: number
     guest_count_estimate: number | null
     is_upload_active: boolean
+    invitation_enabled: boolean
   }
   slug: string
 }
@@ -108,6 +110,32 @@ export default function EventDetailClient({ event, slug }: Props) {
               {t(locale, 'liveSlideshowLink')}
             </a>
           )}
+
+          {/* Davetiye Sayfası — tüm paketlerde kullanılabilir (premium gate YOK) */}
+          <div className="bg-white rounded-3xl border border-[#e8ddd5] p-5 shadow-[0_2px_16px_rgba(0,0,0,0.05)]">
+            <h2 className="text-base font-semibold text-[#1a1a1a] mb-1">
+              {t(locale, 'invitationCardTitle')}
+            </h2>
+            <p className="text-xs text-[#9ca3af] mb-4">{t(locale, 'invitationCardDesc')}</p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href={`/etkinlik/${slug}/davetiye`}
+                className="inline-flex items-center gap-2 text-sm text-[#6D1A3E] font-medium hover:text-[#5a1533]"
+              >
+                {t(locale, 'invitationEditLink')}
+              </Link>
+              {event.invitation_enabled && (
+                <a
+                  href={`/davetiye/${slug}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-[#6D1A3E] font-medium hover:text-[#5a1533]"
+                >
+                  {t(locale, 'invitationPublicLink')}
+                </a>
+              )}
+            </div>
+          </div>
 
           <TableCardSection
             templateId={event.template_id}

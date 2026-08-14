@@ -27,6 +27,8 @@ export interface Event {
   template_id: string;
   guest_count_estimate: number | null;
   is_upload_active: boolean;
+  invitation_enabled: boolean;
+  programs: ProgramItem[];
   upload_expires_at: string | null;
   media_retention_until: string | null;
   photo_count: number;
@@ -35,8 +37,21 @@ export interface Event {
   updated_at: string;
 }
 
-// pin_code_hash asla client'a gönderilmez — ayrı tip
-export type PublicEvent = Omit<Event, 'pin_code_hash'>;
+// Davetiye sayfası programları — events.programs JSONB kolonunda saklanır.
+// Her zaman parent event ile birlikte tek parça okunup yazılır (child tablo değil).
+export interface ProgramItem {
+  id: string;          // nanoid(8) — liste düzenleme/sıralama için client tarafında üretilir
+  name: string;        // "Kına Gecesi", "Nikah Töreni", "Düğün"...
+  venueName: string;
+  address: string;
+  mapsUrl?: string;    // hostun yapıştırdığı Google Maps paylaşım linki
+  date: string;        // YYYY-MM-DD
+  time?: string;       // HH:mm
+}
+
+// pin_code_hash asla client'a gönderilmez — davetiye alanları da guest
+// upload akışında hiç okunmadığı için burada tutulmuyor
+export type PublicEvent = Omit<Event, 'pin_code_hash' | 'invitation_enabled' | 'programs'>;
 
 export interface MediaItem {
   id: string;
@@ -108,5 +123,12 @@ export interface Dictionary {
     uploadFailed: string;
     eventClosed: string;
     limitReached: string;
+  };
+  invitation: {
+    eyebrow: string;
+    programTitle: string;
+    getDirections: string;
+    mapUnavailable: string;
+    seeYouThere: string;
   };
 }

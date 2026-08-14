@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { generateSlug } from '@/lib/slug'
 import { hashPin } from '@/lib/pin'
+import { sanitizePrograms } from '@/lib/programs'
 import StepDetails from './steps/step-details'
+import StepPrograms from './steps/step-programs'
 import StepPackage from './steps/step-package'
 import StepTemplate from './steps/step-template'
 import TableCardPreview from './table-card-preview'
-import type { EventType, PackageType } from '@/types'
+import type { EventType, PackageType, ProgramItem } from '@/types'
 
 interface WizardState {
   title: string
@@ -19,6 +21,7 @@ interface WizardState {
   thankYouMessage: string
   pinEnabled: boolean
   pinCode: string
+  programs: ProgramItem[]
   packageType: PackageType
   templateId: string
 }
@@ -31,11 +34,12 @@ const INITIAL_STATE: WizardState = {
   thankYouMessage: '',
   pinEnabled: false,
   pinCode: '',
+  programs: [],
   packageType: 'standard',
   templateId: 'minimal',
 }
 
-const STEPS = ['Detaylar', 'Paket', 'Tasarım']
+const STEPS = ['Detaylar', 'Program & Konum', 'Paket', 'Tasarım']
 
 export default function EventWizard() {
   const [step, setStep] = useState(0)
@@ -59,7 +63,8 @@ export default function EventWizard() {
       if (state.pinEnabled && state.pinCode.length !== 4) return false
       return true
     }
-    if (step === 2) {
+    // step 1 (Program & Konum) tamamen isteğe bağlı — ek doğrulama yok
+    if (step === 3) {
       return ['minimal', 'floral', 'botanical'].includes(state.templateId)
     }
     return true
@@ -97,6 +102,7 @@ export default function EventWizard() {
           pin_code_hash: pinHash,
           package_type: 'eco',
           template_id: state.templateId,
+          programs: sanitizePrograms(state.programs),
           guest_count_estimate: state.guestCountEstimate
             ? Number(state.guestCountEstimate)
             : null,
@@ -154,8 +160,9 @@ export default function EventWizard() {
         </div>
 
         {step === 0 && <StepDetails state={state} update={update} />}
-        {step === 1 && <StepPackage state={state} update={update} />}
-        {step === 2 && <StepTemplate state={state} update={update} />}
+        {step === 1 && <StepPrograms state={state} update={update} />}
+        {step === 2 && <StepPackage state={state} update={update} />}
+        {step === 3 && <StepTemplate state={state} update={update} />}
 
         {error && (
           <p className="mt-4 text-sm text-red-500 bg-red-50 rounded-xl px-4 py-3">{error}</p>
@@ -198,7 +205,7 @@ export default function EventWizard() {
       </div>
 
       {/* Live preview — hidden on template step (card previews shown inline there) */}
-      <div className={`hidden lg:block w-72 sticky top-6 space-y-4 ${step === 2 ? 'invisible' : ''}`}>
+      <div className={`hidden lg:block w-72 sticky top-6 space-y-4 ${step === 3 ? 'invisible' : ''}`}>
         <TableCardPreview state={state} />
         {state.thankYouMessage && (
           <div className="bg-[#f5e6ed] rounded-2xl p-4 text-sm">

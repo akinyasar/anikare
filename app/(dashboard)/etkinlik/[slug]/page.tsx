@@ -14,7 +14,7 @@ export default async function EventDashboardPage({
 
   const { data: event } = await supabase
     .from('events')
-    .select('id, title, event_type, event_date, package_type, template_id, photo_count, video_count, guest_count_estimate, is_upload_active')
+    .select('id, title, event_type, event_date, package_type, template_id, photo_count, video_count, guest_count_estimate, is_upload_active, invitation_enabled')
     .eq('slug', slug)
     .eq('host_id', user.id)
     .single()

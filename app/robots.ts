@@ -12,6 +12,7 @@ export default function robots(): MetadataRoute.Robots {
           '/etkinlik/',
           '/e/',
           '/sunum/',
+          '/davetiye/',
           '/api/',
           '/giris',
           '/kayit',
