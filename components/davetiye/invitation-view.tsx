@@ -35,48 +35,13 @@ function formatDate(value: string, locale: Locale): string {
   })
 }
 
-// "Gamze & Akın" -> ["G", "A"]. Baş harfler zaten doğru büyük harfle geldiği
-// için (kullanıcı girişi) herhangi bir case dönüşümü uygulanmıyor — Türkçe
+// "Gamze & Akın" -> "GA". Baş harfler zaten doğru büyük harfle geldiği için
+// (kullanıcı girişi) herhangi bir case dönüşümü uygulanmıyor — Türkçe
 // i/İ büyütme tuzağından böylece kaçınılıyor.
-function getMonogramLetters(title: string): [string, string?] {
+function getMonogram(title: string): string {
   const parts = title.split('&').map((p) => p.trim()).filter(Boolean)
-  if (parts.length >= 2) return [parts[0][0] ?? '', parts[1][0] ?? '']
-  const trimmed = title.trim()
-  return [trimmed[0] ?? '', trimmed[1]]
-}
-
-// Program adına göre (kına/nikah/düğün) küçük bir tema ikonu seçilir —
-// tanınmayan adlarda nötr bir yıldız ikonuna düşer.
-function ProgramIcon({ name }: { name: string }) {
-  const n = name.toLowerCase()
-  const common = { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
-  if (n.includes('kına') || n.includes('kina')) {
-    return (
-      <svg {...common}>
-        <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18" />
-      </svg>
-    )
-  }
-  if (n.includes('nikah') || n.includes('nikâh')) {
-    return (
-      <svg {...common}>
-        <circle cx="9" cy="13" r="5" />
-        <circle cx="15" cy="13" r="5" />
-      </svg>
-    )
-  }
-  if (n.includes('düğün') || n.includes('dugun')) {
-    return (
-      <svg {...common} fill="currentColor" stroke="none">
-        <path d="M12 20.3l-1.1-1C6.1 15.4 3 12.6 3 9.1 3 6.3 5.2 4 8 4c1.6 0 3.1.8 4 2 .9-1.2 2.4-2 4-2 2.8 0 5 2.3 5 5.1 0 3.5-3.1 6.3-7.9 10.2l-1.1 1z" />
-      </svg>
-    )
-  }
-  return (
-    <svg {...common}>
-      <path d="M12 3l2.4 5.5 6 .6-4.5 4 1.3 5.9L12 16l-5.2 3 1.3-5.9-4.5-4 6-.6z" />
-    </svg>
-  )
+  if (parts.length >= 2) return `${parts[0][0] ?? ''}${parts[1][0] ?? ''}`
+  return title.trim().slice(0, 2)
 }
 
 export default function InvitationView({ title, eventDate, programs, apiKey, initialLocale }: Props) {
@@ -98,7 +63,7 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
 
   const inv = dict?.invitation ?? ({} as Dictionary['invitation'])
   const heroDate = eventDate ? formatDate(eventDate, locale) : ''
-  const [monoFirst, monoSecond] = getMonogramLetters(title)
+  const monogram = getMonogram(title)
 
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
@@ -108,13 +73,13 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
         className="px-5 py-14 sm:py-20"
         style={{ backgroundImage: 'radial-gradient(ellipse at top, rgba(201,168,76,0.07), transparent 60%)' }}
       >
-        <div className="mx-auto w-full max-w-xl lg:max-w-4xl">
+        <div className="mx-auto w-full max-w-xl">
           {/* Hero — davetiye kartı */}
           <motion.div
             initial={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.96, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative text-center bg-white rounded-[28px] border border-[#e8ddd5] px-8 py-12 sm:px-14 sm:py-16 overflow-hidden max-w-2xl mx-auto"
+            className="relative text-center bg-white rounded-[28px] border border-[#e8ddd5] px-8 py-12 sm:px-14 sm:py-16 overflow-hidden"
           >
             <div className="pointer-events-none absolute inset-3 rounded-[20px] border border-[#e8ddd5]" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -135,20 +100,16 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
             />
 
             <div className="relative">
-              <div className="w-16 h-16 mx-auto rounded-full border border-[#c9a84c] flex items-center justify-center gap-0.5">
-                <span className="font-[family-name:var(--font-playfair)] italic text-xl text-[#c9a84c]">
-                  {monoFirst}
-                </span>
-                <DividerHeart size={9} />
-                <span className="font-[family-name:var(--font-playfair)] italic text-xl text-[#c9a84c]">
-                  {monoSecond}
+              <div className="w-14 h-14 mx-auto rounded-full border border-[#c9a84c] flex items-center justify-center">
+                <span className="font-[family-name:var(--font-playfair)] text-lg text-[#c9a84c]">
+                  {monogram}
                 </span>
               </div>
 
               <p className="text-[11px] font-semibold tracking-[0.35em] uppercase text-[#9b4a6a] mt-6">
                 {inv.eyebrow}
               </p>
-              <h1 className="font-[family-name:var(--font-playfair)] text-4xl sm:text-6xl font-bold text-[#6D1A3E] leading-tight mt-3">
+              <h1 className="font-[family-name:var(--font-playfair)] text-4xl sm:text-5xl font-bold text-[#6D1A3E] leading-tight mt-3">
                 <TitleText title={title} />
               </h1>
               {heroDate && <p className="text-sm text-[#7a6a5a] mt-4">{heroDate}</p>}
@@ -168,7 +129,7 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
                 {inv.programTitle}
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="space-y-6">
                 {programs.map((item, idx) => {
                   const embed = mapEmbedUrl(item, apiKey)
                   const directions = directionsUrl(item)
@@ -182,15 +143,9 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '-40px' }}
                       transition={{ duration: 0.5, delay: idx * 0.08 }}
-                      whileHover={prefersReducedMotion ? undefined : { y: -4 }}
-                      className="relative flex flex-col h-full bg-white rounded-3xl border border-[#e8ddd5] shadow-[0_2px_16px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_28px_rgba(0,0,0,0.08)] transition-shadow overflow-hidden"
+                      className="bg-white rounded-3xl border border-[#e8ddd5] shadow-[0_2px_16px_rgba(0,0,0,0.05)] overflow-hidden"
                     >
-                      <div className="pointer-events-none absolute top-0 right-0 w-20 h-20 bg-[#f5e6ed]/50 rounded-bl-[24px]" />
-
-                      <div className="p-6 relative">
-                        <div className="w-10 h-10 rounded-full bg-[#f5e6ed] text-[#6D1A3E] flex items-center justify-center mb-4">
-                          <ProgramIcon name={item.name} />
-                        </div>
+                      <div className="p-6">
                         {item.name && (
                           <span className="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-[#6D1A3E] bg-[#f5e6ed] rounded-full px-3 py-1">
                             {item.name}
@@ -209,37 +164,36 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
                         )}
                       </div>
 
-                      <div className="mt-auto">
-                        {embed ? (
-                          <iframe
-                            title={`${item.venueName || item.name} — ${item.address}`}
-                            src={embed}
-                            loading="lazy"
-                            allowFullScreen
-                            referrerPolicy="no-referrer-when-downgrade"
-                            className="block w-full h-[180px] border-0"
-                          />
-                        ) : (
-                          item.address && (
-                            <div className="flex items-center justify-center h-[120px] bg-[#F0EBE3] text-xs text-[#9ca3af] px-6 text-center">
-                              {inv.mapUnavailable}
-                            </div>
-                          )
-                        )}
-
-                        {directions && (
-                          <div className="p-5 border-t border-[#e8ddd5]">
-                            <a
-                              href={directions}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="flex items-center justify-center w-full bg-[#6D1A3E] text-white rounded-full py-3 text-sm font-medium hover:bg-[#5a1533] transition-colors"
-                            >
-                              {inv.getDirections}
-                            </a>
+                      {embed ? (
+                        <iframe
+                          title={`${item.venueName || item.name} — ${item.address}`}
+                          src={embed}
+                          loading="lazy"
+                          allowFullScreen
+                          referrerPolicy="no-referrer-when-downgrade"
+                          className="block w-full h-[220px] border-0"
+                        />
+                      ) : (
+                        item.address && (
+                          <div className="flex items-center justify-center h-[120px] bg-[#F0EBE3] text-xs text-[#9ca3af] px-6 text-center">
+                            {inv.mapUnavailable}
                           </div>
-                        )}
-                      </div>
+                        )
+                      )}
+
+                      {directions && (
+                        <div className="p-5 border-t border-[#e8ddd5]">
+                          <motion.a
+                            whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+                            href={directions}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center justify-center w-full bg-[#6D1A3E] text-white rounded-full py-3 text-sm font-medium hover:bg-[#5a1533] transition-colors"
+                          >
+                            {inv.getDirections}
+                          </motion.a>
+                        </div>
+                      )}
                     </motion.article>
                   )
                 })}
