@@ -7,14 +7,20 @@ const PACKAGES = [
     value: 'eco' as PackageType,
     name: 'Ücretsiz',
     price: 'Ücretsiz',
-    features: ['10 fotoğraf', '2 video', 'Temel QR kart', 'Akışı keşfet'],
+    features: ['10 fotoğraf', '2 video', 'Temel QR kart', 'Online davetiye sayfası', 'Akışı keşfet'],
   },
   {
     value: 'standard' as PackageType,
     name: 'Standart',
     price: '₺899',
     popular: true,
-    features: ['Sınırsız fotoğraf', '20 video', '1080p kalite', '3 masa kartı şablonu (PDF)'],
+    features: [
+      'Sınırsız fotoğraf',
+      '20 video',
+      '1080p kalite',
+      '3 masa kartı şablonu (PDF)',
+      'Online davetiye sayfası',
+    ],
   },
   {
     value: 'premium' as PackageType,
@@ -25,6 +31,7 @@ const PACKAGES = [
       'Orijinal kalite',
       '3 masa kartı şablonu (PDF)',
       'Canlı slayt gösterisi',
+      'Online davetiye sayfası',
     ],
   },
 ]

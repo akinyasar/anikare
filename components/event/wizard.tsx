@@ -39,7 +39,7 @@ const INITIAL_STATE: WizardState = {
   templateId: 'minimal',
 }
 
-const STEPS = ['Detaylar', 'Davetiye Sayfası', 'Paket', 'Tasarım']
+const STEPS = ['Detaylar', 'Davetiye', 'Paket', 'Tasarım']
 
 export default function EventWizard() {
   const [step, setStep] = useState(0)
