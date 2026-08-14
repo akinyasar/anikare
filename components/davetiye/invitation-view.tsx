@@ -7,7 +7,7 @@ import { useLocale } from '@/components/providers/locale-provider'
 import GuestHeader from '@/components/guest/guest-header'
 import { TitleText } from '@/components/table-card/title-text'
 import { DividerHeart } from '@/components/table-card/card-botanical'
-import { directionsUrl, mapEmbedUrl } from '@/lib/programs'
+import { directionsUrl, yandexDirectionsUrl, mapEmbedUrl } from '@/lib/programs'
 import type { Dictionary, Locale, ProgramItem } from '@/types'
 
 interface Props {
@@ -35,13 +35,14 @@ function formatDate(value: string, locale: Locale): string {
   })
 }
 
-// "Gamze & Akın" -> "GA". Baş harfler zaten doğru büyük harfle geldiği için
-// (kullanıcı girişi) herhangi bir case dönüşümü uygulanmıyor — Türkçe
+// "Gamze & Akın" -> ["G", "A"]. Baş harfler zaten doğru büyük harfle geldiği
+// için (kullanıcı girişi) herhangi bir case dönüşümü uygulanmıyor — Türkçe
 // i/İ büyütme tuzağından böylece kaçınılıyor.
-function getMonogram(title: string): string {
+function getMonogramLetters(title: string): [string, string?] {
   const parts = title.split('&').map((p) => p.trim()).filter(Boolean)
-  if (parts.length >= 2) return `${parts[0][0] ?? ''}${parts[1][0] ?? ''}`
-  return title.trim().slice(0, 2)
+  if (parts.length >= 2) return [parts[0][0] ?? '', parts[1][0] ?? '']
+  const trimmed = title.trim()
+  return [trimmed[0] ?? '', trimmed[1]]
 }
 
 export default function InvitationView({ title, eventDate, programs, apiKey, initialLocale }: Props) {
@@ -63,7 +64,7 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
 
   const inv = dict?.invitation ?? ({} as Dictionary['invitation'])
   const heroDate = eventDate ? formatDate(eventDate, locale) : ''
-  const monogram = getMonogram(title)
+  const [monoFirst, monoSecond] = getMonogramLetters(title)
 
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
@@ -100,9 +101,13 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
             />
 
             <div className="relative">
-              <div className="w-14 h-14 mx-auto rounded-full border border-[#c9a84c] flex items-center justify-center">
+              <div className="w-14 h-14 mx-auto rounded-full border border-[#c9a84c] flex items-center justify-center gap-1">
                 <span className="font-[family-name:var(--font-playfair)] text-lg text-[#c9a84c]">
-                  {monogram}
+                  {monoFirst}
+                </span>
+                <DividerHeart size={9} />
+                <span className="font-[family-name:var(--font-playfair)] text-lg text-[#c9a84c]">
+                  {monoSecond}
                 </span>
               </div>
 
@@ -133,6 +138,7 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
                 {programs.map((item, idx) => {
                   const embed = mapEmbedUrl(item, apiKey)
                   const directions = directionsUrl(item)
+                  const yandexDirections = yandexDirectionsUrl(item)
                   const programDate = formatDate(item.date, locale)
                   const whenParts = [programDate, item.time].filter(Boolean).join(' · ')
 
@@ -171,7 +177,8 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
                           loading="lazy"
                           allowFullScreen
                           referrerPolicy="no-referrer-when-downgrade"
-                          className="block w-full h-[220px] border-0"
+                          className="block w-full h-[220px]"
+                          style={{ paddingInline: '10px', border: '1px solid #fff', borderRadius: '20px' }}
                         />
                       ) : (
                         item.address && (
@@ -181,17 +188,35 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
                         )
                       )}
 
-                      {directions && (
+                      {(directions || yandexDirections) && (
                         <div className="p-5 border-t border-[#e8ddd5]">
-                          <motion.a
-                            whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                            href={directions}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="flex items-center justify-center w-full bg-[#6D1A3E] text-white rounded-full py-3 text-sm font-medium hover:bg-[#5a1533] transition-colors"
-                          >
+                          <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#9ca3af] text-center mb-3">
                             {inv.getDirections}
-                          </motion.a>
+                          </p>
+                          <div className="flex gap-2">
+                            {directions && (
+                              <motion.a
+                                whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+                                href={directions}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex-1 flex items-center justify-center bg-[#6D1A3E] text-white rounded-full py-3 text-sm font-medium hover:bg-[#5a1533] transition-colors"
+                              >
+                                Google Maps
+                              </motion.a>
+                            )}
+                            {yandexDirections && (
+                              <motion.a
+                                whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+                                href={yandexDirections}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex-1 flex items-center justify-center bg-white text-[#6D1A3E] border border-[#6D1A3E] rounded-full py-3 text-sm font-medium hover:bg-[#f5e6ed] transition-colors"
+                              >
+                                Yandex Maps
+                              </motion.a>
+                            )}
+                          </div>
                         </div>
                       )}
                     </motion.article>
