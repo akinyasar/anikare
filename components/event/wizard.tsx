@@ -39,7 +39,7 @@ const INITIAL_STATE: WizardState = {
   templateId: 'minimal',
 }
 
-const STEPS = ['Detaylar', 'Program & Konum', 'Paket', 'Tasarım']
+const STEPS = ['Detaylar', 'Davetiye Sayfası', 'Paket', 'Tasarım']
 
 export default function EventWizard() {
   const [step, setStep] = useState(0)
@@ -63,7 +63,7 @@ export default function EventWizard() {
       if (state.pinEnabled && state.pinCode.length !== 4) return false
       return true
     }
-    // step 1 (Program & Konum) tamamen isteğe bağlı — ek doğrulama yok
+    // step 1 (Davetiye Sayfası) tamamen isteğe bağlı — ek doğrulama yok
     if (step === 3) {
       return ['minimal', 'floral', 'botanical'].includes(state.templateId)
     }

@@ -150,6 +150,7 @@ const SITE_T = {
     programTimeLabel: 'Saat',
     programEmpty: 'Henüz program eklenmedi.',
     programUntitled: 'Program',
+    programMaxReached: 'En fazla 3 program eklenebilir.',
     // Event types
     eventTypeWedding: 'Düğün',
     eventTypeBirthday: 'Doğum Günü',

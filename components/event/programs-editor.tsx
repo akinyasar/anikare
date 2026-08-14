@@ -6,6 +6,8 @@ import { t } from '@/lib/i18n/site'
 import { createProgramItem } from '@/lib/programs'
 import type { ProgramItem } from '@/types'
 
+const MAX_PROGRAMS = 3
+
 interface Props {
   items: ProgramItem[]
   onChange: (items: ProgramItem[]) => void
@@ -133,13 +135,17 @@ export default function ProgramsEditor({ items, onChange }: Props) {
         </div>
       ))}
 
-      <button
-        type="button"
-        onClick={() => onChange([...items, createProgramItem()])}
-        className="w-full border-2 border-dashed border-[#e8ddd5] rounded-2xl py-3 text-sm font-medium text-[#6D1A3E] hover:border-[#6D1A3E]/40 hover:bg-[#f5e6ed] transition-colors"
-      >
-        {t(locale, 'programAdd')}
-      </button>
+      {items.length < MAX_PROGRAMS ? (
+        <button
+          type="button"
+          onClick={() => onChange([...items, createProgramItem()])}
+          className="w-full border-2 border-dashed border-[#e8ddd5] rounded-2xl py-3 text-sm font-medium text-[#6D1A3E] hover:border-[#6D1A3E]/40 hover:bg-[#f5e6ed] transition-colors"
+        >
+          {t(locale, 'programAdd')}
+        </button>
+      ) : (
+        <p className="text-xs text-[#9ca3af] text-center">{t(locale, 'programMaxReached')}</p>
+      )}
     </div>
   )
 }
