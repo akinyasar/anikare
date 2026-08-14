@@ -129,6 +129,7 @@ const SITE_T = {
     invitationSaving: 'Kaydediliyor...',
     invitationSaved: 'Kaydedildi ✓',
     invitationSaveError: 'Kaydedilemedi, tekrar deneyin',
+    invitationUnsavedHint: 'Kaydedilmemiş değişiklikler var',
     invitationBackToEvent: '← Etkinliğe Dön',
     // Program editörü (sihirbaz + dashboard ortak)
     programsTitle: 'Program & Konum',
@@ -310,6 +311,7 @@ const SITE_T = {
     invitationSaving: 'Saving...',
     invitationSaved: 'Saved ✓',
     invitationSaveError: 'Could not save, please try again',
+    invitationUnsavedHint: 'You have unsaved changes',
     invitationBackToEvent: '← Back to Event',
     programsTitle: 'Programme & Venue',
     programsDesc: 'Henna night, ceremony, reception... Add a date, time and venue for each. This step is optional.',
@@ -483,6 +485,7 @@ const SITE_T = {
     invitationSaving: 'Wird gespeichert...',
     invitationSaved: 'Gespeichert ✓',
     invitationSaveError: 'Speichern fehlgeschlagen, bitte erneut versuchen',
+    invitationUnsavedHint: 'Es gibt ungespeicherte Änderungen',
     invitationBackToEvent: '← Zurück zur Veranstaltung',
     programsTitle: 'Programm & Ort',
     programsDesc: 'Henna-Abend, Trauung, Feier... Fügen Sie je Datum, Uhrzeit und Ort hinzu. Dieser Schritt ist optional.',

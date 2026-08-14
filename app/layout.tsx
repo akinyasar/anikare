@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Toaster } from 'sonner'
 import { SITE_URL } from '@/lib/config'
 import { LocaleProvider } from '@/components/providers/locale-provider'
 import './globals.css'
@@ -82,6 +83,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LocaleProvider>
           {children}
         </LocaleProvider>
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            style: {
+              background: '#1a1a1a',
+              color: '#FAF7F2',
+              border: '1px solid #6D1A3E',
+              borderRadius: '9999px',
+              fontSize: '13px',
+              fontWeight: 500,
+              padding: '10px 20px',
+            },
+          }}
+        />
         <Analytics />
       </body>
     </html>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useLocale } from '@/components/providers/locale-provider'
 import { t } from '@/lib/i18n/site'
@@ -17,7 +18,7 @@ interface Props {
   initialPrograms: ProgramItem[]
 }
 
-type SaveState = 'idle' | 'saving' | 'saved' | 'error'
+type SaveState = 'idle' | 'saving' | 'error'
 
 export default function InvitationSettingsClient({
   eventId,
@@ -28,8 +29,12 @@ export default function InvitationSettingsClient({
 }: Props) {
   const { locale } = useLocale()
   const [enabled, setEnabled] = useState(initialEnabled)
+  // Yalnızca başarılı kaydetme sonrası güncellenir — DB'deki gerçek durumu
+  // yansıtır. Yayınla anahtarı bunun aksine anlık/kaydedilmemiş yerel durum.
+  const [publishedEnabled, setPublishedEnabled] = useState(initialEnabled)
   const [programs, setPrograms] = useState<ProgramItem[]>(initialPrograms)
   const [saveState, setSaveState] = useState<SaveState>('idle')
+  const hasUnsavedChanges = enabled !== publishedEnabled
 
   async function handleSave() {
     setSaveState('saving')
@@ -45,7 +50,9 @@ export default function InvitationSettingsClient({
       return
     }
     setPrograms(cleaned)
-    setSaveState('saved')
+    setPublishedEnabled(enabled)
+    setSaveState('idle')
+    toast.success(t(locale, 'invitationSaved'))
   }
 
   return (
@@ -79,7 +86,7 @@ export default function InvitationSettingsClient({
             aria-label={t(locale, 'invitationEnabledLabel')}
             onClick={() => {
               setEnabled((v) => !v)
-              setSaveState('idle')
+              if (saveState === 'error') setSaveState('idle')
             }}
             className={`relative w-11 h-6 rounded-full shrink-0 transition-colors ${
               enabled ? 'bg-[#6D1A3E]' : 'bg-[#e8ddd5]'
@@ -93,7 +100,7 @@ export default function InvitationSettingsClient({
           </button>
         </div>
 
-        {enabled && (
+        {publishedEnabled && (
           <a
             href={`/davetiye/${slug}`}
             target="_blank"
@@ -102,6 +109,13 @@ export default function InvitationSettingsClient({
           >
             {t(locale, 'invitationPublicLink')}
           </a>
+        )}
+
+        {hasUnsavedChanges && (
+          <p className="text-xs text-[#9b4a6a] mt-3 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#9b4a6a] shrink-0" />
+            {t(locale, 'invitationUnsavedHint')}
+          </p>
         )}
       </div>
 
@@ -125,11 +139,7 @@ export default function InvitationSettingsClient({
         disabled={saveState === 'saving'}
         className="w-full mt-6 bg-[#6D1A3E] text-white rounded-xl py-3 text-sm font-medium hover:bg-[#5a1533] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
-        {saveState === 'saving'
-          ? t(locale, 'invitationSaving')
-          : saveState === 'saved'
-            ? t(locale, 'invitationSaved')
-            : t(locale, 'invitationSave')}
+        {saveState === 'saving' ? t(locale, 'invitationSaving') : t(locale, 'invitationSave')}
       </button>
     </div>
   )
