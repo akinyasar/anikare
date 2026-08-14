@@ -55,6 +55,27 @@ export default function InvitationSettingsClient({
     toast.success(t(locale, 'invitationSaved'))
   }
 
+  // Yayınla anahtarı kendi başına kaydeder — ayrı bir "Kaydet" tıklaması
+  // beklemez, programlardaki taslak değişikliklere dokunmaz.
+  async function handleToggle() {
+    const next = !enabled
+    setEnabled(next)
+    setSaveState('saving')
+    const supabase = createClient()
+    const { error } = await supabase
+      .from('events')
+      .update({ invitation_enabled: next })
+      .eq('id', eventId)
+
+    if (error) {
+      setSaveState('error')
+      return
+    }
+    setPublishedEnabled(next)
+    setSaveState('idle')
+    toast.success(t(locale, 'invitationSaved'))
+  }
+
   return (
     <div className="max-w-lg">
       <Link
@@ -84,11 +105,9 @@ export default function InvitationSettingsClient({
             role="switch"
             aria-checked={enabled}
             aria-label={t(locale, 'invitationEnabledLabel')}
-            onClick={() => {
-              setEnabled((v) => !v)
-              if (saveState === 'error') setSaveState('idle')
-            }}
-            className={`relative w-11 h-6 rounded-full shrink-0 transition-colors ${
+            onClick={handleToggle}
+            disabled={saveState === 'saving'}
+            className={`relative w-11 h-6 rounded-full shrink-0 transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
               enabled ? 'bg-[#6D1A3E]' : 'bg-[#e8ddd5]'
             }`}
           >

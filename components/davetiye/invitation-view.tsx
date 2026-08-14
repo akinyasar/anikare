@@ -90,6 +90,14 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
               height={140}
               className="pointer-events-none absolute -top-4 -right-4 w-32 h-32 sm:w-36 sm:h-36 opacity-40"
             />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/table-card/botanical-bl.png"
+              alt=""
+              width={140}
+              height={140}
+              className="pointer-events-none absolute -bottom-4 -left-4 w-32 h-32 sm:w-36 sm:h-36 opacity-40"
+            />
 
             <div className="relative">
               <div className="w-14 h-14 mx-auto rounded-full border border-[#c9a84c] flex items-center justify-center">
