@@ -42,6 +42,7 @@
     "programTitle": "Programm",
     "getDirections": "Route berechnen",
     "mapUnavailable": "Die Karte kann derzeit nicht angezeigt werden",
-    "seeYouThere": "Wir freuen uns auf Sie 🤍"
+    "seeYouThere": "Wir freuen uns auf Sie 🤍",
+    "cancel": "Abbrechen"
   }
 }

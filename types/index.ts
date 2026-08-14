@@ -130,5 +130,6 @@ export interface Dictionary {
     getDirections: string;
     mapUnavailable: string;
     seeYouThere: string;
+    cancel: string;
   };
 }

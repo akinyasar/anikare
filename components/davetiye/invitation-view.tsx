@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { getDictionary } from '@/lib/i18n'
 import { useLocale } from '@/components/providers/locale-provider'
 import GuestHeader from '@/components/guest/guest-header'
@@ -65,6 +65,19 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
   const inv = dict?.invitation ?? ({} as Dictionary['invitation'])
   const heroDate = eventDate ? formatDate(eventDate, locale) : ''
   const [monoFirst, monoSecond] = getMonogramLetters(title)
+  const [sheetItem, setSheetItem] = useState<ProgramItem | null>(null)
+
+  // Tek seçenek varsa doğrudan aç, iki seçenek varsa alt sayfada seçtir.
+  function handleDirectionsClick(item: ProgramItem) {
+    const g = directionsUrl(item)
+    const y = yandexDirectionsUrl(item)
+    if (g && y) {
+      setSheetItem(item)
+      return
+    }
+    const only = g ?? y
+    if (only) window.open(only, '_blank', 'noreferrer')
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
@@ -189,34 +202,15 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
                       )}
 
                       {(directions || yandexDirections) && (
-                        <div className="p-5 border-t border-[#e8ddd5]">
-                          <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#9ca3af] text-center mb-3">
+                        <div className="p-5">
+                          <motion.button
+                            type="button"
+                            whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+                            onClick={() => handleDirectionsClick(item)}
+                            className="flex items-center justify-center w-full bg-[#6D1A3E] text-white rounded-full py-3 text-sm font-medium hover:bg-[#5a1533] transition-colors"
+                          >
                             {inv.getDirections}
-                          </p>
-                          <div className="flex gap-2">
-                            {directions && (
-                              <motion.a
-                                whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                                href={directions}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="flex-1 flex items-center justify-center bg-[#6D1A3E] text-white rounded-full py-3 text-sm font-medium hover:bg-[#5a1533] transition-colors"
-                              >
-                                Google Maps
-                              </motion.a>
-                            )}
-                            {yandexDirections && (
-                              <motion.a
-                                whileHover={prefersReducedMotion ? undefined : { y: -2 }}
-                                href={yandexDirections}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="flex-1 flex items-center justify-center bg-white text-[#6D1A3E] border border-[#6D1A3E] rounded-full py-3 text-sm font-medium hover:bg-[#f5e6ed] transition-colors"
-                              >
-                                Yandex Maps
-                              </motion.a>
-                            )}
-                          </div>
+                          </motion.button>
                         </div>
                       )}
                     </motion.article>
@@ -235,6 +229,65 @@ export default function InvitationView({ title, eventDate, programs, apiKey, ini
           </div>
         </div>
       </main>
+
+      <AnimatePresence>
+        {sheetItem && (
+          <>
+            <motion.div
+              key="overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSheetItem(null)}
+              className="fixed inset-0 bg-black/40 z-40"
+            />
+            <motion.div
+              key="sheet"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 320 }}
+              className="fixed bottom-0 left-0 right-0 z-50 mx-auto w-full max-w-xl bg-white rounded-t-[28px] px-6 pt-3 pb-6 safe-bottom"
+            >
+              <div className="w-10 h-1 rounded-full bg-[#e8ddd5] mx-auto mb-5" />
+              <p className="text-center text-sm font-medium text-[#1a1a1a] mb-4">
+                {inv.getDirections}
+              </p>
+              <div className="space-y-2">
+                {directionsUrl(sheetItem) && (
+                  <a
+                    href={directionsUrl(sheetItem)!}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setSheetItem(null)}
+                    className="block text-center py-3.5 rounded-2xl bg-[#F0EBE3] text-[#1a1a1a] font-medium hover:bg-[#e8ddd5] transition-colors"
+                  >
+                    Google Maps
+                  </a>
+                )}
+                {yandexDirectionsUrl(sheetItem) && (
+                  <a
+                    href={yandexDirectionsUrl(sheetItem)!}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setSheetItem(null)}
+                    className="block text-center py-3.5 rounded-2xl bg-[#F0EBE3] text-[#1a1a1a] font-medium hover:bg-[#e8ddd5] transition-colors"
+                  >
+                    Yandex Maps
+                  </a>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setSheetItem(null)}
+                className="w-full mt-2 py-3.5 text-sm text-[#9ca3af] font-medium"
+              >
+                {inv.cancel}
+              </button>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
