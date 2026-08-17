@@ -65,10 +65,15 @@ export function directionsUrl(item: ProgramItem): string | null {
 // sitesinin kendi JS'i bunu çözüyordu, uygulama boş açılıyordu) — bunun
 // yerine hem web hem uygulamada güvenilir çalışan arama tabanlı link
 // kullanılıyor; misafir uygulama içinde "yol tarifi"ne kendi dokunur.
+// Mekan adı sorguya eklenir: Yandex'in Türkiye'deki işletme kapsamı zayıf,
+// yalnızca adres (özellikle parantezli alternatif sokak adlarıyla) belirsiz
+// eşleşmeler üretiyor — mekan adıyla birlikte doğrudan doğru işletmeyi buluyor.
 export function yandexDirectionsUrl(item: ProgramItem): string | null {
   const address = item.address.trim()
   if (!address) return null
-  return `https://yandex.ru/maps/?text=${encodeURIComponent(address)}`
+  const venueName = item.venueName.trim()
+  const query = venueName ? `${venueName}, ${address}` : address
+  return `https://yandex.ru/maps/?text=${encodeURIComponent(query)}`
 }
 
 // Google Maps Embed API (resmî, key'li endpoint).
