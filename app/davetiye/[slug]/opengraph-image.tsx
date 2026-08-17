@@ -72,8 +72,8 @@ export default async function Image({
           <div
             style={{
               position: 'absolute',
-              width: 330,
-              height: 330,
+              width: 230,
+              height: 230,
               borderRadius: '50%',
               border: '1px solid rgba(255,255,255,0.18)',
               display: 'flex',
@@ -81,8 +81,8 @@ export default async function Image({
           />
           <div
             style={{
-              width: 200,
-              height: 200,
+              width: 150,
+              height: 150,
               borderRadius: '50%',
               border: '3px solid #f7cac9',
               display: 'flex',
@@ -90,17 +90,17 @@ export default async function Image({
               justifyContent: 'center',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <span style={{ display: 'flex', fontFamily: 'Playfair', fontSize: 68, color: '#f7cac9' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ display: 'flex', fontFamily: 'Playfair', fontSize: 48, color: '#f7cac9' }}>
                 {monoFirst}
               </span>
-              <svg width="24" height="24" viewBox="0 0 24 24">
+              <svg width="17" height="17" viewBox="0 0 24 24">
                 <path
                   d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                   fill="#c9a84c"
                 />
               </svg>
-              <span style={{ display: 'flex', fontFamily: 'Playfair', fontSize: 68, color: '#f7cac9' }}>
+              <span style={{ display: 'flex', fontFamily: 'Playfair', fontSize: 48, color: '#f7cac9' }}>
                 {monoSecond}
               </span>
             </div>
