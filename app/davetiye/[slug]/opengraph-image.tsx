@@ -38,6 +38,14 @@ export default async function Image({
         })
       : ''
 
+  // "Gamze & Akın" -> ["G", "A"] — invitation-view.tsx'teki ile aynı mantık,
+  // bu route kendi başına çalışan bir dosya olduğu için yerelde tutuluyor.
+  const [monoFirst, monoSecond] = (() => {
+    const parts = title.split('&').map((p) => p.trim()).filter(Boolean)
+    if (parts.length >= 2) return [parts[0][0] ?? '', parts[1][0] ?? '']
+    return [title.trim()[0] ?? '', title.trim()[1] ?? '']
+  })()
+
   return new ImageResponse(
     (
       <div
@@ -45,53 +53,113 @@ export default async function Image({
           width: '100%',
           height: '100%',
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
           backgroundColor: '#FAF7F2',
           border: '18px solid #6D1A3E',
         }}
       >
+        {/* Sol panel — davetiye kartındaki monogram motifi büyütülmüş halde */}
         <div
           style={{
+            width: 440,
+            height: '100%',
             display: 'flex',
-            fontSize: 26,
-            letterSpacing: 12,
-            color: '#9b4a6a',
-            marginBottom: 32,
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+            backgroundImage: 'linear-gradient(160deg, #6D1A3E 0%, #9b4a6a 100%)',
           }}
         >
-          DAVETİYE
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            fontFamily: 'Playfair',
-            fontSize: 92,
-            fontWeight: 700,
-            color: '#6D1A3E',
-            textAlign: 'center',
-            padding: '0 90px',
-            lineHeight: 1.15,
-          }}
-        >
-          {title}
-        </div>
-        {dateLabel ? (
-          <div style={{ display: 'flex', fontSize: 34, color: '#7a6a5a', marginTop: 36 }}>
-            {dateLabel}
+          <div
+            style={{
+              position: 'absolute',
+              width: 330,
+              height: 330,
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.18)',
+              display: 'flex',
+            }}
+          />
+          <div
+            style={{
+              width: 200,
+              height: 200,
+              borderRadius: '50%',
+              border: '3px solid #f7cac9',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <span style={{ display: 'flex', fontFamily: 'Playfair', fontSize: 68, color: '#f7cac9' }}>
+                {monoFirst}
+              </span>
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  fill="#c9a84c"
+                />
+              </svg>
+              <span style={{ display: 'flex', fontFamily: 'Playfair', fontSize: 68, color: '#f7cac9' }}>
+                {monoSecond}
+              </span>
+            </div>
           </div>
-        ) : null}
+        </div>
+
+        {/* Sağ panel — metin içeriği */}
         <div
           style={{
+            flex: 1,
+            height: '100%',
             display: 'flex',
-            fontSize: 22,
-            letterSpacing: 6,
-            color: '#9ca3af',
-            marginTop: 56,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: '0 64px',
           }}
         >
-          ANIKARE.NET
+          <div
+            style={{
+              display: 'flex',
+              fontSize: 24,
+              letterSpacing: 10,
+              color: '#9b4a6a',
+              marginBottom: 24,
+            }}
+          >
+            DAVETİYE
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              fontFamily: 'Playfair',
+              fontSize: 76,
+              fontWeight: 700,
+              color: '#6D1A3E',
+              lineHeight: 1.15,
+            }}
+          >
+            {title}
+          </div>
+          {dateLabel ? (
+            <div style={{ display: 'flex', alignItems: 'center', marginTop: 28 }}>
+              <div style={{ display: 'flex', width: 44, height: 2, backgroundColor: '#c9a84c' }} />
+              <div style={{ display: 'flex', fontSize: 30, color: '#7a6a5a', marginLeft: 18 }}>
+                {dateLabel}
+              </div>
+            </div>
+          ) : null}
+          <div
+            style={{
+              display: 'flex',
+              fontSize: 20,
+              letterSpacing: 6,
+              color: '#9ca3af',
+              marginTop: 48,
+            }}
+          >
+            ANIKARE.NET
+          </div>
         </div>
       </div>
     ),
