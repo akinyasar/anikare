@@ -60,13 +60,15 @@ export function directionsUrl(item: ProgramItem): string | null {
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`
 }
 
-// Yandex Maps için yol tarifi — key gerekmez, adres metnini doğrudan
-// rota hedefi olarak kabul eden düz URL şeması. "~" öncesi boş bırakılınca
-// başlangıç noktası olarak kullanıcının anlık konumu kullanılır.
+// Yandex Maps için konum linki — key gerekmez. rtext (rota) parametresi
+// serbest metin adresi mobil uygulamada coğrafi kodlamıyor (yalnızca web
+// sitesinin kendi JS'i bunu çözüyordu, uygulama boş açılıyordu) — bunun
+// yerine hem web hem uygulamada güvenilir çalışan arama tabanlı link
+// kullanılıyor; misafir uygulama içinde "yol tarifi"ne kendi dokunur.
 export function yandexDirectionsUrl(item: ProgramItem): string | null {
   const address = item.address.trim()
   if (!address) return null
-  return `https://yandex.com/maps/?rtext=~${encodeURIComponent(address)}&rtt=auto`
+  return `https://yandex.ru/maps/?text=${encodeURIComponent(address)}`
 }
 
 // Google Maps Embed API (resmî, key'li endpoint).
